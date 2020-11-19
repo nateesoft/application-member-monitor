@@ -5,7 +5,7 @@ const Task = require('../model/Member.model')
 const Controller = require('../controller/Member.controller')
 
 module.exports = args => {
-  const { apiServiceMember, apiServiceDB, apiServiceAuth } = args;
+  const { apiServiceMember, apiServiceDB, apiServiceAuth, logger } = args;
   const router = Router()
 
   router.use(json())
@@ -14,7 +14,7 @@ module.exports = args => {
   const module = {}
 
   module.GET_SERVER = (req, res) => {
-    console.log('GET_SERVER');
+    logger.info('member:GET_SERVER');
     const options = {
       'method': 'GET',
       'url': apiServiceMember,
@@ -25,7 +25,7 @@ module.exports = args => {
     };
     request(options, async (error, response) => {
       if (error) {
-        console.log(error);
+        logger.error(error);
       } else {
         const result = await Controller().createOrUpdate(response.body);
         res.json(result);
@@ -34,13 +34,12 @@ module.exports = args => {
   }
 
   module.SYNC_UPLOAD = async (req, res) => {
+    logger.info('member:SYNC_UPLOAD');
     try {
       const response = await Task().syncData();
       const data = JSON.parse(response.data);
-      if(data.length>0){
-        // 1. find data[0] from db
+      if(data.length > 0){
         const getData = await Task().findByMemberCode(data[0].Member_Code);
-        // 2. send data[0] to server
         const parseData = JSON.parse(getData.data);
         const options = {
           'method': 'PUT',
@@ -54,15 +53,11 @@ module.exports = args => {
         };
         request(options, async (error, response) => {
           if (error) {
-            console.log(error);
+            logger.error(error);
           } else {
             const newData = JSON.parse(getData.data);
-            //    3.1 delete data[0] from db_temp
-            const res1 = await Task().deleteTemp(newData[0].Member_Code);
-            console.log(res1);
-            //    3.2 insert data[0] into db_temp
-            const res2 = await Task().createTemp(newData[0].Member_Code);
-            console.log(res2);
+            await Task().deleteTemp(newData[0].Member_Code);
+            await Task().createTemp(newData[0].Member_Code);
           }
         });
       }
@@ -71,14 +66,16 @@ module.exports = args => {
         msg: 'Success',
         data
       })
-    } catch (error) {
+    } catch (err) {
+      logger.error(err);
       return res
       .status(500)
-      .json({ status: "Internal Server Error", msg: error.sqlMessage })
+      .json({ status: "Internal Server Error", msg: err.sqlMessage })
     }
   }
 
   module.POST = async (req, res) => {
+    logger.info('member:POST');
     try {
       const response = await Task().create(req.body);
       if (response) {
@@ -87,18 +84,18 @@ module.exports = args => {
       }
       const data = JSON.parse(response.data);
       res.status(200).json({ status: response.status, msg: "Success", data })
-    } catch (error) {
+    } catch (err) {
+      logger.error(err);
       return res
       .status(500)
-      .json({ status: "Internal Server Error", msg: error.sqlMessage })
+      .json({ status: "Internal Server Error", msg: err.sqlMessage })
     }
   }
 
   // local database
-  // member
-  router.get('/server', module.GET_SERVER); // get member from server
-  router.get('/', module.SYNC_UPLOAD); // sync member to server
-  router.post('/', module.POST); // create new member
+  router.get('/server', module.GET_SERVER);
+  router.get('/', module.SYNC_UPLOAD);
+  router.post('/', module.POST);
 
   return router;
 }

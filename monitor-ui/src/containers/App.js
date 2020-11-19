@@ -23,8 +23,7 @@ const DisConnectStyle = styled.span`
 const init = async () => {
   await Func.initLoadData();
 }
-const handleApi = async (action) => {
-  console.log(action);
+const handleApi = async () => {
   await Func.uploadMember();
   await Func.uploadRedeem();
 }
@@ -44,6 +43,10 @@ const App = () => {
       await Func.saveMemberLocal(JSON.parse(data))
     })
 
+    socket.on("update_member", async data => {
+      init();
+    })
+
     socket.on("client_id", (id)=>{
       setClient('Your id: ' + id);
       setTime(new Date());
@@ -57,7 +60,7 @@ const App = () => {
     })
 
     socket.on("timeSync", action => {
-      handleApi(action);
+      handleApi();
     })
     
     socket.on('error', ()=>{

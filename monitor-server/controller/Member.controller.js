@@ -1,9 +1,12 @@
+const logger = require('../logger');
+
 module.exports = () => {
     const Task = require('../model/Member.model')();
     const config = require('../config')
     const module = {}
 
     module.createOrUpdate = (data_in_file) => {
+        logger.info('member:createOrUpdate')
         return new Promise(async (resolve, reject) => {
             try {
                 const get = JSON.parse(data_in_file)
@@ -20,8 +23,9 @@ module.exports = () => {
                 }else{
                     resolve('not found data to create')
                 }
-            } catch (error) {
-                reject(error);
+            } catch (err) {
+                logger.error(err);
+                reject(err);
             }
         })
     }

@@ -9,7 +9,7 @@ module.exports = () => {
   const table_name = "memmaster"
 
   module.findAll = () => {
-    logger.info('findAll');
+    logger.info('member:findAll');
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `select * from ${table_name} order by Member_Code;`;
@@ -24,7 +24,7 @@ module.exports = () => {
   }
 
   module.syncData = () => {
-    logger.info('syncData');
+    logger.info('member:syncData');
     return new Promise(async (resolve, reject) => {
       try {
         const fieldCheck = 'Member_Code, Member_TotalPurchase, Member_TotalScore';
@@ -44,7 +44,7 @@ module.exports = () => {
   }
 
   module.findByMemberCode = memberCode => {
-    logger.info(`findByMemberCode: ${memberCode}`);
+    logger.info(`member:findByMemberCode: ${memberCode}`);
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `select * from ${table_name} where Member_Code = ?;`;
@@ -59,13 +59,16 @@ module.exports = () => {
   }
 
   module.bulkInsert = (objectArray) => {
-    logger.info(`bulkInsert: ${objectArray}`)
+    logger.info(`member:bulkInsert: ${objectArray}`)
     return new Promise(async (resolve, reject) => {
       try {
         let keys = Object.keys(objectArray[0]);
         let values = objectArray.map( obj => keys.map( key => obj[key]));
         let sql = `INSERT INTO ${table_name} (${keys.join(',')}) VALUES ? 
-        ON DUPLICATE KEY UPDATE Member_Code=Member_Code`;
+        ON DUPLICATE KEY 
+        UPDATE 
+        Member_TotalPurchase=VALUES(Member_TotalPurchase), 
+        Member_TotalScore=VALUES(Member_TotalScore)`;
         logger.debug(sql);
         const response = await pool.query(sql, [values]);
         resolve(response);
@@ -77,13 +80,16 @@ module.exports = () => {
   }
 
   module.bulkInsertTemp = (objectArray) => {
-    logger.info(`bulkInsertTemp: ${objectArray}`)
+    logger.info(`member:bulkInsertTemp: ${objectArray}`)
     return new Promise(async (resolve, reject) => {
       try {
         let keys = Object.keys(objectArray[0]);
         let values = objectArray.map( obj => keys.map( key => obj[key]));
         let sql = `INSERT INTO ${table_name}_temp (${keys.join(',')}) VALUES ? 
-        ON DUPLICATE KEY UPDATE Member_Code=Member_Code`;
+        ON DUPLICATE KEY 
+        UPDATE 
+        Member_TotalPurchase=VALUES(Member_TotalPurchase), 
+        Member_TotalScore=VALUES(Member_TotalScore)`;
         logger.debug(sql);
         const response = await pool.query(sql, [values]);
         resolve(response);
@@ -95,7 +101,7 @@ module.exports = () => {
   }
 
   module.getQuery = (data) => {
-    logger.info(`getQuery: ${data}`)
+    logger.info(`member:getQuery: ${data}`)
     return new Promise(async (resolve, reject) => {
       return resolve({
         Member_Code: data.code,
@@ -122,7 +128,7 @@ module.exports = () => {
   }
 
   module.create = data => {
-    logger.info(`create: ${data}`)
+    logger.info(`member:create: ${data}`)
     return new Promise(async (resolve, reject) => {
       const payload = await module.getQuery(data);
       try {
@@ -142,7 +148,7 @@ module.exports = () => {
   }
 
   module.createTemp = memberCode => {
-    logger.info(`createTemp: ${memberCode}`)
+    logger.info(`member:createTemp: ${memberCode}`)
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `INSERT INTO ${table_name}_temp select * from ${table_name} where Member_Code = ?;`;
@@ -157,7 +163,7 @@ module.exports = () => {
   }
 
   module.update = data => {
-    logger.info(`update: ${data}`)
+    logger.info(`member:update: ${data}`)
     return new Promise(async (resolve, reject) => {
       const payload = await module.getQuery(data);
       try {
@@ -214,7 +220,7 @@ module.exports = () => {
   }
 
   module.updateMemberPoint = data => {
-    logger.info(`updateMemberPoint: ${data}`)
+    logger.info(`member:updateMemberPoint: ${data}`)
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `UPDATE ${table_name} 
@@ -237,7 +243,7 @@ module.exports = () => {
   }
 
   module.deleteTemp = memberCode => {
-    logger.info(`deleteTemp: ${memberCode}`)
+    logger.info(`member:deleteTemp: ${memberCode}`)
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `DELETE FROM ${table_name}_temp WHERE Member_Code=?;`;

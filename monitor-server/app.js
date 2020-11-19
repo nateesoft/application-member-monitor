@@ -19,6 +19,7 @@ const options = {
   apiServiceRedeem: config.apiServiceRedeem,
   apiServiceDB: config.apiServiceDB,
   apiServiceAuth: config.apiServiceAuth,
+  logger,
 }
 
 const setupLogger = (req, res, next) => {

@@ -11,7 +11,7 @@ module.exports = () => {
   const table_name = "redeem";
 
   module.findById = (id) => {
-    logger.info(`findById: ${id}`)
+    logger.info(`redeem:findById: ${id}`)
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `select * from ${table_name} where uuid_index=?;`;
@@ -26,7 +26,7 @@ module.exports = () => {
   }
 
   module.syncData = () => {
-    logger.info(`syncData`)
+    logger.info(`redeem:syncData`)
     return new Promise(async (resolve, reject) => {
       try {
         const fieldCheck = 'redeem_code,bill_no';
@@ -46,7 +46,7 @@ module.exports = () => {
   }
 
   module.findByRedeemCode = (redeemCode) => {
-    logger.info(`findByRedeemCode: ${redeemCode}`)
+    logger.info(`redeem:findByRedeemCode: ${redeemCode}`)
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `select * from ${table_name} where redeem_code=?;`;
@@ -61,7 +61,7 @@ module.exports = () => {
   }
 
   module.findAll = () => {
-    logger.info('findAll');
+    logger.info('redeem:findAll');
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `select * from ${table_name};`;
@@ -76,7 +76,7 @@ module.exports = () => {
   }
 
   module.syncData = () => {
-    logger.info('syncData');
+    logger.info('redeem:syncData');
     return new Promise(async (resolve, reject) => {
       try {
         const fieldCheck = 'redeem_code, bill_no';
@@ -96,7 +96,7 @@ module.exports = () => {
   }
 
   module.searchData = (key, value) => {
-    logger.info(`searchData: ${key} ${value}`);
+    logger.info(`redeem:searchData: ${key} ${value}`);
     return new Promise(async (resolve, reject) => {
       try {
         let sql = `select * from ${table_name}`
@@ -114,7 +114,7 @@ module.exports = () => {
   }
 
   module.bulkInsert = (objectArray) => {
-    logger.info(`bulkInsert: ${objectArray}`)
+    logger.info(`redeem:bulkInsert: ${objectArray}`)
     return new Promise(async (resolve, reject) => {
       try {
         let keys = Object.keys(objectArray[0]);
@@ -131,7 +131,7 @@ module.exports = () => {
     });
   }
   module.bulkInsertTemp = (objectArray) => {
-    logger.info(`bulkInsertTemp: ${objectArray}`)
+    logger.info(`redeem:bulkInsertTemp: ${objectArray}`)
     return new Promise(async (resolve, reject) => {
       try {
         let keys = Object.keys(objectArray[0]);
@@ -149,7 +149,7 @@ module.exports = () => {
   }
 
   module.getQuery = (data) => {
-    logger.info(`getQuery: ${data}`)
+    logger.info(`redeem:getQuery: ${data}`)
     return new Promise(async (resolve, reject) => {
       return resolve({
         uuid_index: data.uuid_index,
@@ -174,7 +174,7 @@ module.exports = () => {
   }
 
   module.create = data => {
-    logger.info(`create: ${data}`)
+    logger.info(`redeem:create: ${data}`)
     return new Promise(async (resolve, reject) => {
       const payload = await module.getQuery(data);
       try {
@@ -193,7 +193,7 @@ module.exports = () => {
     })
   }
   module.createTemp = redeemCode => {
-    logger.info(`createTemp: ${redeemCode}`)
+    logger.info(`redeem:createTemp: ${redeemCode}`)
     return new Promise(async (resolve, reject) => {
       try {
           const sql = `INSERT INTO ${table_name}_temp select * from ${table_name} where redeem_code = ?;`;
@@ -208,7 +208,7 @@ module.exports = () => {
   }
 
   module.update = (data) => {
-    logger.info(`update: ${data}`)
+    logger.info(`redeem:update: ${data}`)
     return new Promise(async (resolve, reject) => {
       const payload = await module.getQuery(data);
       try {
@@ -257,7 +257,7 @@ module.exports = () => {
   }
 
   module.delete = (id) => {
-    logger.info(`delete: ${id}`)
+    logger.info(`redeem:delete: ${id}`)
     return new Promise(async (resolve, reject) => {
       try {
         const sql = `DELETE FROM ${table_name} WHERE uuid_index = ?;`;
@@ -272,11 +272,10 @@ module.exports = () => {
   }
 
   module.deleteTemp = (redeemCode) => {
-    logger.info(`deleteTemp: ${redeemCode}`)
+    logger.info(`redeem:deleteTemp: ${redeemCode}`)
     return new Promise(async (resolve, reject) => {
       try {
-        const sql = `DELETE FROM ${table_name} 
-        WHERE redeem_code = ?;`;
+        const sql = `DELETE FROM ${table_name}_temp WHERE redeem_code = ?;`;
         logger.debug(sql);
         const result = await pool.query(sql, [redeemCode])
         resolve({ status: "Success", data: JSON.stringify(result) })

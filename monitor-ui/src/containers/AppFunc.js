@@ -1,7 +1,7 @@
-const apiLocalRedeem = 'http://localhost:5050/api/redeem';
 const apiLocalMember = 'http://localhost:5050/api/member';
-const apiServiceRedeem = 'http://localhost:5050/api/redeem/server';
+const apiLocalRedeem = 'http://localhost:5050/api/redeem';
 const apiServiceMember = 'http://localhost:5050/api/member/server';
+const apiServiceRedeem = 'http://localhost:5050/api/redeem/server';
 
 export const initLoadData = async () => {
   console.log('call=>initLoadData');
@@ -12,7 +12,7 @@ export const initLoadData = async () => {
       console.log('action:member insertId:', result.insertId)
     }
   })
-  .catch(err => console.log(`Error:${err} ${apiLocalMember}`));
+  .catch(err => console.log(`Error:${err} ${apiServiceMember}`));
 
   await fetch(apiServiceRedeem)
   .then(res => res.json())
