@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import socketIOClient from "socket.io-client"
 import styled from 'styled-components';
-import * as Func from './AppFunc';
+import * as Func from '../utils/AppFunc';
 import { config } from '../config';
 
 import logo from "./logo.svg"
