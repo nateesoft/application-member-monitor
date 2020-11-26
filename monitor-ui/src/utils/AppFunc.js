@@ -29,7 +29,7 @@ export const uploadMember = () => {
   return new Promise(async (resolve, reject) => {
     const resMember = await fetch(apiLocalMember)
     .then(res => res.json())
-    .catch(err => console.log(`Error:${err} ${apiLocalMember}`));
+    .catch(err => console.log(`call=>uploadMember=>ERROR:${err} ${apiLocalMember}`));
     if (resMember) {
       resolve('member sync up success');
     } else {
@@ -43,7 +43,7 @@ export const uploadRedeem = () => {
   return new Promise(async (resolve, reject) => {
     const resRedeem = await fetch(apiLocalRedeem)
     .then(res => res.json())
-    .catch(err => console.log(`Error:${err} ${apiLocalRedeem}`));
+    .catch(err => console.log(`call=>uploadRedeem=>ERROR:${err} ${apiLocalRedeem}`));
     if (resRedeem) {
       resolve('redeem sync up success');
     } else {
@@ -53,7 +53,7 @@ export const uploadRedeem = () => {
 }
 
 export const saveRedeemLocal = async (payload) => {
-  console.log('call=>saveRedeemLocal');
+  console.log('call=>saveRedeemLocal: ', payload.redeem_code);
   return new Promise(async (resolve, reject) => {
     const response = await fetch(apiLocalRedeem, {
       method: "POST",
@@ -67,6 +67,7 @@ export const saveRedeemLocal = async (payload) => {
       referrerPolicy: "no-referrer",
       body: JSON.stringify(payload),
     }).catch((err) => {
+      console.log(`call=>saveRedeemLocal=>ERROR: ${err} with ${payload.redeem_code}`);
       reject(err)
     })
     if(response){
@@ -78,7 +79,7 @@ export const saveRedeemLocal = async (payload) => {
 }
 
 export const saveMemberLocal = async (payload) => {
-  console.log('call=>saveMemberLocal');
+  console.log('call=>saveMemberLocal: ', payload.code);
   return new Promise(async (resolve, reject) => {
     const response = await fetch(apiLocalMember, {
       method: "POST",
@@ -92,6 +93,7 @@ export const saveMemberLocal = async (payload) => {
       referrerPolicy: "no-referrer",
       body: JSON.stringify(payload),
     }).catch((err) => {
+      console.log(`call=>saveMemberLocal=>ERROR: ${err} with ${payload.code}`);
       reject(err)
     })
     if(response){
