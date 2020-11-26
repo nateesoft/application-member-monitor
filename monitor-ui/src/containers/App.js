@@ -34,7 +34,21 @@ const App = () => {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
-    const socket = socketIOClient(apiServiceEndpoint, { transports: ['websocket'] })
+    const socket = socketIOClient(apiServiceEndpoint, { 
+      transports: ['websocket'],
+      reconnection: true,
+      reconnectionDelayMax: 10000,
+    })
+
+    // client-side
+    socket.on("connect", () => {
+      console.log('client-connect', socket.id); // x8WIv7-mJelg7on_ALbx
+    });
+
+    socket.on("disconnect", () => {
+      console.log('client-disconnect', socket.id); // undefined
+    });
+
     socket.on("create_redeem", async data => {
       await Func.saveRedeemLocal(JSON.parse(data))
     })
@@ -73,9 +87,9 @@ const App = () => {
     socket.on('connect_failed', err => {
       setConnect(false)
     });
-    socket.on('disconnect', err => {
-      setConnect(false)
-    });
+    // socket.on('disconnect', err => {
+    //   setConnect(false)
+    // });
   }, [])
 
   return (
