@@ -4,15 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "stop:server": "pm2 delete -s server-monitor || echo notfound server-monitor name",
-    "stop:ui": "pm2 delete -s ui-monitor || echo notfound ui-monitor name",
-    "stop:app": "npm run stop:server && npm run stop:ui",
-    "start:server": "pm2 start ./monitor-server/bin/www --name server-monitor",
-    "start:ui": "pm2 start ./monitor-ui/server/index.js --name ui-monitor",
-    "start:app": "npm run start:server && npm run start:ui",
-    "start": "npm run stop:app && npm run start:app && electron .",
-    "test": "electron .",
-    "start:prod": "npm run build && npm run start",
+    "start": "electron .",
     "build": "electron-builder"
   },
   "keywords": [],
@@ -20,12 +12,15 @@
   "license": "ISC",
   "dependencies": {
     "moment": "^2.27.0",
+    "monaco-loader": "^1.0.0",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.1",
+    "socket.io-client": "^3.0.3",
     "winston": "^3.3.3"
   },
   "devDependencies": {
     "electron": "^10.1.3",
-    "electron-builder": "^22.9.1"
+    "electron-builder": "^22.9.1",
+    "electron-is-dev": "^1.2.0"
   }
 }
