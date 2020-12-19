@@ -1,8 +1,7 @@
 const { Router } = require("express")
 const { json, urlencoded } = require("body-parser")
 const request = require('request');
-const Task = require('../model/Redeem.model')
-const Controller = require('../controller/Redeem.controller')
+const RedeemController = require('../controller').RedeemController
 
 module.exports = args => {
   const { apiServiceRedeem, apiServiceDB, apiServiceAuth, logger } = args;
@@ -14,32 +13,36 @@ module.exports = args => {
   const module = {}
 
   module.GET_SERVER = (req, res) => {
-    logger.info('redeem:GET_SERVER');
-    const options = {
-      'method': 'GET',
-      'url': apiServiceRedeem,
-      'headers': {
-        'database': apiServiceDB,
-        'Authorization': apiServiceAuth
-      }
-    };
-    request(options, async (error, response) => {
-      if (error) {
-        logger.error(error);
-      } else {
-        const result = await Controller().createOrUpdate(response.body);
-        res.json(result);
-      }
-    });
+    try {
+      const options = {
+        'method': 'GET',
+        'url': apiServiceRedeem,
+        'headers': {
+          'database': apiServiceDB,
+          'Authorization': apiServiceAuth
+        }
+      };
+      request(options, async (error, response) => {
+        if (error) {
+          logger.error(error);
+          return res.status(500).json({ status: "Error", msg: error })
+        } else {
+          const result = await RedeemController().createOrUpdate(response.body);
+          return res.json(result);
+        }
+      });
+    } catch (err) {
+      logger.error(err.msg || err);
+      return res.status(500).json({ status: err.status, msg: err.msg })
+    }
   }
 
   module.SYNC_UPLOAD = async (req, res) => {
-    logger.info('redeem:SYNC_UPLOAD')
     try {
-      const response = await Task().syncData();
+      const response = await RedeemController().syncData();
       const data = JSON.parse(response.data);
       if (data.length > 0) {
-        const getData = await Task().findByRedeemCode(data[0].redeem_code)
+        const getData = await RedeemController().findByRedeemCode(data[0].redeem_code)
         const parseData = JSON.parse(getData.data);
         const options = {
           'method': 'PUT',
@@ -56,39 +59,25 @@ module.exports = args => {
             logger.error(error);
           } else {
             const newData = JSON.parse(getData.data);
-            await Task().deleteTemp(newData[0].redeem_code);
-            await Task().createTemp(newData[0].redeem_code);
+            await RedeemController().deleteCreateTemp(newData[0].redeem_code);
           }
         });
       }
-      res.status(200).json({
-        status: response.status,
-        msg: 'Success',
-        data
-      })
+      res.status(200).json({ status: response.status, msg: 'Success', data })
     } catch (err) {
-      logger.error(err);
-      return res
-      .status(500)
-      .json({ status: "Internal Server Error", msg: err.sqlMessage })
+      logger.error(err.msg || err);
+      return res.status(500).json({ status: err.status, msg: err.msg })
     }
   }
 
   module.POST = async (req, res) => {
-    logger.info('redeem:POST');
     try {
-      const response = await Task().create(req.body);
-      if (response) {
-        const redeemCode = req.body.redeem_code;
-        await Task().createTemp(redeemCode);
-      }
+      const response = await RedeemController().createRedeem(req.body);
       const data = JSON.parse(response.data);
       res.status(200).json({ status: response.status, msg: "Success", data })
     } catch (err) {
-      logger.error(err);
-      return res
-      .status(500)
-      .json({ status: "Internal Server Error", msg: err.sqlMessage })
+      logger.error(err.msg || err);
+      return res.status(500).json({ status: err.status, msg: err.msg })
     }
   }
 

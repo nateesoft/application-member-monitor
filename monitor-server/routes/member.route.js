@@ -1,8 +1,7 @@
 const { Router } = require("express")
 const { json, urlencoded } = require("body-parser")
 const request = require('request');
-const Task = require('../model/Member.model')
-const Controller = require('../controller/Member.controller')
+const MemberController = require("../controller").MemberController
 
 module.exports = args => {
   const { apiServiceMember, apiServiceDB, apiServiceAuth, logger } = args;
@@ -14,32 +13,36 @@ module.exports = args => {
   const module = {}
 
   module.GET_SERVER = (req, res) => {
-    logger.info('member:GET_SERVER');
-    const options = {
-      'method': 'GET',
-      'url': apiServiceMember,
-      'headers': {
-        'database': apiServiceDB,
-        'Authorization': apiServiceAuth
-      }
-    };
-    request(options, async (error, response) => {
-      if (error) {
-        logger.error(error);
-      } else {
-        const result = await Controller().createOrUpdate(response.body);
-        res.json(result);
-      }
-    });
+    try {
+      const options = {
+        'method': 'GET',
+        'url': apiServiceMember,
+        'headers': {
+          'database': apiServiceDB,
+          'Authorization': apiServiceAuth
+        }
+      };
+      request(options, async (error, response) => {
+        if (error) {
+          logger.error(error);
+          return res.status(500).json({ status: "Error", msg: error })
+        } else {
+          const result = await MemberController().createOrUpdate(response.body);
+          return res.json(result);
+        }
+      });
+    } catch (err) {
+      logger.error(err.msg);
+      return res.status(500).json({ status: err.status, msg: err.msg })
+    }
   }
 
   module.SYNC_UPLOAD = async (req, res) => {
-    logger.info('member:SYNC_UPLOAD');
     try {
-      const response = await Task().syncData();
+      const response = await MemberController().syncData();
       const data = JSON.parse(response.data);
       if(data.length > 0){
-        const getData = await Task().findByMemberCode(data[0].Member_Code);
+        const getData = await MemberController().findByMemberCode(data[0].Member_Code);
         const parseData = JSON.parse(getData.data);
         const options = {
           'method': 'PUT',
@@ -56,39 +59,25 @@ module.exports = args => {
             logger.error(error);
           } else {
             const newData = JSON.parse(getData.data);
-            await Task().deleteTemp(newData[0].Member_Code);
-            await Task().createTemp(newData[0].Member_Code);
+            await MemberController().deleteCreateTemp(newData[0].Member_Code)
           }
         });
       }
-      res.status(200).json({
-        status: response.status,
-        msg: 'Success',
-        data
-      })
+      res.status(200).json({ status: response.status, msg: 'Success', data })
     } catch (err) {
-      logger.error(err);
-      return res
-      .status(500)
-      .json({ status: "Internal Server Error", msg: err.sqlMessage })
+      logger.error(err.msg);
+      return res.status(500).json({ status: err.status, msg: err.msg })
     }
   }
 
   module.POST = async (req, res) => {
-    logger.info('member:POST');
     try {
-      const response = await Task().create(req.body);
-      if (response) {
-        const memberCode = req.body.code || req.body.Member_Code;
-        await Task().createTemp(memberCode);
-      }
+      const response = await MemberController().createMember(req.body);
       const data = JSON.parse(response.data);
       res.status(200).json({ status: response.status, msg: "Success", data })
     } catch (err) {
-      logger.error(err);
-      return res
-      .status(500)
-      .json({ status: "Internal Server Error", msg: err.sqlMessage })
+      logger.error(err.msg);
+      return res.status(500).json({ status: err.status, msg: err.msg })
     }
   }
 

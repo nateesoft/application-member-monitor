@@ -26,7 +26,8 @@ const config = {
         acquireTimeout: 10000,
         waitForConnections: true,
         queueLimit: 0,
-    }
+    },
+    isDev: false,
 }
 
 module.exports = config;
