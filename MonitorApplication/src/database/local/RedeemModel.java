@@ -27,6 +27,7 @@ public class RedeemModel {
     private Float discount_percent;
     private String redeem_or_free;
     private String data_sync;
+    private String saveOrUpdate;
 
     public String getUuid_index() {
         return uuid_index;
@@ -178,6 +179,14 @@ public class RedeemModel {
 
     public void setData_sync(String data_sync) {
         this.data_sync = data_sync;
+    }
+
+    public String getSaveOrUpdate() {
+        return saveOrUpdate;
+    }
+
+    public void setSaveOrUpdate(String saveOrUpdate) {
+        this.saveOrUpdate = saveOrUpdate;
     }
 
     @Override

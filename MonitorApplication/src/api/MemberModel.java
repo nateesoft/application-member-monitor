@@ -1,7 +1,5 @@
 package api;
 
-import java.sql.Date;
-
 /**
  *
  * @author nateesun
@@ -30,6 +28,7 @@ public class MemberModel {
     private String member_role;
     private String data_sync;
     private String line_user_id;
+    private String saveOrUpdate;
 
     public String getCode() {
         return code;
@@ -205,6 +204,19 @@ public class MemberModel {
 
     public void setLine_user_id(String line_user_id) {
         this.line_user_id = line_user_id;
+    }
+
+    public String getSaveOrUpdate() {
+        return saveOrUpdate;
+    }
+
+    public void setSaveOrUpdate(String saveOrUpdate) {
+        this.saveOrUpdate = saveOrUpdate;
+    }
+
+    @Override
+    public String toString() {
+        return "MemberModel{" + "code=" + code + ", company_code=" + company_code + ", gender=" + gender + ", status=" + status + ", email=" + email + ", birthday=" + birthday + ", expired_date=" + expired_date + ", total_purchase=" + total_purchase + ", mobile=" + mobile + ", point_expired_date=" + point_expired_date + ", total_score=" + total_score + ", active=" + active + ", first_name=" + first_name + ", last_name=" + last_name + ", system_created=" + system_created + ", system_updated=" + system_updated + ", line_id=" + line_id + ", prefix=" + prefix + ", uuid_index=" + uuid_index + ", member_role=" + member_role + ", data_sync=" + data_sync + ", line_user_id=" + line_user_id + ", saveOrUpdate=" + saveOrUpdate + '}';
     }
 
 }

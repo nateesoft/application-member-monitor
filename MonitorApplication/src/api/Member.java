@@ -2,6 +2,7 @@ package api;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import utils.DateUtil;
 
 /**
  *
@@ -17,17 +18,17 @@ public class Member {
             model.setGender(rs.getString("gender"));
             model.setStatus(rs.getString("status"));
             model.setEmail(rs.getString("email"));
-            model.setBirthday(rs.getString("birthday"));
-            model.setExpired_date(rs.getString("expired_date"));
+            model.setBirthday(DateUtil.getDateString(rs.getString("birthday")));
+            model.setExpired_date(DateUtil.getDateString(rs.getString("expired_date")));
             model.setTotal_purchase(rs.getFloat("total_purchase"));
             model.setMobile(rs.getString("mobile"));
-            model.setPoint_expired_date(rs.getString("point_expired_date"));
+            model.setPoint_expired_date(DateUtil.getDateString(rs.getString("point_expired_date")));
             model.setTotal_score(rs.getFloat("total_score"));
             model.setActive(rs.getString("active"));
             model.setFirst_name(rs.getString("first_name"));
             model.setLast_name(rs.getString("last_name"));
-            model.setSystem_created(rs.getString("system_created"));
-            model.setSystem_updated(rs.getString("system_updated"));
+            model.setSystem_created(DateUtil.getDateString(rs.getString("system_created")));
+            model.setSystem_updated(DateUtil.getDateString(rs.getString("system_updated")));
             model.setLine_id(rs.getString("line_id"));
             model.setPrefix(rs.getString("prefix"));
             model.setUuid_index(rs.getString("uuid_index"));
@@ -47,17 +48,17 @@ public class Member {
             model.setGender(rs.getString("gender"));
             model.setStatus(rs.getString("status"));
             model.setEmail(rs.getString("email"));
-            model.setBirthday(rs.getString("birthday"));
-            model.setExpired_date(rs.getString("expired_date"));
+            model.setBirthday(DateUtil.getDateString(rs.getString("birthday")));
+            model.setExpired_date(DateUtil.getDateString(rs.getString("expired_date")));
             model.setTotal_purchase(rs.getFloat("total_purchase"));
             model.setMobile(rs.getString("mobile"));
-            model.setPoint_expired_date(rs.getString("point_expired_date"));
+            model.setPoint_expired_date(DateUtil.getDateString(rs.getString("point_expired_date")));
             model.setTotal_score(rs.getFloat("total_score"));
             model.setActive(rs.getString("active"));
             model.setFirst_name(rs.getString("first_name"));
             model.setLast_name(rs.getString("last_name"));
-            model.setSystem_created(rs.getString("system_created"));
-            model.setSystem_updated(rs.getString("system_updated"));
+            model.setSystem_created(DateUtil.getDateString(rs.getString("system_created")));
+            model.setSystem_updated(DateUtil.getDateString(rs.getString("system_updated")));
             model.setLine_id(rs.getString("line_id"));
             model.setPrefix(rs.getString("prefix"));
             model.setUuid_index(rs.getString("uuid_index"));

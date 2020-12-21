@@ -1,13 +1,16 @@
 package database.local;
 
+import api.MemberModel;
 import database.MySQLMemberConnect;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.List;
+import utils.DateUtil;
+import utils.ThaiUtil;
 
 /**
  *
@@ -16,7 +19,10 @@ import org.json.JSONObject;
 interface MemmasterInterface {
 
     public MemmasterModel findByMemberCode(String memberCode);
-    public ArrayList<MemmasterModel> findAll();
+
+    public List<MemmasterModel> findAll();
+
+    public List<MemberModel> findMemberAll();
 //    public boolean syncData();
 //    public void bulkInsert();
 //    public void bulkInsertTemp();
@@ -33,146 +39,36 @@ public class Memmaster implements MemmasterInterface {
     public MemmasterModel mapping(ResultSet rs, MemmasterModel model) {
         try {
             model.setMember_Code(rs.getString("Member_Code"));
-            model.setMember_TypeCode(rs.getString("Member_TypeCode"));
-            model.setMember_BranchCode(rs.getString("Member_BranchCode"));
             model.setMember_NameThai(rs.getString("Member_NameThai"));
-            model.setMember_NameEng(rs.getString("Member_NameEng"));
-            model.setMember_Gender(rs.getString("Member_Gender"));
-            model.setMember_Status(rs.getString("Member_Status"));
-            model.setMember_NationCode(rs.getString("Member_NationCode"));
-            model.setMember_OccupationCode(rs.getString("Member_OccupationCode"));
-            model.setMember_IncomeCode(rs.getString("Member_IncomeCode"));
-            model.setMember_EducationCode(rs.getString("Member_EducationCode"));
-            model.setMember_Company(rs.getString("Member_Company"));
-            model.setMember_AddressNo(rs.getString("Member_AddressNo"));
-            model.setMember_Building(rs.getString("Member_Building"));
-            model.setMember_AddressSoi(rs.getString("Member_AddressSoi"));
-            model.setMember_AddressStreet(rs.getString("Member_AddressStreet"));
-            model.setMember_AddressSubDistrict(rs.getString("Member_AddressSubDistrict"));
-            model.setMember_AddressDistrict(rs.getString("Member_AddressDistrict"));
-            model.setMember_Province(rs.getString("Member_Province"));
-            model.setMember_PostalCode(rs.getString("Member_PostalCode"));
-            model.setMember_HomeTel(rs.getString("Member_HomeTel"));
-            model.setMember_Fax(rs.getString("Member_Fax"));
             model.setMember_Email(rs.getString("Member_Email"));
             model.setMember_Brithday(rs.getDate("Member_Brithday"));
-            model.setMember_AppliedDate(rs.getDate("Member_AppliedDate"));
             model.setMember_ExpiredDate(rs.getDate("Member_ExpiredDate"));
-            model.setMember_DiscountRate(rs.getString("Member_DiscountRate"));
-            model.setMember_SpouseName(rs.getString("Member_SpouseName"));
-            model.setMember_Food(rs.getString("Member_Food"));
             model.setMember_TotalPurchase(rs.getFloat("Member_TotalPurchase"));
-            model.setMember_Remark1(rs.getString("Member_Remark1"));
-            model.setMember_Remark2(rs.getString("Member_Remark2"));
             model.setMember_Mobile(rs.getString("Member_Mobile"));
-            model.setMember_ReceiveInformation(rs.getString("Member_ReceiveInformation"));
-            model.setMember_HobbySetCode(rs.getString("Member_HobbySetCode"));
-            model.setMember_LastDateService(rs.getDate("Member_LastDateService"));
-            model.setMember_ServiceCount(rs.getFloat("Member_ServiceCount"));
-            model.setMember_PointExpiredDate(rs.getDate("Member_PointExpiredDate"));
             model.setMember_TotalScore(rs.getFloat("Member_TotalScore"));
             model.setMember_TitleNameThai(rs.getString("Member_TitleNameThai"));
             model.setMember_SurnameThai(rs.getString("Member_SurnameThai"));
-            model.setMember_CompanyAddressNo(rs.getString("Member_CompanyAddressNo"));
-            model.setMember_CompanyBuilding(rs.getString("Member_CompanyBuilding"));
-            model.setMember_CompanySoi(rs.getString("Member_CompanySoi"));
-            model.setMember_CompanyStreet(rs.getString("Member_CompanyStreet"));
-            model.setMember_CompanySubDistrict(rs.getString("Member_CompanySubDistrict"));
-            model.setMember_CompanyDistrict(rs.getString("Member_CompanyDistrict"));
-            model.setMember_CompanyProvince(rs.getString("Member_CompanyProvince"));
-            model.setMember_CompanyPostalCode(rs.getString("Member_CompanyPostalCode"));
-            model.setMember_CompanyTel(rs.getString("Member_CompanyTel"));
-            model.setMember_CompanyFax(rs.getString("Member_CompanyFax"));
             model.setMember_Active(rs.getString("Member_Active"));
-            model.setMember_UsedTitle(rs.getString("Member_UsedTitle"));
-            model.setMember_MailTo(rs.getString("Member_MailTo"));
-            model.setMember_PrintLabel(rs.getString("Member_PrintLabel"));
-            model.setEmployee_CodeCreate(rs.getString("Employee_CodeCreate"));
-            model.setEmployee_CreateDate(rs.getDate("Employee_CreateDate"));
-            model.setEmployee_CreateTime(rs.getString("Employee_CreateTime"));
-            model.setEmployee_CodeModify(rs.getString("Employee_CodeModify"));
-            model.setEmployee_ModifyDate(rs.getDate("Employee_ModifyDate"));
-            model.setEmployee_ModifyTime(rs.getString("Employee_ModifyTime"));
-            model.setMember_TranferFlag(rs.getString("Member_TranferFlag"));
-            model.setMember_UnknowBirth(rs.getString("Member_UnknowBirth"));
-            model.setMember_PriceNO(rs.getString("Member_PriceNO"));
-            model.setSystem_Created(rs.getDate("System_Created"));
-            model.setSystem_Updated(rs.getDate("System_Updated"));
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
         return model;
     }
-    
-    public MemmasterModel mapping(JSONObject rs, MemmasterModel model) {
+
+    public MemberModel mapping(ResultSet rs, MemberModel model) {
         try {
-            model.setMember_Code(rs.getString("Member_Code"));
-            model.setMember_TypeCode(rs.getString("Member_TypeCode"));
-            model.setMember_BranchCode(rs.getString("Member_BranchCode"));
-            model.setMember_NameThai(rs.getString("Member_NameThai"));
-            model.setMember_NameEng(rs.getString("Member_NameEng"));
-            model.setMember_Gender(rs.getString("Member_Gender"));
-            model.setMember_Status(rs.getString("Member_Status"));
-            model.setMember_NationCode(rs.getString("Member_NationCode"));
-            model.setMember_OccupationCode(rs.getString("Member_OccupationCode"));
-            model.setMember_IncomeCode(rs.getString("Member_IncomeCode"));
-            model.setMember_EducationCode(rs.getString("Member_EducationCode"));
-            model.setMember_Company(rs.getString("Member_Company"));
-            model.setMember_AddressNo(rs.getString("Member_AddressNo"));
-            model.setMember_Building(rs.getString("Member_Building"));
-            model.setMember_AddressSoi(rs.getString("Member_AddressSoi"));
-            model.setMember_AddressStreet(rs.getString("Member_AddressStreet"));
-            model.setMember_AddressSubDistrict(rs.getString("Member_AddressSubDistrict"));
-            model.setMember_AddressDistrict(rs.getString("Member_AddressDistrict"));
-            model.setMember_Province(rs.getString("Member_Province"));
-            model.setMember_PostalCode(rs.getString("Member_PostalCode"));
-            model.setMember_HomeTel(rs.getString("Member_HomeTel"));
-            model.setMember_Fax(rs.getString("Member_Fax"));
-            model.setMember_Email(rs.getString("Member_Email"));
-//            model.setMember_Brithday(rs.getDate("Member_Brithday"));
-//            model.setMember_AppliedDate(rs.getDate("Member_AppliedDate"));
-//            model.setMember_ExpiredDate(rs.getDate("Member_ExpiredDate"));
-            model.setMember_DiscountRate(rs.getString("Member_DiscountRate"));
-            model.setMember_SpouseName(rs.getString("Member_SpouseName"));
-            model.setMember_Food(rs.getString("Member_Food"));
-            model.setMember_TotalPurchase(rs.getFloat("Member_TotalPurchase"));
-            model.setMember_Remark1(rs.getString("Member_Remark1"));
-            model.setMember_Remark2(rs.getString("Member_Remark2"));
-            model.setMember_Mobile(rs.getString("Member_Mobile"));
-            model.setMember_ReceiveInformation(rs.getString("Member_ReceiveInformation"));
-            model.setMember_HobbySetCode(rs.getString("Member_HobbySetCode"));
-//            model.setMember_LastDateService(rs.getDate("Member_LastDateService"));
-            model.setMember_ServiceCount(rs.getFloat("Member_ServiceCount"));
-//            model.setMember_PointExpiredDate(rs.getDate("Member_PointExpiredDate"));
-            model.setMember_TotalScore(rs.getFloat("Member_TotalScore"));
-            model.setMember_TitleNameThai(rs.getString("Member_TitleNameThai"));
-            model.setMember_SurnameThai(rs.getString("Member_SurnameThai"));
-            model.setMember_CompanyAddressNo(rs.getString("Member_CompanyAddressNo"));
-            model.setMember_CompanyBuilding(rs.getString("Member_CompanyBuilding"));
-            model.setMember_CompanySoi(rs.getString("Member_CompanySoi"));
-            model.setMember_CompanyStreet(rs.getString("Member_CompanyStreet"));
-            model.setMember_CompanySubDistrict(rs.getString("Member_CompanySubDistrict"));
-            model.setMember_CompanyDistrict(rs.getString("Member_CompanyDistrict"));
-            model.setMember_CompanyProvince(rs.getString("Member_CompanyProvince"));
-            model.setMember_CompanyPostalCode(rs.getString("Member_CompanyPostalCode"));
-            model.setMember_CompanyTel(rs.getString("Member_CompanyTel"));
-            model.setMember_CompanyFax(rs.getString("Member_CompanyFax"));
-            model.setMember_Active(rs.getString("Member_Active"));
-            model.setMember_UsedTitle(rs.getString("Member_UsedTitle"));
-            model.setMember_MailTo(rs.getString("Member_MailTo"));
-            model.setMember_PrintLabel(rs.getString("Member_PrintLabel"));
-            model.setEmployee_CodeCreate(rs.getString("Employee_CodeCreate"));
-//            model.setEmployee_CreateDate(rs.getDate("Employee_CreateDate"));
-            model.setEmployee_CreateTime(rs.getString("Employee_CreateTime"));
-            model.setEmployee_CodeModify(rs.getString("Employee_CodeModify"));
-//            model.setEmployee_ModifyDate(rs.getDate("Employee_ModifyDate"));
-            model.setEmployee_ModifyTime(rs.getString("Employee_ModifyTime"));
-            model.setMember_TranferFlag(rs.getString("Member_TranferFlag"));
-            model.setMember_UnknowBirth(rs.getString("Member_UnknowBirth"));
-            model.setMember_PriceNO(rs.getString("Member_PriceNO"));
-//            model.setSystem_Created(rs.getDate("System_Created"));
-//            model.setSystem_Updated(rs.getDate("System_Updated"));
-        } catch (JSONException e) {
+            model.setCode(rs.getString("Member_Code"));
+            model.setFirst_name(ThaiUtil.ASCII2Unicode(rs.getString("Member_NameThai")));
+            model.setEmail(rs.getString("Member_Email"));
+            model.setBirthday(DateUtil.getDateString(rs.getDate("Member_Brithday")));
+            model.setExpired_date(DateUtil.getDateString(rs.getDate("Member_ExpiredDate")));
+            model.setTotal_purchase(rs.getFloat("Member_TotalPurchase"));
+            model.setMobile(rs.getString("Member_Mobile"));
+            model.setTotal_score(rs.getFloat("Member_TotalScore"));
+            model.setPrefix(ThaiUtil.ASCII2Unicode(rs.getString("Member_TitleNameThai")));
+            model.setLast_name(ThaiUtil.ASCII2Unicode(rs.getString("Member_SurnameThai")));
+            model.setActive(rs.getString("Member_Active"));
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
         return model;
@@ -181,7 +77,10 @@ public class Memmaster implements MemmasterInterface {
     @Override
     public MemmasterModel findByMemberCode(String memberCode) {
         try {
-            String sql = "select * from memmaster where Member_Code='" + memberCode + "'";
+            String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,\n"
+                    + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,\n"
+                    + "Member_CompanyTel,Member_Active "
+                    + "from memmaster where Member_Code='" + memberCode + "'";
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery(sql)) {
@@ -197,16 +96,18 @@ public class Memmaster implements MemmasterInterface {
     }
 
     @Override
-    public ArrayList<MemmasterModel> findAll() {
-        ArrayList<MemmasterModel> listMembers = new ArrayList<>();
+    public List<MemmasterModel> findAll() {
+        List<MemmasterModel> listMembers = new ArrayList<>();
         try {
-            String sql = "select * from memmaster order by Member_Code";
+            String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,\n"
+                    + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,\n"
+                    + "Member_CompanyTel,Member_Active "
+                    + "from memmaster order by Member_Code";
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery(sql)) {
-                    if (rs.next()) {
-                        MemmasterModel model = mapping(rs, new MemmasterModel());
-                        listMembers.add(model);
+                    while (rs.next()) {
+                        listMembers.add(mapping(rs, new MemmasterModel()));
                     }
                 }
             }
@@ -214,5 +115,107 @@ public class Memmaster implements MemmasterInterface {
             System.err.println(e.getMessage());
         }
         return listMembers;
+    }
+
+    @Override
+    public List<MemberModel> findMemberAll() {
+        List<MemberModel> listMembers = new ArrayList<>();
+        try {
+            String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,"
+                    + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,"
+                    + "Member_CompanyTel,Member_Active "
+                    + "from memmaster order by Member_Code";
+            MySQLMemberConnect mysql = new MySQLMemberConnect();
+            try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery(sql)) {
+                    while (rs.next()) {
+                        listMembers.add(mapping(rs, new MemberModel()));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return listMembers;
+    }
+
+    public void update(MemberModel[] listMember) {
+        try {
+            MySQLMemberConnect mysql = new MySQLMemberConnect();
+            try (Connection conn = mysql.openConnection()) {
+                conn.setAutoCommit(false);
+                String sql = "update memmaster set Member_TotalPurchase=?, Member_TotalScore=? where Member_Code=?;";
+                try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
+                    for (MemberModel model : listMember) {
+                        if (model.getSaveOrUpdate().equals("update")) {
+                            prepStmt.setFloat(1, model.getTotal_purchase());
+                            prepStmt.setFloat(2, model.getTotal_score());
+                            prepStmt.setString(3, model.getCode());
+                            
+                            prepStmt.addBatch();
+                        }
+                    }
+                    int[] numUpdates = prepStmt.executeBatch();
+                    for (int i = 0; i < numUpdates.length; i++) {
+                        if (numUpdates[i] == -2) {
+                            System.out.println("Execution " + i + ": unknown number of rows updated");
+                        } else {
+                            System.out.println("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
+                        }
+                    }
+                }                
+                conn.commit();
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    public void save(MemberModel[] listMember) {
+        try {
+            MySQLMemberConnect mysql = new MySQLMemberConnect();
+            try (Connection conn = mysql.openConnection()) {
+                conn.setAutoCommit(false);
+                String sql = "insert into memmaster"
+                        + "(Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,"
+                        + "Member_ExpiredDate,Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,"
+                        + "Member_SurnameThai,Member_CompanyTel,Member_Active,System_Created,System_Updated) "
+                        + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
+                    for (MemberModel model : listMember) {
+                        if (model.getSaveOrUpdate().equals("save")) {
+                            prepStmt.setString(1, model.getCode());
+                            prepStmt.setString(2, ThaiUtil.Unicode2ASCII(model.getFirst_name()));
+                            prepStmt.setString(3, model.getMobile());
+                            prepStmt.setString(4, model.getEmail());
+                            prepStmt.setDate(5, DateUtil.getDate(model.getBirthday()));
+                            prepStmt.setDate(6, DateUtil.getDate(model.getExpired_date()));
+                            prepStmt.setFloat(7, model.getTotal_purchase());
+                            prepStmt.setString(8, model.getMobile());
+                            prepStmt.setFloat(9, model.getTotal_score());
+                            prepStmt.setString(10, ThaiUtil.Unicode2ASCII(model.getPrefix()));
+                            prepStmt.setString(11, ThaiUtil.Unicode2ASCII(model.getLast_name()));
+                            prepStmt.setString(12, model.getMobile());
+                            prepStmt.setString(13, "Y");
+                            prepStmt.setDate(14, new Date(new java.util.Date().getTime()));
+                            prepStmt.setDate(15, new Date(new java.util.Date().getTime()));
+                            
+                            prepStmt.addBatch();
+                        }
+                    }
+                    int[] numUpdates = prepStmt.executeBatch();
+                    for (int i = 0; i < numUpdates.length; i++) {
+                        if (numUpdates[i] == -2) {
+                            System.out.println("Execution " + i + ": unknown number of rows updated");
+                        } else {
+                            System.out.println("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
+                        }
+                    }
+                }                
+                conn.commit();
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
