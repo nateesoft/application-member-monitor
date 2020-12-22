@@ -3,6 +3,7 @@ package apps;
 import api.ControllerApi;
 import database.MySQLMemberConnect;
 import database.MySQLPOSConnect;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         btnShowLogFile = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        cbTargetLogFiles = new javax.swing.JComboBox<>();
+        cbTargetLogFiles = new javax.swing.JComboBox<String>();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -109,21 +110,25 @@ public class LogAppDialog extends javax.swing.JDialog {
         jLabel5.setText("Service Redeem:");
 
         lbPosDbConnect.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lbPosDbConnect.setForeground(new java.awt.Color(204, 0, 0));
         lbPosDbConnect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbPosDbConnect.setText("Disconnect");
         lbPosDbConnect.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lbMemberDbConnect.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lbMemberDbConnect.setForeground(new java.awt.Color(204, 0, 0));
         lbMemberDbConnect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbMemberDbConnect.setText("Disconnect");
         lbMemberDbConnect.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lbServiceMemberConnect.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lbServiceMemberConnect.setForeground(new java.awt.Color(204, 0, 0));
         lbServiceMemberConnect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbServiceMemberConnect.setText("Disconnect");
         lbServiceMemberConnect.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lbServiceRedeemConnect.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lbServiceRedeemConnect.setForeground(new java.awt.Color(204, 0, 0));
         lbServiceRedeemConnect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbServiceRedeemConnect.setText("Disconnect");
         lbServiceRedeemConnect.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -330,6 +335,7 @@ public class LogAppDialog extends javax.swing.JDialog {
             Connection con1 = pos.openConnection();
             if(con1!=null){
                 lbPosDbConnect.setText("Connected.");
+                lbPosDbConnect.setForeground(Color.BLUE);
                 con1.close();
             }
             // member db connect
@@ -337,6 +343,7 @@ public class LogAppDialog extends javax.swing.JDialog {
             Connection con2 = member.openConnection();
             if(con2!=null){
                 lbMemberDbConnect.setText("Connected.");
+                lbMemberDbConnect.setForeground(Color.BLUE);
                 con2.close();
             }
         } catch (SQLException e) {
@@ -349,6 +356,8 @@ public class LogAppDialog extends javax.swing.JDialog {
         if(api.getVersion()){
             lbServiceMemberConnect.setText("Connected.");
             lbServiceRedeemConnect.setText("Connected.");
+            lbServiceMemberConnect.setForeground(Color.BLUE);
+            lbServiceRedeemConnect.setForeground(Color.BLUE);
         }
     }
 }

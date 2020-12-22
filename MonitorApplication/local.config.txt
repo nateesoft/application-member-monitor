@@ -13,7 +13,7 @@ member.port=3306
 member.dbName=mycrmbranch
 
 ### API ENDPOINT ###
-api.serviceVersion==http://localhost:5000/api/version
+api.serviceVersion=http://localhost:5000/api/version
 api.serviceMember=http://localhost:5000/api/member/client
 api.serviceRedeem=http://localhost:5000/api/redeem/client
 api.serviceDB=d2ViZGFpbHlfMDAx
