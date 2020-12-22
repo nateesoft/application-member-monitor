@@ -19,7 +19,14 @@ public class TaskController {
     private static final ControllerDB local = new ControllerDB();
 
     public static void run() {
-        syncDown();
+        while (!Thread.currentThread().isInterrupted()) {
+            System.out.println("Thread running");
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public static void syncDown() {
@@ -30,17 +37,19 @@ public class TaskController {
             MemberModel memberLocalList[] = local.getMember();
             RedeemModel redeemLocalList[] = local.getRedeem();
 
-            MemberModel []insertMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
-            RedeemModel []insertRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
-            
-           local.saveUpdateMember(insertMember);
-           local.saveUpdateRedeem(insertRedeem);
+            MemberModel[] insertMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
+            RedeemModel[] insertRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
+
+            local.saveUpdateMember(insertMember);
+            local.saveUpdateRedeem(insertRedeem);
         } catch (IOException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public static void pushUp() {
-        
+        // sync from file member local
+
+        // sync from file redeem local
     }
 }
