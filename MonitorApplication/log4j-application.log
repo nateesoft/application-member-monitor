@@ -1,0 +1,8 @@
+2563-12-22 14:40:55 INFO  Main:62 - start application monitory running
+2563-12-22 15:16:56 INFO  Main:62 - start application monitory running
+2563-12-22 15:16:56 INFO  DbConfig:34 - loadConfig
+2563-12-22 15:17:30 INFO  Main:46 - Close application monitor
+2563-12-22 15:25:19 INFO  Main:62 - start application monitory running
+2563-12-22 15:25:19 DEBUG DbConfig:34 - loadConfig
+2563-12-22 15:25:19 INFO  TaskController:23 - Task running
+2563-12-22 15:25:23 INFO  Main:46 - Close application monitor

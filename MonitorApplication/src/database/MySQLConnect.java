@@ -3,6 +3,7 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -10,25 +11,28 @@ import java.sql.SQLException;
  */
 public class MySQLConnect {
 
+    private static final Logger LOGGER = Logger.getLogger(MySQLConnect.class);
     private Connection connection;
     private DbConfig config;
-    
+
     public Connection openConnection(String type) {
+        LOGGER.debug("openConnection type=" + type);
         try {
             config = DbConfig.loadConfig();
             Class.forName("com.mysql.cj.jdbc.Driver");
             String urlConnect = "";
             switch (type) {
                 case "pos":
-                    urlConnect = "jdbc:mysql://"+config.getHostPos()+"/"+config.getDbNamePos()+"?"+ "user="+config.getUserPos()+"&password="+config.getPasswordPos();
+                    urlConnect = "jdbc:mysql://" + config.getHostPos() + "/" + config.getDbNamePos() + "?" + "user=" + config.getUserPos() + "&password=" + config.getPasswordPos();
                     break;
                 case "member":
-                    urlConnect = "jdbc:mysql://"+config.getHostMember()+"/"+config.getDbNameMember()+"?"+ "user="+config.getUserMember()+"&password="+config.getPasswordMember();
+                    urlConnect = "jdbc:mysql://" + config.getHostMember() + "/" + config.getDbNameMember() + "?" + "user=" + config.getUserMember() + "&password=" + config.getPasswordMember();
                     break;
             }
+            LOGGER.info(urlConnect);
             connection = DriverManager.getConnection(urlConnect);
         } catch (ClassNotFoundException | SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
             this.connection = null;
         }
         return this.connection;

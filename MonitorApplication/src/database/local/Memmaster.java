@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 import utils.DateUtil;
 import utils.ThaiUtil;
 
@@ -36,7 +37,10 @@ interface MemmasterInterface {
 
 public class Memmaster implements MemmasterInterface {
 
+    private static final Logger LOGGER = Logger.getLogger(Memmaster.class);
+
     public MemmasterModel mapping(ResultSet rs, MemmasterModel model) {
+        LOGGER.debug("mapping");
         try {
             model.setMember_Code(rs.getString("Member_Code"));
             model.setMember_NameThai(rs.getString("Member_NameThai"));
@@ -50,12 +54,13 @@ public class Memmaster implements MemmasterInterface {
             model.setMember_SurnameThai(rs.getString("Member_SurnameThai"));
             model.setMember_Active(rs.getString("Member_Active"));
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return model;
     }
 
     public MemberModel mapping(ResultSet rs, MemberModel model) {
+        LOGGER.debug("mapping");
         try {
             model.setCode(rs.getString("Member_Code"));
             model.setFirst_name(ThaiUtil.ASCII2Unicode(rs.getString("Member_NameThai")));
@@ -69,13 +74,14 @@ public class Memmaster implements MemmasterInterface {
             model.setLast_name(ThaiUtil.ASCII2Unicode(rs.getString("Member_SurnameThai")));
             model.setActive(rs.getString("Member_Active"));
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return model;
     }
 
     @Override
     public MemmasterModel findByMemberCode(String memberCode) {
+        LOGGER.debug("findByMemberCode");
         try {
             String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,\n"
                     + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,\n"
@@ -90,13 +96,14 @@ public class Memmaster implements MemmasterInterface {
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<MemmasterModel> findAll() {
+        LOGGER.debug("findAll");
         List<MemmasterModel> listMembers = new ArrayList<>();
         try {
             String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,\n"
@@ -112,13 +119,14 @@ public class Memmaster implements MemmasterInterface {
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return listMembers;
     }
 
     @Override
     public List<MemberModel> findMemberAll() {
+        LOGGER.debug("findMemberAll");
         List<MemberModel> listMembers = new ArrayList<>();
         try {
             String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,"
@@ -134,12 +142,13 @@ public class Memmaster implements MemmasterInterface {
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return listMembers;
     }
 
     public void update(MemberModel[] listMember) {
+        LOGGER.debug("update");
         try {
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection()) {
@@ -151,27 +160,28 @@ public class Memmaster implements MemmasterInterface {
                             prepStmt.setFloat(1, model.getTotal_purchase());
                             prepStmt.setFloat(2, model.getTotal_score());
                             prepStmt.setString(3, model.getCode());
-                            
+
                             prepStmt.addBatch();
                         }
                     }
                     int[] numUpdates = prepStmt.executeBatch();
                     for (int i = 0; i < numUpdates.length; i++) {
                         if (numUpdates[i] == -2) {
-                            System.out.println("Execution " + i + ": unknown number of rows updated");
+                            LOGGER.debug("Execution " + i + ": unknown number of rows updated");
                         } else {
-                            System.out.println("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
+                            LOGGER.debug("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
                         }
                     }
-                }                
+                }
                 conn.commit();
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
-    
+
     public void save(MemberModel[] listMember) {
+        LOGGER.debug("save");
         try {
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection()) {
@@ -199,23 +209,23 @@ public class Memmaster implements MemmasterInterface {
                             prepStmt.setString(13, "Y");
                             prepStmt.setDate(14, new Date(new java.util.Date().getTime()));
                             prepStmt.setDate(15, new Date(new java.util.Date().getTime()));
-                            
+
                             prepStmt.addBatch();
                         }
                     }
                     int[] numUpdates = prepStmt.executeBatch();
                     for (int i = 0; i < numUpdates.length; i++) {
                         if (numUpdates[i] == -2) {
-                            System.out.println("Execution " + i + ": unknown number of rows updated");
+                            LOGGER.debug("Execution " + i + ": unknown number of rows updated");
                         } else {
-                            System.out.println("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
+                            LOGGER.debug("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
                         }
                     }
-                }                
+                }
                 conn.commit();
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }

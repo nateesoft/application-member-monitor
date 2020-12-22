@@ -1,5 +1,6 @@
 package api;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.DateUtil;
@@ -8,10 +9,12 @@ import utils.DateUtil;
  *
  * @author nateesun
  */
-
 public class Member {
 
+    private static final Logger LOGGER = Logger.getLogger(Member.class);
+
     public MemberModel mappingJsonToModel(JSONObject rs, MemberModel model) {
+        LOGGER.debug("mappingJsonToModel");
         try {
             model.setCode(rs.getString("code"));
             model.setCompany_code(rs.getString("company_code"));
@@ -36,12 +39,13 @@ public class Member {
             model.setData_sync(rs.getString("data_sync"));
             model.setLine_user_id(rs.getString("line_user_id"));
         } catch (JSONException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return model;
     }
-    
+
     public MemberModel mappingPosModelToModel(JSONObject rs, MemberModel model) {
+        LOGGER.debug("mappingPosModelToModel");
         try {
             model.setCode(rs.getString("code"));
             model.setCompany_code(rs.getString("company_code"));
@@ -66,12 +70,13 @@ public class Member {
             model.setData_sync(rs.getString("data_sync"));
             model.setLine_user_id(rs.getString("line_user_id"));
         } catch (JSONException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return model;
     }
-    
-    public JSONObject mappingModelToJSON(MemberModel model){
+
+    public JSONObject mappingModelToJSON(MemberModel model) {
+        LOGGER.debug("mappingModelToJSON");
         return new JSONObject(model);
     }
 }

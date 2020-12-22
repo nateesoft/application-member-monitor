@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 /**
@@ -15,6 +16,8 @@ import org.json.JSONObject;
  * @author nateesun
  */
 public class ControllerApi {
+
+    private static final Logger LOGGER = Logger.getLogger(ControllerApi.class);
 
     private static final String USER_AGENT = "Mozilla/5.0";
     private final DbConfig config;
@@ -25,6 +28,7 @@ public class ControllerApi {
     }
 
     public String callGetService(String url) throws IOException {
+        LOGGER.debug("callGetService :" + url);
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
@@ -49,18 +53,23 @@ public class ControllerApi {
     }
 
     private String getMember() throws IOException {
+        LOGGER.debug("getMember");
         return callGetService(config.getApiServiceMember());
     }
-    
+
     private String getRedeem() throws IOException {
+        LOGGER.debug("getRedeem");
         return callGetService(config.getApiServiceRedeem());
     }
 
     public MemberModel[] getMemberMapping() throws IOException {
+        LOGGER.debug("getMemberMapping");
         JSONObject json = new JSONObject(getMember());
         return gson.fromJson(json.get("data").toString(), MemberModel[].class);
     }
+
     public RedeemModel[] getRedeemMapping() throws IOException {
+        LOGGER.debug("getRedeemMapping");
         JSONObject json = new JSONObject(getRedeem());
         return gson.fromJson(json.get("data").toString(), RedeemModel[].class);
     }

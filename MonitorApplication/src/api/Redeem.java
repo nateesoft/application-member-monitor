@@ -3,6 +3,7 @@ package api;
 import database.local.RedeemModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -10,8 +11,10 @@ import java.sql.SQLException;
  */
 
 public class Redeem {
+    private static final Logger LOGGER = Logger.getLogger(Redeem.class);
 
     public RedeemModel mapping(ResultSet rs, RedeemModel model) {
+        LOGGER.debug("mapping");
         try {
             model.setUuid_index(rs.getString("uuid_index"));
             model.setRedeem_code(rs.getString("redeem_code"));
@@ -33,7 +36,7 @@ public class Redeem {
             model.setRedeem_or_free(rs.getString("redeem_or_free"));
             model.setData_sync(rs.getString("data_sync"));
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return model;
     }

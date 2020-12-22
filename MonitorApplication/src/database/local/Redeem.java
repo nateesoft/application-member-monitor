@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import utils.DateUtil;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -19,6 +19,7 @@ interface RedeemInterface {
     public RedeemModel findById(String id);
 //    public void syncData();
 //    public void findByRedeemCode();
+
     public List<RedeemModel> findAll();
 //    public void searchData();
 //    public void bulkInsert();
@@ -33,7 +34,10 @@ interface RedeemInterface {
 
 public class Redeem implements RedeemInterface {
 
+    private static final Logger LOGGER = Logger.getLogger(Redeem.class);
+
     public RedeemModel mapping(ResultSet rs, RedeemModel model) {
+        LOGGER.debug("mapping");
         try {
             model.setUuid_index(rs.getString("uuid_index"));
             model.setRedeem_code(rs.getString("redeem_code"));
@@ -55,15 +59,16 @@ public class Redeem implements RedeemInterface {
             model.setRedeem_or_free(rs.getString("redeem_or_free"));
             model.setData_sync(rs.getString("data_sync"));
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return model;
     }
 
     @Override
     public RedeemModel findById(String id) {
+        LOGGER.debug("findById");
         try {
-            String sql = "select * from redeem where uuid_index='"+id+"'";
+            String sql = "select * from redeem where uuid_index='" + id + "'";
             MySQLPOSConnect mysql = new MySQLPOSConnect();
             try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery(sql)) {
@@ -73,13 +78,14 @@ public class Redeem implements RedeemInterface {
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<RedeemModel> findAll() {
+        LOGGER.debug("findAll");
         List<RedeemModel> listRedeems = new ArrayList<>();
         try {
             String sql = "select * from redeem order by redeem_code";
@@ -92,12 +98,13 @@ public class Redeem implements RedeemInterface {
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return listRedeems;
     }
 
     public void update(RedeemModel[] listRedeem) {
+        LOGGER.debug("update");
         try {
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection()) {
@@ -111,36 +118,37 @@ public class Redeem implements RedeemInterface {
                             prepStmt.setString(3, model.getActive());
                             prepStmt.setString(4, model.getUse_in_branch());
                             prepStmt.setString(5, model.getUuid_index());
-                            
+
                             prepStmt.addBatch();
-                        }                        
+                        }
                     }
                     int[] numUpdates = prepStmt.executeBatch();
                     for (int i = 0; i < numUpdates.length; i++) {
                         if (numUpdates[i] == -2) {
-                            System.out.println("Execution " + i + ": unknown number of rows updated");
+                            LOGGER.debug("Execution " + i + ": unknown number of rows updated");
                         } else {
-                            System.out.println("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
+                            LOGGER.debug("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
                         }
                     }
-                }                
+                }
                 conn.commit();
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
-    
+
     public void save(RedeemModel[] listRedeem) {
+        LOGGER.debug("save");
         try {
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection()) {
                 conn.setAutoCommit(false);
                 String sql = "insert into redeem"
-                        + "(uuid_index,redeem_code,product_code,point_to_redeem,use_in_branch," +
-                            "emp_code_redeem,member_code_use,qty_in_use,system_create,redeem_date," +
-                            "in_time,status_use,active,redeem_name,bill_no," +
-                            "discount_amt,discount_percent,redeem_or_free,data_sync) "
+                        + "(uuid_index,redeem_code,product_code,point_to_redeem,use_in_branch,"
+                        + "emp_code_redeem,member_code_use,qty_in_use,system_create,redeem_date,"
+                        + "in_time,status_use,active,redeem_name,bill_no,"
+                        + "discount_amt,discount_percent,redeem_or_free,data_sync) "
                         + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
                 try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
                     for (RedeemModel model : listRedeem) {
@@ -164,23 +172,23 @@ public class Redeem implements RedeemInterface {
                             prepStmt.setFloat(17, model.getDiscount_percent());
                             prepStmt.setString(18, model.getRedeem_or_free());
                             prepStmt.setString(19, model.getData_sync());
-                            
+
                             prepStmt.addBatch();
-                        }                        
+                        }
                     }
                     int[] numUpdates = prepStmt.executeBatch();
                     for (int i = 0; i < numUpdates.length; i++) {
                         if (numUpdates[i] == -2) {
-                            System.out.println("Execution " + i + ": unknown number of rows updated");
+                            LOGGER.debug("Execution " + i + ": unknown number of rows updated");
                         } else {
-                            System.out.println("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
+                            LOGGER.debug("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
                         }
                     }
-                }                
+                }
                 conn.commit();
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+           LOGGER.error(e.getMessage());
         }
     }
 }

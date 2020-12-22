@@ -5,8 +5,7 @@ import api.MemberModel;
 import database.local.ControllerDB;
 import database.local.RedeemModel;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import utils.ArrayDiff;
 
 /**
@@ -14,40 +13,47 @@ import utils.ArrayDiff;
  * @author nateesun
  */
 public class TaskController {
+    private static final Logger LOGGER = Logger.getLogger(TaskController.class);
 
-    private static final ControllerApi api = new ControllerApi();
-    private static final ControllerDB local = new ControllerDB();
+    private static final ControllerApi API = new ControllerApi();
+    private static final ControllerDB DB_LOCAL = new ControllerDB();
+    private static int count = 0;
 
     public static void run() {
+        LOGGER.info("Task running");
         while (!Thread.currentThread().isInterrupted()) {
-            System.out.println("Thread running");
+            System.out.println("Sync up" + (++count));
+//            syncDown();
+//            pushUp();
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+               LOGGER.error(ex.getMessage());
             }
         }
     }
 
     public static void syncDown() {
+        LOGGER.debug("syncDown");
         try {
-            MemberModel memberServerList[] = api.getMemberMapping();
-            RedeemModel redeemServerList[] = api.getRedeemMapping();
+            MemberModel memberServerList[] = API.getMemberMapping();
+            RedeemModel redeemServerList[] = API.getRedeemMapping();
 
-            MemberModel memberLocalList[] = local.getMember();
-            RedeemModel redeemLocalList[] = local.getRedeem();
+            MemberModel memberLocalList[] = DB_LOCAL.getMember();
+            RedeemModel redeemLocalList[] = DB_LOCAL.getRedeem();
 
             MemberModel[] insertMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
             RedeemModel[] insertRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
 
-            local.saveUpdateMember(insertMember);
-            local.saveUpdateRedeem(insertRedeem);
+            DB_LOCAL.saveUpdateMember(insertMember);
+            DB_LOCAL.saveUpdateRedeem(insertRedeem);
         } catch (IOException ex) {
-            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage());
         }
     }
 
     public static void pushUp() {
+        LOGGER.debug("pushUp");
         // sync from file member local
 
         // sync from file redeem local

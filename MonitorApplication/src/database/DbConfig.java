@@ -4,12 +4,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author nateesun
  */
 public class DbConfig {
+    private static final Logger LOGGER = Logger.getLogger(DbConfig.class);
 
     private String hostPos;
     private String userPos;
@@ -29,8 +31,9 @@ public class DbConfig {
     private String apiServiceAuth;
     
     public static DbConfig loadConfig() {
+        LOGGER.debug("loadConfig");
         DbConfig config = new DbConfig();
-        try (InputStream input = new FileInputStream("local.properties")) {
+        try (InputStream input = new FileInputStream("local.txt")) {
 
             Properties prop = new Properties();
             prop.load(input);
