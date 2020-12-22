@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
  * @author nateesun
  */
 public class DbConfig {
+
     private static final Logger LOGGER = Logger.getLogger(DbConfig.class);
 
     private String hostPos;
@@ -29,12 +30,12 @@ public class DbConfig {
     private String apiServiceRedeem;
     private String apiServiceDB;
     private String apiServiceAuth;
-    
+    private String apiVersion;
+
     public static DbConfig loadConfig() {
         LOGGER.debug("loadConfig");
         DbConfig config = new DbConfig();
         try (InputStream input = new FileInputStream("local.txt")) {
-
             Properties prop = new Properties();
             prop.load(input);
 
@@ -43,7 +44,7 @@ public class DbConfig {
             config.setPasswordPos(prop.getProperty("pos.password"));
             config.setPortPos(prop.getProperty("pos.port"));
             config.setDbNamePos(prop.getProperty("pos.dbName"));
-            
+
             config.setHostMember(prop.getProperty("member.host"));
             config.setUserMember(prop.getProperty("member.user"));
             config.setPasswordMember(prop.getProperty("member.password"));
@@ -54,10 +55,12 @@ public class DbConfig {
             config.setApiServiceRedeem(prop.getProperty("api.serviceRedeem"));
             config.setApiServiceDB(prop.getProperty("api.serviceDB"));
             config.setApiServiceAuth(prop.getProperty("api.serviceAuth"));
+            config.setApiVersion(prop.getProperty("api.serviceVersion"));
         } catch (IOException ex) {
+            LOGGER.error(ex.getMessage());
             return null;
         }
-        
+
         return config;
     }
 
@@ -172,4 +175,13 @@ public class DbConfig {
     public void setApiServiceAuth(String apiServiceAuth) {
         this.apiServiceAuth = apiServiceAuth;
     }
+
+    public String getApiVersion() {
+        return apiVersion;
+    }
+
+    public void setApiVersion(String apiVersion) {
+        this.apiVersion = apiVersion;
+    }
+
 }

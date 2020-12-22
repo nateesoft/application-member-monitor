@@ -22,9 +22,8 @@ public class TaskController {
     public static void run() {
         LOGGER.info("Task running");
         while (!Thread.currentThread().isInterrupted()) {
-            System.out.println("Sync up" + (++count));
-//            syncDown();
-//            pushUp();
+            syncDown();
+            pushUp();
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException ex) {

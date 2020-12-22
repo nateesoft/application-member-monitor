@@ -51,6 +51,17 @@ public class ControllerApi {
 
         return null;
     }
+    
+    public boolean getVersion(){
+        LOGGER.debug("getVersion");
+        try {
+            callGetService(config.getApiVersion());
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+            return false;
+        }
+        return true;
+    }
 
     private String getMember() throws IOException {
         LOGGER.debug("getMember");
