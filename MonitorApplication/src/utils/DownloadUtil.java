@@ -2,6 +2,7 @@ package utils;
 
 import database.DbConfig;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +21,7 @@ import org.apache.log4j.Logger;
  */
 public class DownloadUtil {
 
+    private static final String folderApplications = "applications";
     private static final Logger LOGGER = Logger.getLogger(DownloadUtil.class);
     private static final SimpleDateFormat simp = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 
@@ -37,7 +39,10 @@ public class DownloadUtil {
             String dateFormat = simp.format(new Date());
             String applicationName = "update_" + dateFormat + ".zip";
             String downloadSite = config.getPathDownload() + "/" + applicationName;
-            String outputFile = "applications/" + applicationName;
+            String outputFile = folderApplications + "/" + applicationName;
+            if (!new File(folderApplications).exists()) {
+                new File(folderApplications).mkdir();
+            }
             URL url = new URL(downloadSite);
             InputStream is = url.openConnection().getInputStream();
             br = new BufferedReader(new InputStreamReader(is));

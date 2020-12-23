@@ -18,6 +18,7 @@ import utils.DownloadUtil;
  * @author nateesun
  */
 public class Main {
+
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
