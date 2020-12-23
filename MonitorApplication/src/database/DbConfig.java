@@ -31,6 +31,9 @@ public class DbConfig {
     private String apiServiceDB;
     private String apiServiceAuth;
     private String apiVersion;
+    
+    private int timeSync;
+    private String pathDownload;
 
     public static DbConfig loadConfig() {
         LOGGER.debug("loadConfig");
@@ -56,6 +59,9 @@ public class DbConfig {
             config.setApiServiceDB(prop.getProperty("api.serviceDB"));
             config.setApiServiceAuth(prop.getProperty("api.serviceAuth"));
             config.setApiVersion(prop.getProperty("api.serviceVersion"));
+            
+            config.setTimeSync(Integer.parseInt(prop.getProperty("time.sync")));
+            config.setPathDownload(prop.getProperty("app.download"));
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage());
             return null;
@@ -182,6 +188,22 @@ public class DbConfig {
 
     public void setApiVersion(String apiVersion) {
         this.apiVersion = apiVersion;
+    }
+
+    public int getTimeSync() {
+        return timeSync;
+    }
+
+    public void setTimeSync(int timeSync) {
+        this.timeSync = timeSync;
+    }
+
+    public String getPathDownload() {
+        return pathDownload;
+    }
+
+    public void setPathDownload(String pathDownload) {
+        this.pathDownload = pathDownload;
     }
 
 }

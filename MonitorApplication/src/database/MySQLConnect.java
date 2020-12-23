@@ -29,7 +29,7 @@ public class MySQLConnect {
                     urlConnect = "jdbc:mysql://" + config.getHostMember() + "/" + config.getDbNameMember() + "?" + "user=" + config.getUserMember() + "&password=" + config.getPasswordMember();
                     break;
             }
-            LOGGER.info(urlConnect);
+            LOGGER.debug(urlConnect);
             connection = DriverManager.getConnection(urlConnect);
         } catch (ClassNotFoundException | SQLException e) {
             LOGGER.error(e.getMessage());

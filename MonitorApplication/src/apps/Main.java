@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import org.apache.log4j.Logger;
+import utils.DownloadUtil;
 
 /**
  *
@@ -38,6 +39,16 @@ public class Main {
             }
         });
         trayPopupMenu.add(action);
+        trayPopupMenu.addSeparator();
+        MenuItem downloadUpdate = new MenuItem("Check Update");
+        downloadUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LOGGER.info("Download and update");
+                DownloadUtil.downloadAppUpdate();
+            }
+        });
+        trayPopupMenu.add(downloadUpdate);
         trayPopupMenu.addSeparator();
         MenuItem close = new MenuItem("Exit");
         close.addActionListener(new ActionListener() {

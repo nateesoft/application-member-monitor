@@ -105,6 +105,9 @@ public class Redeem implements RedeemInterface {
 
     public void update(RedeemModel[] listRedeem) {
         LOGGER.debug("update");
+        if(listRedeem.length==0){
+            return;
+        }
         try {
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection()) {
@@ -140,6 +143,10 @@ public class Redeem implements RedeemInterface {
 
     public void save(RedeemModel[] listRedeem) {
         LOGGER.debug("save");
+        if(listRedeem.length==0){
+            LOGGER.debug("not found redeem to update local db");
+            return;
+        }
         try {
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection()) {

@@ -182,6 +182,10 @@ public class Memmaster implements MemmasterInterface {
 
     public void save(MemberModel[] listMember) {
         LOGGER.debug("save");
+        if (listMember.length == 0) {
+            LOGGER.debug("not found member to update local db");
+            return;
+        }
         try {
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection()) {
