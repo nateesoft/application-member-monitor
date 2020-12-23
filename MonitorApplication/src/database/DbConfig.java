@@ -1,6 +1,8 @@
 package database;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -13,6 +15,8 @@ import org.apache.log4j.Logger;
 public class DbConfig {
 
     private static final Logger LOGGER = Logger.getLogger(DbConfig.class);
+    private static final File FILE_CONFIG = new File("local.txt");
+    private static final File FILE_IMAGE_PNG = new File("icon-sync.png");
 
     private String hostPos;
     private String userPos;
@@ -31,13 +35,51 @@ public class DbConfig {
     private String apiServiceDB;
     private String apiServiceAuth;
     private String apiVersion;
-    
+
     private int timeSync;
     private String pathDownload;
+
+    private static void writeDefaultConfigFile() {
+        LOGGER.debug("writeDefaultConfigFile");
+        try {
+            try (FileWriter myWriter = new FileWriter(FILE_CONFIG)) {
+                myWriter.write("### LOCAL DB ###\n"
+                        + "pos.host=localhost\n"
+                        + "pos.user=root\n"
+                        + "pos.password=\n"
+                        + "pos.port=3306\n"
+                        + "pos.dbName=myrestaurant\n"
+                        + "\n"
+                        + "### SERVER DB ###\n"
+                        + "member.host=localhost\n"
+                        + "member.user=root\n"
+                        + "member.password=\n"
+                        + "member.port=3306\n"
+                        + "member.dbName=mycrmbranch\n"
+                        + "\n"
+                        + "### API ENDPOINT ###\n"
+                        + "api.serviceVersion=http://softcrmpkh.dyndns.org:5000/api/version\n"
+                        + "api.serviceMember=http://softcrmpkh.dyndns.org:5000/api/member/client\n"
+                        + "api.serviceRedeem=http://softcrmpkh.dyndns.org:5000/api/redeem/client\n"
+                        + "api.serviceDB=d2ViZGFpbHlfMDAx\n"
+                        + "api.serviceAuth=YWRtaW46c29mdHBvczIwMTM=\n"
+                        + "\n"
+                        + "### TIME SYNC ###\n"
+                        + "time.sync=10000\n"
+                        + "app.download=http://softcrmpkh.dyndns.org:5000/images/applications");
+            }
+            LOGGER.info("Successfully wrote to the file.");
+        } catch (IOException e) {
+            LOGGER.error("An error occurred.");
+        }
+    }
 
     public static DbConfig loadConfig() {
         LOGGER.debug("loadConfig");
         DbConfig config = new DbConfig();
+        if (!FILE_CONFIG.exists()) {
+            writeDefaultConfigFile();
+        }
         try (InputStream input = new FileInputStream("local.txt")) {
             Properties prop = new Properties();
             prop.load(input);
@@ -59,7 +101,7 @@ public class DbConfig {
             config.setApiServiceDB(prop.getProperty("api.serviceDB"));
             config.setApiServiceAuth(prop.getProperty("api.serviceAuth"));
             config.setApiVersion(prop.getProperty("api.serviceVersion"));
-            
+
             config.setTimeSync(Integer.parseInt(prop.getProperty("time.sync")));
             config.setPathDownload(prop.getProperty("app.download"));
         } catch (IOException ex) {
