@@ -25,26 +25,6 @@ module.exports = () => {
     })
   }
 
-  module.syncData = () => {
-    logger.info(`redeem:syncData`)
-    return new Promise(async (resolve, reject) => {
-      try {
-        const fieldCheck = 'redeem_code,bill_no';
-        const sql = `SELECT ${fieldCheck} FROM 
-        (SELECT ${fieldCheck} FROM ${table_name} t1 
-        UNION ALL SELECT ${fieldCheck} FROM ${table_name}_temp) tbl
-        GROUP BY ${fieldCheck} HAVING count(*) = 1 
-        ORDER BY redeem_code;`;
-        logger.debug(sql);
-        const result = await pool.query(sql)
-        resolve({ status: "Success", data: JSON.stringify(result) })
-      } catch (err) {
-        logger.error(err);
-        reject({ status: 'Error', msg: err.message })
-      }
-    })
-  }
-
   module.findByRedeemCode = (redeemCode) => {
     logger.info(`redeem:findByRedeemCode: ${redeemCode}`)
     return new Promise(async (resolve, reject) => {
