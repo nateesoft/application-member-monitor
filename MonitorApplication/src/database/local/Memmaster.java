@@ -134,7 +134,8 @@ public class Memmaster implements MemmasterInterface {
                     + "Member_CompanyTel,Member_Active "
                     + "from memmaster order by Member_Code";
             MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try (Connection conn = mysql.openConnection(); 
+                    PreparedStatement stmt = conn.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
                         listMembers.add(mapping(rs, new MemberModel()));

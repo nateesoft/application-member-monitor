@@ -22,9 +22,6 @@ public class LogAppDialog extends javax.swing.JDialog {
     public LogAppDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
-        loadConnection();
-        loadFileLogs();
     }
 
     @SuppressWarnings("unchecked")
@@ -34,7 +31,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         btnShowLogFile = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        cbTargetLogFiles = new javax.swing.JComboBox<String>();
+        cbTargetLogFiles = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -44,6 +41,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         lbMemberDbConnect = new javax.swing.JLabel();
         lbServiceMemberConnect = new javax.swing.JLabel();
         lbServiceRedeemConnect = new javax.swing.JLabel();
+        btnCheckStatus = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -150,7 +148,7 @@ public class LogAppDialog extends javax.swing.JDialog {
                         .addComponent(lbServiceRedeemConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                         .addComponent(lbMemberDbConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
@@ -177,8 +175,16 @@ public class LogAppDialog extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(lbServiceRedeemConnect))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
+
+        btnCheckStatus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCheckStatus.setText("Check Status");
+        btnCheckStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckStatusActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
 
@@ -212,17 +218,20 @@ public class LogAppDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCheckStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
+                .addComponent(btnCheckStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -250,6 +259,11 @@ public class LogAppDialog extends javax.swing.JDialog {
             LOGGER.error(ex.getMessage());
         }
     }//GEN-LAST:event_btnShowLogFileActionPerformed
+
+    private void btnCheckStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckStatusActionPerformed
+        loadConnection();
+        loadFileLogs();
+    }//GEN-LAST:event_btnCheckStatusActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -291,6 +305,7 @@ public class LogAppDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCheckStatus;
     private javax.swing.JButton btnShowLogFile;
     private javax.swing.JComboBox<String> cbTargetLogFiles;
     private javax.swing.JLabel jLabel1;

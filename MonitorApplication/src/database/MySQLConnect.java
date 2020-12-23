@@ -19,14 +19,14 @@ public class MySQLConnect {
         LOGGER.debug("openConnection type=" + type);
         try {
             config = DbConfig.loadConfig();
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             String urlConnect = "";
             switch (type) {
                 case "pos":
-                    urlConnect = "jdbc:mysql://" + config.getHostPos() + "/" + config.getDbNamePos() + "?" + "user=" + config.getUserPos() + "&password=" + config.getPasswordPos();
+                    urlConnect = "jdbc:mysql://" + config.getHostPos() + ":"+config.getPortPos()+"/" + config.getDbNamePos() + "?user=" + config.getUserPos() + "&password=" + config.getPasswordPos();
                     break;
                 case "member":
-                    urlConnect = "jdbc:mysql://" + config.getHostMember() + "/" + config.getDbNameMember() + "?" + "user=" + config.getUserMember() + "&password=" + config.getPasswordMember();
+                    urlConnect = "jdbc:mysql://" + config.getHostMember() + ":"+config.getPortMember()+"/" + config.getDbNameMember() + "?user=" + config.getUserMember() + "&password=" + config.getPasswordMember();
                     break;
             }
             LOGGER.debug(urlConnect);
