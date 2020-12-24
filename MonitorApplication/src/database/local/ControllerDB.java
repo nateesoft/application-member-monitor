@@ -17,6 +17,13 @@ public class ControllerDB {
     private final Memmaster memmaster = new Memmaster();
     private final Redeem redeem = new Redeem();
 
+    public MemberModel[] getMemberFromBillno() {
+        LOGGER.debug("getMemberFromBillno");
+        List<MemberModel> listMemberModel = memmaster.findMemberFromBillno();
+        MemberModel[] listMembers = listMemberModel.toArray(new MemberModel[listMemberModel.size()]);
+        return listMembers;
+    }
+    
     public MemberModel[] getMember() {
         LOGGER.debug("getMember");
         List<MemberModel> listMemberModel = memmaster.findMemberAll();

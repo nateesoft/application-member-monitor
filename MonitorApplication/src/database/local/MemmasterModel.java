@@ -18,7 +18,6 @@ public class MemmasterModel {
     private Float Member_TotalScore;
     private String Member_TitleNameThai;
     private String Member_SurnameThai;
-    private String Member_Active;
 
     public String getMember_Code() {
         return Member_Code;
@@ -100,17 +99,9 @@ public class MemmasterModel {
         this.Member_SurnameThai = Member_SurnameThai;
     }
 
-    public String getMember_Active() {
-        return Member_Active;
-    }
-
-    public void setMember_Active(String Member_Active) {
-        this.Member_Active = Member_Active;
-    }
-
     @Override
     public String toString() {
-        return "MemmasterModel{" + "Member_Code=" + Member_Code + ", Member_NameThai=" + Member_NameThai + ", Member_Email=" + Member_Email + ", Member_Brithday=" + Member_Brithday + ", Member_ExpiredDate=" + Member_ExpiredDate + ", Member_TotalPurchase=" + Member_TotalPurchase + ", Member_Mobile=" + Member_Mobile + ", Member_TotalScore=" + Member_TotalScore + ", Member_TitleNameThai=" + Member_TitleNameThai + ", Member_SurnameThai=" + Member_SurnameThai + ", Member_Active=" + Member_Active + '}';
+        return "MemmasterModel{" + "Member_Code=" + Member_Code + ", Member_NameThai=" + Member_NameThai + ", Member_Email=" + Member_Email + ", Member_Brithday=" + Member_Brithday + ", Member_ExpiredDate=" + Member_ExpiredDate + ", Member_TotalPurchase=" + Member_TotalPurchase + ", Member_Mobile=" + Member_Mobile + ", Member_TotalScore=" + Member_TotalScore + ", Member_TitleNameThai=" + Member_TitleNameThai + ", Member_SurnameThai=" + Member_SurnameThai + '}';
     }
 
 }

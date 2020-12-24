@@ -55,7 +55,9 @@ public class ArrayDiff {
         for (MemberModel model : arrB) {
             if (model.getCode().equals(m1.getCode())) {
                 found = true;
-                if (!model.getTotal_score().equals(m1.getTotal_score()) || !model.getTotal_purchase().equals(m1.getTotal_purchase())) {
+                boolean isScore = model.getTotal_score().equals(m1.getTotal_score());
+                boolean isPurchase = model.getTotal_purchase().equals(m1.getTotal_purchase());
+                if (!isScore || !isPurchase) {
                     return "update";
                 }
             }

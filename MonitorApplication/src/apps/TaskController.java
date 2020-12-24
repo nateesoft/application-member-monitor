@@ -76,7 +76,7 @@ public class TaskController {
         LOGGER.debug("pushUp");
         try {
             // member
-            MemberModel[] memberLocalList = DB_LOCAL.getMember();
+            MemberModel[] memberLocalList = DB_LOCAL.getMemberFromBillno();
             if (memberLocalList.length > 0) {
                 MemberModel memberServerList[] = API.getMemberMapping();
                 MemberModel[] diffMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);

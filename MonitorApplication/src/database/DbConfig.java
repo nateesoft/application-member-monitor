@@ -17,6 +17,7 @@ public class DbConfig {
     private static final Logger LOGGER = Logger.getLogger(DbConfig.class);
     private static final File FILE_CONFIG = new File("local.txt");
     private static final File FILE_IMAGE_PNG = new File("icon-sync.png");
+    private static DbConfig config = null;
 
     private String hostPos;
     private String userPos;
@@ -76,14 +77,17 @@ public class DbConfig {
 
     public static DbConfig loadConfig() {
         LOGGER.debug("loadConfig");
-        DbConfig config = new DbConfig();
         if (!FILE_CONFIG.exists()) {
             writeDefaultConfigFile();
+        }
+        if (config != null) {
+            return config;
         }
         try (InputStream input = new FileInputStream("local.txt")) {
             Properties prop = new Properties();
             prop.load(input);
 
+            config = new DbConfig();
             config.setHostPos(prop.getProperty("pos.host"));
             config.setUserPos(prop.getProperty("pos.user"));
             config.setPasswordPos(prop.getProperty("pos.password"));
