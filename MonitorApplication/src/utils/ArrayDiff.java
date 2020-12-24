@@ -65,7 +65,7 @@ public class ArrayDiff {
         }
         return "";
     }
-
+    
     private static String foundStatus(RedeemModel m1, RedeemModel[] arrB) {
         if (arrB.length == 0) {
             return "save";
@@ -83,31 +83,5 @@ public class ArrayDiff {
             return "save";
         }
         return "";
-    }
-
-    public static MemberModel[] getLocalDiff(MemberModel[] diffMember, MemberModel[] memberLocalList) {
-        List<MemberModel> listMemberDiff = new ArrayList<>();
-        for (MemberModel diff : diffMember) {
-            for (MemberModel local : memberLocalList) {
-                if (diff.getCode().equals(local.getCode())) {
-                    listMemberDiff.add(local);
-                    break;
-                }
-            }
-        }
-        return listMemberDiff.toArray(new MemberModel[listMemberDiff.size()]);
-    }
-
-    public static RedeemModel[] getLocalDiff(RedeemModel[] diffRedeem, RedeemModel[] redeemLocalList) {
-        List<RedeemModel> listRedeemDiff = new ArrayList<>();
-        for (RedeemModel diff : diffRedeem) {
-            for (RedeemModel local : redeemLocalList) {
-                if (diff.getRedeem_code().equals(local.getRedeem_code())) {
-                    listRedeemDiff.add(local);
-                    break;
-                }
-            }
-        }
-        return listRedeemDiff.toArray(new RedeemModel[listRedeemDiff.size()]);
     }
 }

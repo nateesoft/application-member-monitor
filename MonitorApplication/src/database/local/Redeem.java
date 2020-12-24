@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import utils.ThaiUtil;
 
 /**
  *
@@ -18,7 +17,19 @@ import utils.ThaiUtil;
 interface RedeemInterface {
 
     public RedeemModel findById(String id);
+//    public void syncData();
+//    public void findByRedeemCode();
+
     public List<RedeemModel> findAll();
+//    public void searchData();
+//    public void bulkInsert();
+//    public void bulkInsertTemp();
+//    public void getQuery();
+//    public void create();
+//    public void createTemp();
+//    public void update();
+//    public void delete();
+//    public void deleteTemp();
 }
 
 public class Redeem implements RedeemInterface {
@@ -162,7 +173,7 @@ public class Redeem implements RedeemInterface {
                             prepStmt.setDate(11, model.getIn_time());
                             prepStmt.setString(12, model.getStatus_use());
                             prepStmt.setString(13, model.getActive());
-                            prepStmt.setString(14, ThaiUtil.Unicode2ASCII(model.getRedeem_name()));
+                            prepStmt.setString(14, model.getRedeem_name());
                             prepStmt.setString(15, model.getBill_no());
                             prepStmt.setFloat(16, model.getDiscount_amt());
                             prepStmt.setFloat(17, model.getDiscount_percent());
