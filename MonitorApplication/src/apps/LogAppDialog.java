@@ -33,7 +33,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         btnShowLogFile = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        cbTargetLogFiles = new javax.swing.JComboBox<String>();
+        cbTargetLogFiles = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();

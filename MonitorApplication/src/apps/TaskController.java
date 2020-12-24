@@ -87,13 +87,12 @@ public class TaskController {
             }
 
             // redeem
-            RedeemModel[] redeemLocalList = DB_LOCAL.getRedeem();
-            if (redeemLocalList.length > 0) {
-                RedeemModel redeemServerList[] = API.getRedeemMapping();
-                RedeemModel[] diffRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
-                RedeemModel[] updateRedeem = ArrayDiff.getLocalDiff(diffRedeem, redeemLocalList);
-                if (updateRedeem.length > 0) {
-                    API.pushRedeemService(updateRedeem);
+            RedeemModel redeemServerList[] = API.getRedeemMapping();
+            if (redeemServerList.length > 0) {
+                RedeemModel redeemLocalList[] = DB_LOCAL.getRedeem();
+                RedeemModel[] insertRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
+                if (insertRedeem.length > 0) {
+                    API.pushRedeemService();
                 }
             }
 
