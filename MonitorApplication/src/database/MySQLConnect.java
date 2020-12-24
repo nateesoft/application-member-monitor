@@ -21,16 +21,20 @@ public class MySQLConnect {
             config = DbConfig.loadConfig();
             Class.forName("com.mysql.jdbc.Driver");
             String urlConnect = "";
+
             switch (type) {
                 case "pos":
-                    urlConnect = "jdbc:mysql://" + config.getHostPos() + ":"+config.getPortPos()+"/" + config.getDbNamePos() + "?user=" + config.getUserPos() + "&password=" + config.getPasswordPos();
+                    LOGGER.debug(urlConnect);
+                    urlConnect = "jdbc:mysql://" + config.getHostPos() + ":" + config.getPortPos() + "/" + config.getDbNamePos() + "?charset=tis-620";
+                    connection = DriverManager.getConnection(urlConnect, config.getUserPos(), config.getPasswordPos());
                     break;
                 case "member":
-                    urlConnect = "jdbc:mysql://" + config.getHostMember() + ":"+config.getPortMember()+"/" + config.getDbNameMember() + "?user=" + config.getUserMember() + "&password=" + config.getPasswordMember();
+                    LOGGER.debug(urlConnect);
+                    urlConnect = "jdbc:mysql://" + config.getHostMember() + ":" + config.getPortMember() + "/" + config.getDbNameMember() + "?charset=tis-620";
+                    connection = DriverManager.getConnection(urlConnect, config.getUserMember(), config.getPasswordMember());
                     break;
             }
-            LOGGER.debug(urlConnect);
-            connection = DriverManager.getConnection(urlConnect);
+
         } catch (ClassNotFoundException | SQLException e) {
             LOGGER.error(e.getMessage());
             this.connection = null;
