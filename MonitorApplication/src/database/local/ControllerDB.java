@@ -24,11 +24,10 @@ public class ControllerDB {
         return listMembers;
     }
 
-    public ReqMemberBody[] getMemberReqBody() {
-        LOGGER.debug("getMember");
-        List<MemberModel> listMemberModel = memmaster.findMemberAll();
+    public ReqMemberBody[] getMemberReqBody(MemberModel[] insertMember) {
+        LOGGER.debug("getMemberReqBody");
         List<ReqMemberBody> listReq = new ArrayList<>();
-        for (MemberModel model : listMemberModel) {
+        for (MemberModel model : insertMember) {
             listReq.add(new ReqMemberBody(model.getTotal_purchase(), model.getTotal_score(), model.getCode()));
         }
         ReqMemberBody[] listMembers = listReq.toArray(new ReqMemberBody[listReq.size()]);
@@ -42,18 +41,17 @@ public class ControllerDB {
         return listRedeems;
     }
 
-    public ReqRedeemBody[] getRedeemReqBody() {
-        LOGGER.debug("getRedeem");
-        List<RedeemModel> listRedeemModel = redeem.findAll();
+    public ReqRedeemBody[] getRedeemReqBody(RedeemModel[] insertRedeem) {
+        LOGGER.debug("getRedeemReqBody");
         List<ReqRedeemBody> listReq = new ArrayList<>();
-        for (RedeemModel model : listRedeemModel) {
+        for (RedeemModel model : insertRedeem) {
             listReq.add(new ReqRedeemBody(
-                    model.getProduct_code(),
-                    model.getBill_no(),
-                    model.getUse_in_branch(),
-                    model.getEmp_code_redeem(),
-                    model.getActive(),
-                    model.getRedeem_code()
+                model.getProduct_code(),
+                model.getBill_no(),
+                model.getUse_in_branch(),
+                model.getEmp_code_redeem(),
+                model.getActive(),
+                model.getRedeem_code()
             ));
         }
         ReqRedeemBody[] listRedeems = listReq.toArray(new ReqRedeemBody[listReq.size()]);

@@ -76,22 +76,24 @@ public class TaskController {
         LOGGER.debug("pushUp");
         try {
             // member
-            MemberModel memberServerList[] = API.getMemberMapping();
-            if (memberServerList.length > 0) {
-                MemberModel memberLocalList[] = DB_LOCAL.getMember();
-                MemberModel[] insertMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
-                if (insertMember.length > 0) {
-                    API.pushMemberService();
+            MemberModel[] memberLocalList = DB_LOCAL.getMember();
+            if (memberLocalList.length > 0) {
+                MemberModel memberServerList[] = API.getMemberMapping();
+                MemberModel[] diffMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
+                MemberModel[] updateMember = ArrayDiff.getLocalDiff(diffMember, memberLocalList);
+                if (updateMember.length > 0) {
+                    API.pushMemberService(updateMember);
                 }
             }
 
             // redeem
-            RedeemModel redeemServerList[] = API.getRedeemMapping();
-            if (redeemServerList.length > 0) {
-                RedeemModel redeemLocalList[] = DB_LOCAL.getRedeem();
-                RedeemModel[] insertRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
-                if (insertRedeem.length > 0) {
-                    API.pushRedeemService();
+            RedeemModel[] redeemLocalList = DB_LOCAL.getRedeem();
+            if (redeemLocalList.length > 0) {
+                RedeemModel redeemServerList[] = API.getRedeemMapping();
+                RedeemModel[] diffRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
+                RedeemModel[] updateRedeem = ArrayDiff.getLocalDiff(diffRedeem, redeemLocalList);
+                if (updateRedeem.length > 0) {
+                    API.pushRedeemService(updateRedeem);
                 }
             }
 
