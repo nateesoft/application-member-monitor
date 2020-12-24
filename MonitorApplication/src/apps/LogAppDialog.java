@@ -22,6 +22,8 @@ public class LogAppDialog extends javax.swing.JDialog {
     public LogAppDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        checkStatusLoad();
     }
 
     @SuppressWarnings("unchecked")
@@ -48,7 +50,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
 
-        setTitle("Log Applicataion Sync CRM v1.0");
+        setTitle("Log Applicataion Sync CRM v1.0.6");
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -261,8 +263,7 @@ public class LogAppDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnShowLogFileActionPerformed
 
     private void btnCheckStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckStatusActionPerformed
-        loadConnection();
-        loadFileLogs();
+        checkStatusLoad();
     }//GEN-LAST:event_btnCheckStatusActionPerformed
 
     public static void main(String args[]) {
@@ -374,5 +375,10 @@ public class LogAppDialog extends javax.swing.JDialog {
             lbServiceMemberConnect.setForeground(Color.BLUE);
             lbServiceRedeemConnect.setForeground(Color.BLUE);
         }
+    }
+
+    private void checkStatusLoad() {
+        loadConnection();
+        loadFileLogs();
     }
 }

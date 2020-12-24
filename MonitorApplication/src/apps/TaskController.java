@@ -76,12 +76,13 @@ public class TaskController {
         LOGGER.debug("pushUp");
         try {
             // member
-            MemberModel memberServerList[] = API.getMemberMapping();
-            if (memberServerList.length > 0) {
-                MemberModel memberLocalList[] = DB_LOCAL.getMember();
-                MemberModel[] insertMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
-                if (insertMember.length > 0) {
-                    API.pushMemberService();
+            MemberModel[] memberLocalList = DB_LOCAL.getMemberFromBillno();
+            if (memberLocalList.length > 0) {
+                MemberModel memberServerList[] = API.getMemberMapping();
+                MemberModel[] diffMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
+                MemberModel[] updateMember = ArrayDiff.getLocalDiff(diffMember, memberLocalList);
+                if (updateMember.length > 0) {
+                    API.pushMemberService(updateMember);
                 }
             }
 
