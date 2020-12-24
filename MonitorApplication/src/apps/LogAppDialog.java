@@ -31,7 +31,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         btnShowLogFile = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        cbTargetLogFiles = new javax.swing.JComboBox<>();
+        cbTargetLogFiles = new javax.swing.JComboBox<String>();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -48,7 +48,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
 
-        setTitle("Log Applicataion Sync CRM v1.0");
+        setTitle("Log Applicataion Sync CRM v1.0.5");
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 

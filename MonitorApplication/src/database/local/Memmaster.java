@@ -20,19 +20,8 @@ import utils.ThaiUtil;
 interface MemmasterInterface {
 
     public MemmasterModel findByMemberCode(String memberCode);
-
     public List<MemmasterModel> findAll();
-
     public List<MemberModel> findMemberAll();
-//    public boolean syncData();
-//    public void bulkInsert();
-//    public void bulkInsertTemp();
-//    public void getQuery();
-//    public void create();
-//    public void createTemp();
-//    public void update();
-//    public void updateMemberPoint();
-//    public void deleteTemp();
 }
 
 public class Memmaster implements MemmasterInterface {
@@ -63,15 +52,15 @@ public class Memmaster implements MemmasterInterface {
         LOGGER.debug("mapping");
         try {
             model.setCode(rs.getString("Member_Code"));
-            model.setFirst_name(ThaiUtil.ASCII2Unicode(rs.getString("Member_NameThai")));
+            model.setFirst_name(rs.getString("Member_NameThai"));
             model.setEmail(rs.getString("Member_Email"));
             model.setBirthday(DateUtil.getDateString(rs.getDate("Member_Brithday")));
             model.setExpired_date(DateUtil.getDateString(rs.getDate("Member_ExpiredDate")));
             model.setTotal_purchase(rs.getFloat("Member_TotalPurchase"));
             model.setMobile(rs.getString("Member_Mobile"));
             model.setTotal_score(rs.getFloat("Member_TotalScore"));
-            model.setPrefix(ThaiUtil.ASCII2Unicode(rs.getString("Member_TitleNameThai")));
-            model.setLast_name(ThaiUtil.ASCII2Unicode(rs.getString("Member_SurnameThai")));
+            model.setPrefix(rs.getString("Member_TitleNameThai"));
+            model.setLast_name(rs.getString("Member_SurnameThai"));
             model.setActive(rs.getString("Member_Active"));
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
@@ -194,8 +183,10 @@ public class Memmaster implements MemmasterInterface {
                 String sql = "insert into memmaster"
                         + "(Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,"
                         + "Member_ExpiredDate,Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,"
-                        + "Member_SurnameThai,Member_CompanyTel,Member_Active,System_Created,System_Updated) "
-                        + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                        + "Member_SurnameThai,Member_CompanyTel,Member_Active,System_Created,System_Updated,"
+                        + "Member_AppliedDate, Member_LastDateService, Member_PointExpiredDate, Employee_CreateDate,"
+                        + "Employee_ModifyDate) "
+                        + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),now(),now(),now());";
                 try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
                     for (MemberModel model : listMember) {
                         if (model.getSaveOrUpdate().equals("save")) {
