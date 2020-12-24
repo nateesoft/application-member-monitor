@@ -119,9 +119,9 @@ public class ControllerApi {
         return gson.fromJson(json.get("data").toString(), RedeemModel[].class);
     }
 
-    public String pushMemberService(MemberModel[] insertMember) throws IOException {
+    public String pushMemberService() throws IOException {
         LOGGER.debug("pushMemberService");
-        ReqMemberBody[] model = controllerDB.getMemberReqBody(insertMember);
+        ReqMemberBody[] model = controllerDB.getMemberReqBody();
         if (model.length == 0) {
             LOGGER.debug("not found member to push update");
             return "";
@@ -134,9 +134,9 @@ public class ControllerApi {
         return sendPutService(config.getApiServiceMember(), jsonData);
     }
 
-    public String pushRedeemService(RedeemModel[] insertRedeem) throws IOException {
+    public String pushRedeemService() throws IOException {
         LOGGER.debug("pushRedeemService");
-        ReqRedeemBody[] model = controllerDB.getRedeemReqBody(insertRedeem);
+        ReqRedeemBody[] model = controllerDB.getRedeemReqBody();
         if (model.length == 0) {
             LOGGER.debug("not found redeem to push update");
             return "";
