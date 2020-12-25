@@ -67,7 +67,7 @@ public class ArrayDiff {
         }
         return "";
     }
-    
+
     private static String foundStatus(RedeemModel m1, RedeemModel[] arrB) {
         if (arrB.length == 0) {
             return "save";
@@ -86,26 +86,33 @@ public class ArrayDiff {
         }
         return "";
     }
-    
-    public static MemberModel[] getLocalDiff(MemberModel[] diffMember, MemberModel[] memberLocalList) {
+
+    public static MemberModel[] getLocalDiff(MemberModel[] apiMember, MemberModel[] memberLocalList) {
         List<MemberModel> listMemberDiff = new ArrayList<>();
-        for (MemberModel diff : diffMember) {
+        for (MemberModel api : apiMember) {
             for (MemberModel local : memberLocalList) {
-                if (diff.getCode().equals(local.getCode())) {
-                    listMemberDiff.add(local);
+                if (api.getCode().equals(local.getCode())) {
+                    boolean isScore = api.getTotal_score().equals(local.getTotal_score());
+                    boolean isPurchase = api.getTotal_purchase().equals(local.getTotal_purchase());
+                    if (!isScore || !isPurchase) {
+                        listMemberDiff.add(local);
+                    }
                     break;
                 }
             }
         }
         return listMemberDiff.toArray(new MemberModel[listMemberDiff.size()]);
     }
-    
-    public static RedeemModel[] getLocalDiff(RedeemModel[] diffRedeem, RedeemModel[] redeemLocalList) {
+
+    public static RedeemModel[] getLocalDiff(RedeemModel[] apiRedeem, RedeemModel[] redeemLocalList) {
         List<RedeemModel> listRedeemDiff = new ArrayList<>();
-        for (RedeemModel diff : diffRedeem) {
+        for (RedeemModel api : apiRedeem) {
             for (RedeemModel local : redeemLocalList) {
-                if (diff.getRedeem_code().equals(local.getRedeem_code())) {
-                    listRedeemDiff.add(local);
+                if (api.getRedeem_code().equals(local.getRedeem_code())) {
+                    boolean isBillNo = api.getBill_no().equals(local.getBill_no());
+                    if (!isBillNo) {
+                        listRedeemDiff.add(local);
+                    }
                     break;
                 }
             }

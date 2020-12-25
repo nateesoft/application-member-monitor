@@ -38,7 +38,7 @@
     </Menu>
   </NonVisualComponents>
   <Properties>
-    <Property name="title" type="java.lang.String" value="Log Applicataion Sync CRM v1.0.6"/>
+    <Property name="title" type="java.lang.String" value="Log Applicataion Sync CRM v1.0.7"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>

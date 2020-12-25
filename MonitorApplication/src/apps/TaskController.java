@@ -20,6 +20,9 @@ public class TaskController {
     private static final ControllerApi API = new ControllerApi();
     private static final ControllerDB DB_LOCAL = new ControllerDB();
     private static int count = 0;
+    
+    private static MemberModel []memberServerList = null;
+    private static RedeemModel []redeemServerList = null;
 
     public static void run() {
         LOGGER.info("Task running");
@@ -47,7 +50,7 @@ public class TaskController {
         LOGGER.debug("syncDown");
         try {
             // member
-            MemberModel memberServerList[] = API.getMemberMapping();
+            memberServerList = API.getMemberMapping();
             if (memberServerList.length > 0) {
                 MemberModel memberLocalList[] = DB_LOCAL.getMember();
                 MemberModel[] insertMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
@@ -57,7 +60,7 @@ public class TaskController {
             }
 
             // redeem
-            RedeemModel redeemServerList[] = API.getRedeemMapping();
+            redeemServerList = API.getRedeemMapping();
             if (redeemServerList.length > 0) {
                 RedeemModel redeemLocalList[] = DB_LOCAL.getRedeem();
                 RedeemModel[] insertRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
@@ -78,9 +81,7 @@ public class TaskController {
             // member
             MemberModel[] memberLocalList = DB_LOCAL.getMemberFromBillno();
             if (memberLocalList.length > 0) {
-                MemberModel memberServerList[] = API.getMemberMapping();
-                MemberModel[] diffMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
-                MemberModel[] updateMember = ArrayDiff.getLocalDiff(diffMember, memberLocalList);
+                MemberModel[] updateMember = ArrayDiff.getLocalDiff(memberServerList, memberLocalList);
                 if (updateMember.length > 0) {
                     API.pushMemberService(updateMember);
                 }
@@ -89,9 +90,7 @@ public class TaskController {
             // redeem
             RedeemModel[] redeemLocalList = DB_LOCAL.getRedeem();
             if (redeemLocalList.length > 0) {
-                RedeemModel redeemServerList[] = API.getRedeemMapping();
-                RedeemModel[] diffRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
-                RedeemModel[] updateRedeem = ArrayDiff.getLocalDiff(diffRedeem, redeemLocalList);
+                RedeemModel[] updateRedeem = ArrayDiff.getLocalDiff(redeemServerList, redeemLocalList);
                 if (updateRedeem.length > 0) {
                     API.pushRedeemService(updateRedeem);
                 }
