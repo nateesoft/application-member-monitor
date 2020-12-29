@@ -2,6 +2,7 @@ package utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -22,12 +23,22 @@ public class DateUtil {
 
     public static java.sql.Date getDate(String time) {
         try {
-            java.sql.Date date = new java.sql.Date(simp.parse(time).getTime());
+            Date tDate = simp.parse(time);
+            Date ouDate = simpOut.parse(simpOut.format(tDate));
+            java.sql.Date date = new java.sql.Date(ouDate.getTime());
             return date;
         } catch (ParseException e) {
             System.err.println(e.getMessage());
         }
         return null;
+    }
+    
+    public static java.sql.Date getDateAdd(java.sql.Date plusTime) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(plusTime);
+        c.add(Calendar.MINUTE, 30);
+        java.sql.Date date = new java.sql.Date(c.getTimeInMillis());
+        return date;
     }
     
     public static String getDateString(String time) {

@@ -216,16 +216,16 @@ public class Memmaster implements MemmasterInterface {
                             prepStmt.setString(2, ThaiUtil.Unicode2ASCII(model.getFirst_name()));
                             prepStmt.setString(3, model.getMobile());
                             prepStmt.setString(4, model.getEmail());
-                            prepStmt.setDate(5, DateUtil.getDate(model.getBirthday()));
-                            prepStmt.setDate(6, DateUtil.getDate(model.getExpired_date()));
+                            prepStmt.setString(5, DateUtil.getDateString(model.getBirthday()));
+                            prepStmt.setString(6, DateUtil.getDateString(model.getExpired_date()));
                             prepStmt.setFloat(7, model.getTotal_purchase());
                             prepStmt.setString(8, model.getMobile());
                             prepStmt.setFloat(9, model.getTotal_score());
                             prepStmt.setString(10, ThaiUtil.Unicode2ASCII(model.getPrefix()));
                             prepStmt.setString(11, ThaiUtil.Unicode2ASCII(model.getLast_name()));
                             prepStmt.setString(12, model.getMobile());
-                            prepStmt.setDate(13, new Date(new java.util.Date().getTime()));
-                            prepStmt.setDate(14, new Date(new java.util.Date().getTime()));
+                            prepStmt.setString(13, DateUtil.getDateString(model.getSystem_created()));
+                            prepStmt.setString(14, DateUtil.getDateString(model.getSystem_updated()));
 
                             prepStmt.addBatch();
                         }

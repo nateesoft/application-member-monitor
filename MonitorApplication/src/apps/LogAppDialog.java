@@ -50,7 +50,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
 
-        setTitle("Log Applicataion Sync CRM v1.0.8");
+        setTitle("Log Applicataion Sync CRM v1.0.10");
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 

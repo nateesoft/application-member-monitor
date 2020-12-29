@@ -76,7 +76,7 @@ public class ArrayDiff {
         for (RedeemModel model : arrB) {
             if (model.getRedeem_code().equals(m1.getRedeem_code())) {
                 found = true;
-                if (model.getBill_no() !=null && !model.getBill_no().equals(m1.getBill_no())) {
+                if (model.getBill_no() != null && !model.getBill_no().equals(m1.getBill_no())) {
                     return "update";
                 }
             }
@@ -109,7 +109,15 @@ public class ArrayDiff {
         for (RedeemModel api : apiRedeem) {
             for (RedeemModel local : redeemLocalList) {
                 if (api.getRedeem_code().equals(local.getRedeem_code())) {
-                    boolean isBillNo = api.getBill_no().equals(local.getBill_no());
+                    boolean isBillNo = false;
+                    if (api.getBill_no() != null && local.getBill_no() != null) {
+                        if (api.getBill_no().equals(local.getBill_no())) {
+                            isBillNo = true;
+                        }
+                    }
+                    if (api.getBill_no() == null && local.getBill_no() == null) {
+                        isBillNo = true;
+                    }
                     if (!isBillNo) {
                         listRedeemDiff.add(local);
                     }

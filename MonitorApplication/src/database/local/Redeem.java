@@ -158,9 +158,9 @@ public class Redeem implements RedeemInterface {
                             prepStmt.setString(6, model.getEmp_code_redeem());
                             prepStmt.setString(7, model.getMember_code_use());
                             prepStmt.setInt(8, model.getQty_in_use());
-                            prepStmt.setDate(9, DateUtil.getDate(model.getSystem_create()));
-                            prepStmt.setDate(10, null);
-                            prepStmt.setDate(11, DateUtil.getDate(model.getIn_time()));
+                            prepStmt.setString(9, DateUtil.getDateString(model.getSystem_create()));
+                            prepStmt.setString(10, null);
+                            prepStmt.setString(11, DateUtil.getDateString(model.getIn_time()));
                             prepStmt.setString(12, model.getStatus_use());
                             prepStmt.setString(13, model.getActive());
                             prepStmt.setString(14, ThaiUtil.Unicode2ASCII(model.getRedeem_name()));
