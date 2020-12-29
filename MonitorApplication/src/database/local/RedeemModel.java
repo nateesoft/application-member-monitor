@@ -1,7 +1,5 @@
 package database.local;
 
-import java.sql.Date;
-
 /**
  *
  * @author nateesun
@@ -16,9 +14,9 @@ public class RedeemModel {
     private String emp_code_redeem;
     private String member_code_use;
     private Integer qty_in_use;
-    private Date system_create;
-    private Date redeem_date;
-    private Date in_time;
+    private String system_create;
+    private String redeem_date;
+    private String in_time;
     private String status_use;
     private String active;
     private String redeem_name;
@@ -93,27 +91,27 @@ public class RedeemModel {
         this.qty_in_use = qty_in_use;
     }
 
-    public Date getSystem_create() {
+    public String getSystem_create() {
         return system_create;
     }
 
-    public void setSystem_create(Date system_create) {
+    public void setSystem_create(String system_create) {
         this.system_create = system_create;
     }
 
-    public Date getRedeem_date() {
+    public String getRedeem_date() {
         return redeem_date;
     }
 
-    public void setRedeem_date(Date redeem_date) {
+    public void setRedeem_date(String redeem_date) {
         this.redeem_date = redeem_date;
     }
 
-    public Date getIn_time() {
+    public String getIn_time() {
         return in_time;
     }
 
-    public void setIn_time(Date in_time) {
+    public void setIn_time(String in_time) {
         this.in_time = in_time;
     }
 
@@ -187,11 +185,6 @@ public class RedeemModel {
 
     public void setSaveOrUpdate(String saveOrUpdate) {
         this.saveOrUpdate = saveOrUpdate;
-    }
-
-    @Override
-    public String toString() {
-        return "RedeemModel{" + "uuid_index=" + uuid_index + ", redeem_code=" + redeem_code + ", product_code=" + product_code + ", point_to_redeem=" + point_to_redeem + ", use_in_branch=" + use_in_branch + ", emp_code_redeem=" + emp_code_redeem + ", member_code_use=" + member_code_use + ", qty_in_use=" + qty_in_use + ", system_create=" + system_create + ", redeem_date=" + redeem_date + ", in_time=" + in_time + ", status_use=" + status_use + ", active=" + active + ", redeem_name=" + redeem_name + ", bill_no=" + bill_no + ", discount_amt=" + discount_amt + ", discount_percent=" + discount_percent + ", redeem_or_free=" + redeem_or_free + ", data_sync=" + data_sync + '}';
     }
 
 }

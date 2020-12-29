@@ -76,7 +76,7 @@ public class ArrayDiff {
         for (RedeemModel model : arrB) {
             if (model.getRedeem_code().equals(m1.getRedeem_code())) {
                 found = true;
-                if (!model.getBill_no().equals(m1.getBill_no())) {
+                if (model.getBill_no() !=null && !model.getBill_no().equals(m1.getBill_no())) {
                     return "update";
                 }
             }

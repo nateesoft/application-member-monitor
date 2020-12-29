@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
+import utils.DateUtil;
 import utils.ThaiUtil;
 
 /**
@@ -36,9 +37,9 @@ public class Redeem implements RedeemInterface {
             model.setEmp_code_redeem(rs.getString("emp_code_redeem"));
             model.setMember_code_use(rs.getString("member_code_use"));
             model.setQty_in_use(rs.getInt("qty_in_use"));
-            model.setSystem_create(rs.getDate("system_create"));
-            model.setRedeem_date(rs.getDate("redeem_date"));
-            model.setIn_time(rs.getDate("in_time"));
+            model.setSystem_create(DateUtil.getDateString(rs.getDate("system_create")));
+            model.setRedeem_date(DateUtil.getDateString(rs.getDate("redeem_date")));
+            model.setIn_time(DateUtil.getDateString(rs.getDate("in_time")));
             model.setStatus_use(rs.getString("status_use"));
             model.setActive(rs.getString("active"));
             model.setRedeem_name(rs.getString("redeem_name"));
@@ -137,7 +138,7 @@ public class Redeem implements RedeemInterface {
             return;
         }
         try {
-            MySQLMemberConnect mysql = new MySQLMemberConnect();
+            MySQLPOSConnect mysql = new MySQLPOSConnect();
             try (Connection conn = mysql.openConnection()) {
                 conn.setAutoCommit(false);
                 String sql = "insert into redeem"
@@ -157,9 +158,9 @@ public class Redeem implements RedeemInterface {
                             prepStmt.setString(6, model.getEmp_code_redeem());
                             prepStmt.setString(7, model.getMember_code_use());
                             prepStmt.setInt(8, model.getQty_in_use());
-                            prepStmt.setDate(9, model.getSystem_create());
-                            prepStmt.setDate(10, model.getRedeem_date());
-                            prepStmt.setDate(11, model.getIn_time());
+                            prepStmt.setDate(9, DateUtil.getDate(model.getSystem_create()));
+                            prepStmt.setDate(10, null);
+                            prepStmt.setDate(11, DateUtil.getDate(model.getIn_time()));
                             prepStmt.setString(12, model.getStatus_use());
                             prepStmt.setString(13, model.getActive());
                             prepStmt.setString(14, ThaiUtil.Unicode2ASCII(model.getRedeem_name()));

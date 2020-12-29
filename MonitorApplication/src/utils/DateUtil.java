@@ -41,6 +41,9 @@ public class DateUtil {
     }
     
     public static String getDateString(java.sql.Date time) {
+        if(time==null){
+            return null;
+        }
         Date date = new Date(time.getTime());
         return simpOut.format(date);
     }

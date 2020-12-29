@@ -4,6 +4,7 @@ import database.local.RedeemModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.apache.log4j.Logger;
+import utils.DateUtil;
 
 /**
  *
@@ -24,9 +25,9 @@ public class Redeem {
             model.setEmp_code_redeem(rs.getString("emp_code_redeem"));
             model.setMember_code_use(rs.getString("member_code_use"));
             model.setQty_in_use(rs.getInt("qty_in_use"));
-            model.setSystem_create(rs.getDate("system_create"));
-            model.setRedeem_date(rs.getDate("redeem_date"));
-            model.setIn_time(rs.getDate("in_time"));
+            model.setSystem_create(DateUtil.getDateString(rs.getString("system_create")));
+            model.setRedeem_date(DateUtil.getDateString(rs.getString("redeem_date")));
+            model.setIn_time(DateUtil.getDateString(rs.getString("in_time")));
             model.setStatus_use(rs.getString("status_use"));
             model.setActive(rs.getString("active"));
             model.setRedeem_name(rs.getString("redeem_name"));
