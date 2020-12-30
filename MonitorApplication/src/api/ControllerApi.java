@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,13 +44,14 @@ public class ControllerApi {
         int responseCode = con.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             StringBuilder response;
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
                 String inputLine;
                 response = new StringBuilder();
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
             }
+            LOGGER.debug(response.toString());
             return response.toString();
         }
 
@@ -79,13 +81,14 @@ public class ControllerApi {
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             StringBuilder response;
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
                 String inputLine;
                 response = new StringBuilder();
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
             }
+            LOGGER.debug(response.toString());
             return response.toString();
         } else {
             LOGGER.error("PUT request not worked");
@@ -108,6 +111,7 @@ public class ControllerApi {
     public MemberModel[] getMemberMapping() throws IOException {
         LOGGER.debug("getMemberMapping");
         String getMember = callGetService(config.getApiServiceMember());
+        LOGGER.debug(getMember);
         JSONObject json = new JSONObject(getMember);
         return gson.fromJson(json.get("data").toString(), MemberModel[].class);
     }
@@ -115,6 +119,7 @@ public class ControllerApi {
     public RedeemModel[] getRedeemMapping() throws IOException {
         LOGGER.debug("getRedeemMapping");
         String getRedeem = callGetService(config.getApiServiceRedeem());
+        LOGGER.debug(getRedeem);
         JSONObject json = new JSONObject(getRedeem);
         return gson.fromJson(json.get("data").toString(), RedeemModel[].class);
     }
@@ -131,6 +136,7 @@ public class ControllerApi {
             jsonArr.put(gson.toJson(m));
         }
         String jsonData = jsonArr.toString();
+        LOGGER.debug(jsonData);
         return sendPutService(config.getApiServiceMember(), jsonData);
     }
 
@@ -146,6 +152,7 @@ public class ControllerApi {
             jsonArr.put(gson.toJson(r));
         }
         String jsonData = jsonArr.toString();
+        LOGGER.debug(jsonData);
         return sendPutService(config.getApiServiceRedeem(), jsonData);
     }
 }

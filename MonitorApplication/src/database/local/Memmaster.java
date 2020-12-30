@@ -21,7 +21,9 @@ import utils.ThaiUtil;
 interface MemmasterInterface {
 
     public MemmasterModel findByMemberCode(String memberCode);
+
     public List<MemmasterModel> findAll();
+
     public List<MemberModel> findMemberAll();
 }
 
@@ -121,7 +123,7 @@ public class Memmaster implements MemmasterInterface {
                     + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,"
                     + "Member_CompanyTel from memmaster order by Member_Code";
             MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection(); 
+            try (Connection conn = mysql.openConnection();
                     PreparedStatement stmt = conn.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
@@ -134,7 +136,7 @@ public class Memmaster implements MemmasterInterface {
         }
         return listMembers;
     }
-    
+
     public List<MemberModel> findMemberFromBillno() {
         LOGGER.debug("findMemberFromBillno");
         List<MemberModel> listMembers = new ArrayList<>();
@@ -143,11 +145,11 @@ public class Memmaster implements MemmasterInterface {
                     + "m.Member_Email, m.Member_Brithday, m.Member_ExpiredDate,"
                     + "m.Member_TotalPurchase, m.Member_Mobile, m.Member_TotalScore,"
                     + "m.Member_TitleNameThai, m.Member_SurnameThai "
-                    + "from "+config.getDbNamePos()+".billno b "
-                    + "left join "+config.getDbNameMember()+".memmaster m on "
+                    + "from " + config.getDbNamePos() + ".billno b "
+                    + "left join " + config.getDbNameMember() + ".memmaster m on "
                     + "b.B_MemCode = m.Member_Code ";
             MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection(); 
+            try (Connection conn = mysql.openConnection();
                     PreparedStatement stmt = conn.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
@@ -211,6 +213,9 @@ public class Memmaster implements MemmasterInterface {
                         + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),now(),now(),now());";
                 try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
                     for (MemberModel model : listMember) {
+                        LOGGER.debug("prefix<=" + model.getPrefix());
+                        LOGGER.debug("first_name<=" + model.getFirst_name());
+                        LOGGER.debug("last_name<=" + model.getLast_name());
                         if (model.getSaveOrUpdate().equals("save")) {
                             prepStmt.setString(1, model.getCode());
                             prepStmt.setString(2, ThaiUtil.Unicode2ASCII(model.getFirst_name()));

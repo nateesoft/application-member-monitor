@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -45,7 +46,7 @@ public class DownloadUtil {
             }
             URL url = new URL(downloadSite);
             InputStream is = url.openConnection().getInputStream();
-            br = new BufferedReader(new InputStreamReader(is));
+            br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             PrintStream ps = new PrintStream(new FileOutputStream(outputFile));
             String line;
             String newline = System.getProperty("line.separator");

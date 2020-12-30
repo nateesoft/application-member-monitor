@@ -1,6 +1,16 @@
 package utils;
 
+import database.DbConfig;
+import org.apache.log4j.Logger;
+
 public class ThaiUtil {
+
+    private static final DbConfig config;
+    private static final Logger LOGGER = Logger.getLogger(ThaiUtil.class);
+
+    static {
+        config = DbConfig.loadConfig();
+    }
 
     public static void main(String[] args) {
         String text = "ทดสอบ ภาษาไทย";
@@ -9,51 +19,48 @@ public class ThaiUtil {
         System.out.println(ThaiUtil.ASCII2Unicode(result));
     }
 
-    public static String Unicode2ASCII(String unicode) {
-        if (unicode == null) {
+    public static String Unicode2ASCII(String str) {
+        LOGGER.debug("Unicode2ASCII <= " + str);
+        if (str == null) {
             return "";
         }
-        StringBuilder ascii = new StringBuilder(unicode);
-        String saveAscii = "";
+        if (!config.isThaiUtf()) {
+            return str;
+        }
+        
+        StringBuilder convert = new StringBuilder(str);
         int code;
-        for (int i = 0; i < unicode.length(); i++) {
-            code = (int) unicode.charAt(i);
+        for (int i = 0; i < str.length(); i++) {
+            code = (int) str.charAt(i);
             if ((0xE01 <= code) && (code <= 0xE5B)) {
-                ascii.setCharAt(i, (char) (code - 0xD60));
-                saveAscii += (char) (code - 0xD60);
+                convert.setCharAt(i, (char) (code - 0xD60));
             } else {
-                saveAscii += (char) code;
+                convert.setCharAt(i, (char) code);
             }
         }
-        return saveAscii;
+        LOGGER.debug("Unicode2ASCII => " + convert.toString());
+        return convert.toString();
     }
 
     public static String ASCII2Unicode(String ascii) {
+        LOGGER.debug("ASCII2Unicode <= " + ascii);
         if (ascii == null) {
             return "";
         }
-        StringBuilder unicode = new StringBuilder(ascii);
+        if (!config.isThaiUtf()) {
+            return ascii;
+        }
+        StringBuilder convert = new StringBuilder(ascii);
         int code;
         for (int i = 0; i < ascii.length(); i++) {
             code = (int) ascii.charAt(i);
             if ((0xA1 <= code) && (code <= 0xFB)) {
-                unicode.setCharAt(i, (char) (code + 0xD60));
+                convert.setCharAt(i, (char) (code + 0xD60));
             } else {
-                unicode.setCharAt(i, (char) code);
+                convert.setCharAt(i, (char) code);
             }
         }
-        return unicode.toString();
-    }
-
-    public static String Unicode2ASCII_js(String text) {
-        String ascii = "";
-        int code;
-        for (int i = 0; i < text.length(); i++) {
-            code = (int) text.charAt(i);
-            if ((0xE01 <= code) && (code <= 0xE5B)) {
-                ascii += (char) (code - 0xD60);
-            }
-        }
-        return ascii;
+        LOGGER.debug("ASCII2Unicode => " + convert.toString());
+        return convert.toString();
     }
 }

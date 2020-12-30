@@ -19,6 +19,7 @@ import utils.ThaiUtil;
 interface RedeemInterface {
 
     public RedeemModel findById(String id);
+
     public List<RedeemModel> findAll();
 }
 
@@ -95,7 +96,7 @@ public class Redeem implements RedeemInterface {
 
     public void update(RedeemModel[] listRedeem) {
         LOGGER.debug("update");
-        if(listRedeem.length==0){
+        if (listRedeem.length == 0) {
             return;
         }
         try {
@@ -133,7 +134,7 @@ public class Redeem implements RedeemInterface {
 
     public void save(RedeemModel[] listRedeem) {
         LOGGER.debug("save");
-        if(listRedeem.length==0){
+        if (listRedeem.length == 0) {
             LOGGER.debug("not found redeem to update local db");
             return;
         }
@@ -149,6 +150,7 @@ public class Redeem implements RedeemInterface {
                         + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
                 try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
                     for (RedeemModel model : listRedeem) {
+                        LOGGER.debug("redeem_name<=" + model.getRedeem_name());
                         if (model.getSaveOrUpdate().equals("save")) {
                             prepStmt.setString(1, model.getUuid_index());
                             prepStmt.setString(2, model.getRedeem_code());
@@ -185,7 +187,7 @@ public class Redeem implements RedeemInterface {
                 conn.commit();
             }
         } catch (SQLException e) {
-           LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }

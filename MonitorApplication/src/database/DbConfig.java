@@ -39,6 +39,7 @@ public class DbConfig {
 
     private int timeSync;
     private String pathDownload;
+    private boolean thaiUtf = true;
 
     private static void writeDefaultConfigFile() {
         LOGGER.debug("writeDefaultConfigFile");
@@ -108,6 +109,10 @@ public class DbConfig {
 
             config.setTimeSync(Integer.parseInt(prop.getProperty("time.sync")));
             config.setPathDownload(prop.getProperty("app.download"));
+
+            if (prop.getProperty("thaiUtf") != null) {
+                config.setThaiUtf(prop.getProperty("thaiUtf").equals("Y"));
+            }
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage());
             return null;
@@ -250,6 +255,14 @@ public class DbConfig {
 
     public void setPathDownload(String pathDownload) {
         this.pathDownload = pathDownload;
+    }
+
+    public boolean isThaiUtf() {
+        return thaiUtf;
+    }
+
+    public void setThaiUtf(boolean thaiUtf) {
+        this.thaiUtf = thaiUtf;
     }
 
 }
