@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -12,8 +13,8 @@ import java.util.TimeZone;
  */
 public class DateUtil {
 
-    private static final SimpleDateFormat simp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-    private static final SimpleDateFormat simpOut = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat simp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+    private static final SimpleDateFormat simpOut = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     private static final TimeZone utc = TimeZone.getTimeZone("UTC");
 
     static {

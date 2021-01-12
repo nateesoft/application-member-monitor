@@ -1,15 +1,11 @@
 package utils;
 
 import database.DbConfig;
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -23,19 +19,13 @@ import org.apache.log4j.Logger;
 public class DownloadUtil {
 
     private static final String folderApplications = "applications";
+    private static final String folderTempApplications = "applications/temp";
     private static final Logger LOGGER = Logger.getLogger(DownloadUtil.class);
     private static final SimpleDateFormat simp = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-
-    public static void main(String[] args) {
-        DownloadUtil.downloadAppUpdate();
-    }
 
     public static void downloadAppUpdate() {
         LOGGER.debug("downloadAppUpdate");
         DbConfig config = DbConfig.loadConfig();
-        StringBuilder contents = new StringBuilder(4096);
-        BufferedReader br = null;
-
         try {
             String dateFormat = simp.format(new Date());
             String applicationName = "update_" + dateFormat + ".zip";
@@ -44,35 +34,49 @@ public class DownloadUtil {
             if (!new File(folderApplications).exists()) {
                 new File(folderApplications).mkdir();
             }
+
             URL url = new URL(downloadSite);
-            InputStream is = url.openConnection().getInputStream();
-            br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-            PrintStream ps = new PrintStream(new FileOutputStream(outputFile));
-            String line;
-            String newline = System.getProperty("line.separator");
-            while ((line = br.readLine()) != null) {
-                contents.append(line).append(newline);
-            }
-            ps.println(contents.toString());
-            LOGGER.info("download application update finish");
-            JOptionPane.showMessageDialog(null,
-                    "Download application file update complete",
-                    "Download success",
-                    JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                    "You are already using the latest version",
-                    "No newer version found.",
-                    JOptionPane.INFORMATION_MESSAGE);
-            LOGGER.error(e.getMessage());
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
+            try (BufferedInputStream bis = new BufferedInputStream(url.openStream());
+                    FileOutputStream fis = new FileOutputStream(outputFile)) {
+                byte[] buffer = new byte[1024];
+                int count;
+                while ((count = bis.read(buffer, 0, 1024)) != -1) {
+                    fis.write(buffer, 0, count);
                 }
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
             }
+            
+            // unzip file
+            LOGGER.info("unzip file from applicatioj download temp file");
+            if (!new File(folderTempApplications).exists()) {
+                new File(folderTempApplications).mkdir();
+            }
+            UnzipUtility.unzip(outputFile, folderTempApplications);
+
+            // copy to update program
+            File from = new File(folderTempApplications + "/dist/MonitorApplication.jar");
+            File to = new File("MonitorApplication.jar");
+            UnzipUtility.copyFile(from, to);
+
+            // copy lib to
+            File folderDist = new File("lib");
+            LOGGER.info("Copy lib to " + folderDist.getAbsolutePath());
+            UnzipUtility.copyDirectory(new File(folderTempApplications + "/dist/lib"), folderDist);
+
+            // stamp file update version
+            new File("update_" + dateFormat + ".version").createNewFile();
+            
+            LOGGER.info("download application update finish, Please restart application");
+            JOptionPane.showMessageDialog(null,
+                    "Update application to latest version, \nPlease start application again",
+                    "Update application complete",
+                    JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Notfound Application Update Today",
+                    e.getMessage(), JOptionPane.INFORMATION_MESSAGE);
+            LOGGER.error(e.getMessage());
         }
+
     }
+
 }

@@ -10,6 +10,10 @@ import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import utils.DownloadUtil;
 
@@ -20,6 +24,7 @@ import utils.DownloadUtil;
 public class Main {
 
     private static final Logger LOGGER = Logger.getLogger(Main.class);
+    private static final SimpleDateFormat simp = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 
     public static void main(String[] args) {
         if (!SystemTray.isSupported()) {
@@ -46,7 +51,14 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LOGGER.info("Download and update");
-                DownloadUtil.downloadAppUpdate();
+                if (!new File("update_" + simp.format(new Date()) + ".version").exists()) {
+                    DownloadUtil.downloadAppUpdate();
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "You are already using the latest version",
+                            "No newer version found.",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
         trayPopupMenu.add(downloadUpdate);
@@ -63,6 +75,12 @@ public class Main {
 
         TrayIcon trayIcon = new TrayIcon(image, "Web daily sync", trayPopupMenu);
         trayIcon.setImageAutoSize(true);
+        trayIcon.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Click Alert");
+            }
+        });
 
         try {
             systemTray.add(trayIcon);
@@ -70,6 +88,20 @@ public class Main {
             LOGGER.error(awtException.getMessage());
         }
 
+        // first time download
+        if (!new File("update_" + simp.format(new Date()) + ".version").exists()) {
+            DownloadUtil.downloadAppUpdate();
+        }
+
+//        while (!Thread.currentThread().isInterrupted()) {
+//            try {
+//                // show notification
+//                trayIcon.displayMessage("Attention!", "From Server", TrayIcon.MessageType.INFO);
+//                Thread.sleep(10000);
+//            } catch (InterruptedException ex) {
+//                LOGGER.error(ex.getMessage());
+//            }
+//        }
         // start application monitory running
         LOGGER.info("start application monitory");
         TaskController.run();
