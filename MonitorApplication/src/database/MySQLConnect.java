@@ -13,7 +13,7 @@ public class MySQLConnect {
 
     private static final Logger LOGGER = Logger.getLogger(MySQLConnect.class);
     private Connection connection;
-    private DbConfig config;
+    private DbConfigProps config;
 
     public Connection openConnection(String type) {
         LOGGER.debug("openConnection type=" + type);
@@ -25,13 +25,13 @@ public class MySQLConnect {
             switch (type) {
                 case "pos":
                     LOGGER.debug(urlConnect);
-                    urlConnect = "jdbc:mysql://" + config.getHostPos() + ":" + config.getPortPos() + "/" + config.getDbNamePos() + "?charset=tis-620";
-                    connection = DriverManager.getConnection(urlConnect, config.getUserPos(), config.getPasswordPos());
+                    urlConnect = "jdbc:mysql://" + config.getPosHost() + ":" + config.getPosPort() + "/" + config.getPosDbName() + "?charset=tis-620";
+                    connection = DriverManager.getConnection(urlConnect, config.getPosUser(), config.getPosPassword());
                     break;
                 case "member":
                     LOGGER.debug(urlConnect);
-                    urlConnect = "jdbc:mysql://" + config.getHostMember() + ":" + config.getPortMember() + "/" + config.getDbNameMember() + "?charset=tis-620";
-                    connection = DriverManager.getConnection(urlConnect, config.getUserMember(), config.getPasswordMember());
+                    urlConnect = "jdbc:mysql://" + config.getMemberHost() + ":" + config.getMemberPort() + "/" + config.getMemberDbName() + "?charset=tis-620";
+                    connection = DriverManager.getConnection(urlConnect, config.getMemberUser(), config.getMemberPassword());
                     break;
             }
 

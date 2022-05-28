@@ -15,36 +15,16 @@ import org.apache.log4j.Logger;
 public class DbConfig {
 
     private static final Logger LOGGER = Logger.getLogger(DbConfig.class);
-    private static final File FILE_CONFIG = new File("local.txt");
-    private static final File FILE_IMAGE_PNG = new File("icon-sync.png");
-    private static DbConfig config = null;
 
-    private String hostPos;
-    private String userPos;
-    private String passwordPos;
-    private String portPos;
-    private String dbNamePos;
-
-    private String hostMember;
-    private String userMember;
-    private String passwordMember;
-    private String portMember;
-    private String dbNameMember;
-
-    private String apiServiceMember;
-    private String apiServiceRedeem;
-    private String apiServiceDB;
-    private String apiServiceAuth;
-    private String apiVersion;
-
-    private int timeSync;
-    private String pathDownload;
-    private boolean thaiUtf = true;
+    public static final File FILE_CONFIG = new File("local.txt");
+    public static final File FILE_IMAGE_PNG = new File("icon-sync.png");
+    public static final File FILE_IMAGE_DISCONNECT_PNG = new File("icon-disconnected.png");
+    private static DbConfigProps config = null;
 
     private static void writeDefaultConfigFile() {
         LOGGER.debug("writeDefaultConfigFile");
         try {
-            try (FileWriter myWriter = new FileWriter(FILE_CONFIG)) {
+            try ( FileWriter myWriter = new FileWriter(FILE_CONFIG)) {
                 myWriter.write("### LOCAL DB ###\n"
                         + "pos.host=localhost\n"
                         + "pos.user=root\n"
@@ -60,6 +40,7 @@ public class DbConfig {
                         + "member.dbName=mycrmbranch\n"
                         + "\n"
                         + "### API ENDPOINT ###\n"
+                        + "api.serviceHost=http://softcrmpkh.dyndns.org:5000\n"
                         + "api.serviceVersion=http://softcrmpkh.dyndns.org:5000/api/version\n"
                         + "api.serviceMember=http://softcrmpkh.dyndns.org:5000/api/member/client\n"
                         + "api.serviceRedeem=http://softcrmpkh.dyndns.org:5000/api/redeem/client\n"
@@ -67,7 +48,7 @@ public class DbConfig {
                         + "api.serviceAuth=YWRtaW46c29mdHBvczIwMTM=\n"
                         + "\n"
                         + "### TIME SYNC ###\n"
-                        + "time.sync=10000\n"
+                        + "time.sync=10\n"
                         + "app.download=http://softcrmpkh.dyndns.org:5000/images/applications");
             }
             LOGGER.info("Successfully wrote to the file.");
@@ -76,7 +57,7 @@ public class DbConfig {
         }
     }
 
-    public static DbConfig loadConfig() {
+    public static DbConfigProps loadConfig() {
         LOGGER.debug("loadConfig");
         if (!FILE_CONFIG.exists()) {
             writeDefaultConfigFile();
@@ -84,35 +65,33 @@ public class DbConfig {
         if (config != null) {
             return config;
         }
-        try (InputStream input = new FileInputStream("local.txt")) {
+        try ( InputStream input = new FileInputStream("local.txt")) {
             Properties prop = new Properties();
             prop.load(input);
 
-            config = new DbConfig();
-            config.setHostPos(prop.getProperty("pos.host"));
-            config.setUserPos(prop.getProperty("pos.user"));
-            config.setPasswordPos(prop.getProperty("pos.password"));
-            config.setPortPos(prop.getProperty("pos.port"));
-            config.setDbNamePos(prop.getProperty("pos.dbName"));
+            config = new DbConfigProps();
+            config.setPosHost(prop.getProperty("pos.host"));
+            config.setPosUser(prop.getProperty("pos.user"));
+            config.setPosPassword(prop.getProperty("pos.password"));
+            config.setPosPort(prop.getProperty("pos.port"));
+            config.setPosDbName(prop.getProperty("pos.dbName"));
 
-            config.setHostMember(prop.getProperty("member.host"));
-            config.setUserMember(prop.getProperty("member.user"));
-            config.setPasswordMember(prop.getProperty("member.password"));
-            config.setPortMember(prop.getProperty("member.port"));
-            config.setDbNameMember(prop.getProperty("member.dbName"));
+            config.setMemberHost(prop.getProperty("member.host"));
+            config.setMemberUser(prop.getProperty("member.user"));
+            config.setMemberPassword(prop.getProperty("member.password"));
+            config.setMemberPort(prop.getProperty("member.port"));
+            config.setMemberDbName(prop.getProperty("member.dbName"));
 
+            config.setApiServiceHost(prop.getProperty("api.serviceHost"));
             config.setApiServiceMember(prop.getProperty("api.serviceMember"));
             config.setApiServiceRedeem(prop.getProperty("api.serviceRedeem"));
             config.setApiServiceDB(prop.getProperty("api.serviceDB"));
             config.setApiServiceAuth(prop.getProperty("api.serviceAuth"));
-            config.setApiVersion(prop.getProperty("api.serviceVersion"));
+            config.setApiServiceVersion(prop.getProperty("api.serviceVersion"));
 
             config.setTimeSync(Integer.parseInt(prop.getProperty("time.sync")));
-            config.setPathDownload(prop.getProperty("app.download"));
-
-            if (prop.getProperty("thaiUtf") != null) {
-                config.setThaiUtf(prop.getProperty("thaiUtf").equals("Y"));
-            }
+            config.setAppDownload(prop.getProperty("app.download"));
+            config.setThaiUtf(prop.getProperty("thaiUtf"));
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage());
             return null;
@@ -121,148 +100,39 @@ public class DbConfig {
         return config;
     }
 
-    public String getHostPos() {
-        return hostPos;
-    }
-
-    public void setHostPos(String hostPos) {
-        this.hostPos = hostPos;
-    }
-
-    public String getUserPos() {
-        return userPos;
-    }
-
-    public void setUserPos(String userPos) {
-        this.userPos = userPos;
-    }
-
-    public String getPasswordPos() {
-        return passwordPos;
-    }
-
-    public void setPasswordPos(String passwordPos) {
-        this.passwordPos = passwordPos;
-    }
-
-    public String getPortPos() {
-        return portPos;
-    }
-
-    public void setPortPos(String portPos) {
-        this.portPos = portPos;
-    }
-
-    public String getDbNamePos() {
-        return dbNamePos;
-    }
-
-    public void setDbNamePos(String dbNamePos) {
-        this.dbNamePos = dbNamePos;
-    }
-
-    public String getHostMember() {
-        return hostMember;
-    }
-
-    public void setHostMember(String hostMember) {
-        this.hostMember = hostMember;
-    }
-
-    public String getUserMember() {
-        return userMember;
-    }
-
-    public void setUserMember(String userMember) {
-        this.userMember = userMember;
-    }
-
-    public String getPasswordMember() {
-        return passwordMember;
-    }
-
-    public void setPasswordMember(String passwordMember) {
-        this.passwordMember = passwordMember;
-    }
-
-    public String getPortMember() {
-        return portMember;
-    }
-
-    public void setPortMember(String portMember) {
-        this.portMember = portMember;
-    }
-
-    public String getDbNameMember() {
-        return dbNameMember;
-    }
-
-    public void setDbNameMember(String dbNameMember) {
-        this.dbNameMember = dbNameMember;
-    }
-
-    public String getApiServiceMember() {
-        return apiServiceMember;
-    }
-
-    public void setApiServiceMember(String apiServiceMember) {
-        this.apiServiceMember = apiServiceMember;
-    }
-
-    public String getApiServiceRedeem() {
-        return apiServiceRedeem;
-    }
-
-    public void setApiServiceRedeem(String apiServiceRedeem) {
-        this.apiServiceRedeem = apiServiceRedeem;
-    }
-
-    public String getApiServiceDB() {
-        return apiServiceDB;
-    }
-
-    public void setApiServiceDB(String apiServiceDB) {
-        this.apiServiceDB = apiServiceDB;
-    }
-
-    public String getApiServiceAuth() {
-        return apiServiceAuth;
-    }
-
-    public void setApiServiceAuth(String apiServiceAuth) {
-        this.apiServiceAuth = apiServiceAuth;
-    }
-
-    public String getApiVersion() {
-        return apiVersion;
-    }
-
-    public void setApiVersion(String apiVersion) {
-        this.apiVersion = apiVersion;
-    }
-
-    public int getTimeSync() {
-        return timeSync;
-    }
-
-    public void setTimeSync(int timeSync) {
-        this.timeSync = timeSync;
-    }
-
-    public String getPathDownload() {
-        return pathDownload;
-    }
-
-    public void setPathDownload(String pathDownload) {
-        this.pathDownload = pathDownload;
-    }
-
-    public boolean isThaiUtf() {
-        return thaiUtf;
-    }
-
-    public void setThaiUtf(boolean thaiUtf) {
-        this.thaiUtf = thaiUtf;
+    public static void saveConfigFileData(DbConfigProps props) {
+        try {
+            try ( FileWriter myWriter = new FileWriter(DbConfig.FILE_CONFIG)) {
+                myWriter.write("### LOCAL DB ###\n"
+                        + "pos.host=" + props.getPosHost() + "\n"
+                        + "pos.user=" + props.getPosUser() + "\n"
+                        + "pos.password=" + props.getPosPassword() + "\n"
+                        + "pos.port=" + props.getPosPort() + "\n"
+                        + "pos.dbName=" + props.getPosDbName() + "\n"
+                        + "\n"
+                        + "### SERVER DB ###\n"
+                        + "member.host=" + props.getMemberHost() + "\n"
+                        + "member.user=" + props.getMemberUser() + "\n"
+                        + "member.password=" + props.getMemberPassword() + "\n"
+                        + "member.port=" + props.getMemberPort() + "\n"
+                        + "member.dbName=" + props.getMemberDbName() + "\n"
+                        + "\n"
+                        + "### API ENDPOINT ###\n"
+                        + "api.serviceHost=" + props.getApiServiceHost() + "\n"
+                        + "api.serviceVersion=" + props.getApiServiceVersion() + "\n"
+                        + "api.serviceMember=" + props.getApiServiceMember() + "\n"
+                        + "api.serviceRedeem=" + props.getApiServiceRedeem() + "\n"
+                        + "api.serviceDB=" + props.getApiServiceDB() + "\n"
+                        + "api.serviceAuth=" + props.getApiServiceAuth() + "\n"
+                        + "\n"
+                        + "### TIME SYNC ###\n"
+                        + "time.sync=" + props.getTimeSync() + "\n"
+                        + "app.download=" + props.getAppDownload() + "");
+            }
+            LOGGER.info("Successfully wrote to the file.");
+        } catch (IOException e) {
+            LOGGER.error("An error occurred.");
+        }
     }
 
 }

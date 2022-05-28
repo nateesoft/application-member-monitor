@@ -1,6 +1,6 @@
 package utils;
 
-import api.MemberModel;
+import api.model.MemberModel;
 import database.local.RedeemModel;
 import java.util.ArrayList;
 import java.util.List;

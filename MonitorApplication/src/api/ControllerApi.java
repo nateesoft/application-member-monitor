@@ -1,7 +1,11 @@
 package api;
 
+import api.model.MemberModel;
+import api.model.ReqMemberBody;
+import api.model.ReqRedeemBody;
 import com.google.gson.Gson;
 import database.DbConfig;
+import database.DbConfigProps;
 import database.local.ControllerDB;
 import database.local.RedeemModel;
 import java.io.BufferedReader;
@@ -24,7 +28,7 @@ public class ControllerApi {
     private static final Logger LOGGER = Logger.getLogger(ControllerApi.class);
 
     private static final String USER_AGENT = "Mozilla/5.0";
-    private final DbConfig config;
+    private final DbConfigProps config;
     private final Gson gson = new Gson();
     private final ControllerDB controllerDB = new ControllerDB();
 
@@ -33,7 +37,7 @@ public class ControllerApi {
     }
 
     public String callGetService(String url) throws IOException {
-        LOGGER.debug("callGetService :" + url);
+        LOGGER.debug("ControllerApi:callGetService :" + url);
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
@@ -59,6 +63,7 @@ public class ControllerApi {
     }
 
     public String sendPutService(String url, String reqBody) throws IOException {
+        LOGGER.debug("ControllerApi:sendPutService :" + url + "," + reqBody);
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("PUT");
@@ -77,7 +82,7 @@ public class ControllerApi {
         }
 
         int responseCode = con.getResponseCode();
-        LOGGER.info("PUT Response Code :: " + responseCode);
+        LOGGER.info("ControllerApi:PUT Response Code :: " + responseCode);
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             StringBuilder response;
@@ -91,16 +96,16 @@ public class ControllerApi {
             LOGGER.debug(response.toString());
             return response.toString();
         } else {
-            LOGGER.error("PUT request not worked");
+            LOGGER.error("ControllerApi:PUT request not worked");
         }
 
         return null;
     }
 
     public boolean getVersion() {
-        LOGGER.debug("getVersion");
+        LOGGER.debug("ControllerApi:getVersion");
         try {
-            callGetService(config.getApiVersion());
+            callGetService(config.getApiServiceVersion());
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             return false;
@@ -109,7 +114,7 @@ public class ControllerApi {
     }
 
     public MemberModel[] getMemberMapping() throws IOException {
-        LOGGER.debug("getMemberMapping");
+        LOGGER.debug("ControllerApi:getMemberMapping");
         String getMember = callGetService(config.getApiServiceMember());
         LOGGER.debug(getMember);
         JSONObject json = new JSONObject(getMember);
@@ -117,7 +122,7 @@ public class ControllerApi {
     }
 
     public RedeemModel[] getRedeemMapping() throws IOException {
-        LOGGER.debug("getRedeemMapping");
+        LOGGER.debug("ControllerApi:getRedeemMapping");
         String getRedeem = callGetService(config.getApiServiceRedeem());
         LOGGER.debug(getRedeem);
         JSONObject json = new JSONObject(getRedeem);
@@ -125,7 +130,7 @@ public class ControllerApi {
     }
 
     public String pushMemberService(MemberModel[] insertMember) throws IOException {
-        LOGGER.debug("pushMemberService");
+        LOGGER.debug("ControllerApi:pushMemberService");
         ReqMemberBody[] model = controllerDB.getMemberReqBody(insertMember);
         if (model.length == 0) {
             LOGGER.debug("not found member to push update");
@@ -141,7 +146,7 @@ public class ControllerApi {
     }
 
     public String pushRedeemService(RedeemModel[] insertRedeem) throws IOException {
-        LOGGER.debug("pushRedeemService");
+        LOGGER.debug("ControllerApi:pushRedeemService");
         ReqRedeemBody[] model = controllerDB.getRedeemReqBody(insertRedeem);
         if (model.length == 0) {
             LOGGER.debug("not found redeem to push update");

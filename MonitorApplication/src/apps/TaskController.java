@@ -1,8 +1,9 @@
 package apps;
 
 import api.ControllerApi;
-import api.MemberModel;
+import api.model.MemberModel;
 import database.DbConfig;
+import database.DbConfigProps;
 import database.local.ControllerDB;
 import database.local.RedeemModel;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class TaskController {
 
     public static void run() {
         LOGGER.info("Task running");
-        DbConfig config = DbConfig.loadConfig();
+        DbConfigProps config = DbConfig.loadConfig();
         while (!Thread.currentThread().isInterrupted()) {
             if (count % 2 == 0) {
                 syncDown();
@@ -35,7 +36,7 @@ public class TaskController {
             }
             try {
                 count++;
-                Thread.sleep(config.getTimeSync());
+                Thread.sleep(config.getTimeSync() * 1000);
             } catch (InterruptedException ex) {
                 LOGGER.error(ex.getMessage());
             }

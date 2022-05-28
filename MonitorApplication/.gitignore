@@ -3,3 +3,5 @@
 /applications/*
 /update_20210112.zip
 /test.txt
+/nbproject/*
+package-lock.json

@@ -13,6 +13,7 @@ member.port=3306
 member.dbName=mycrmbranch
 
 ### API ENDPOINT ###
+api.serviceHost=http://localhost:5000
 api.serviceVersion=http://localhost:5000/api/version
 api.serviceMember=http://localhost:5000/api/member/client
 api.serviceRedeem=http://localhost:5000/api/redeem/client
@@ -20,5 +21,5 @@ api.serviceDB=d2ViZGFpbHlfMDAx
 api.serviceAuth=YWRtaW46c29mdHBvczIwMTM=
 
 ### TIME SYNC ###
-time.sync=10000
+time.sync=10
 app.download=http://localhost:5000/images/applications

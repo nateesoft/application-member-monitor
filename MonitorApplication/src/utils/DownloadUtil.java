@@ -1,6 +1,7 @@
 package utils;
 
 import database.DbConfig;
+import database.DbConfigProps;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,11 +26,11 @@ public class DownloadUtil {
 
     public static void downloadAppUpdate() {
         LOGGER.debug("downloadAppUpdate");
-        DbConfig config = DbConfig.loadConfig();
+        DbConfigProps config = DbConfig.loadConfig();
+        String dateFormat = simp.format(new Date());
         try {
-            String dateFormat = simp.format(new Date());
             String applicationName = "update_" + dateFormat + ".zip";
-            String downloadSite = config.getPathDownload() + "/" + applicationName;
+            String downloadSite = config.getAppDownload() + "/" + applicationName;
             String outputFile = folderApplications + "/" + applicationName;
             if (!new File(folderApplications).exists()) {
                 new File(folderApplications).mkdir();
@@ -72,11 +73,7 @@ public class DownloadUtil {
                     JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Notfound Application Update Today",
-                    e.getMessage(), JOptionPane.INFORMATION_MESSAGE);
-            LOGGER.error(e.getMessage());
+            LOGGER.warn("Not found application to update today");
         }
-
     }
-
 }

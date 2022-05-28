@@ -1,5 +1,9 @@
 package apps;
 
+import database.DbConfig;
+import database.DbConfigProps;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -8,8 +12,8 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -25,6 +29,7 @@ public class Main {
 
     private static final Logger LOGGER = Logger.getLogger(Main.class);
     private static final SimpleDateFormat simp = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+    private static DbConfigProps config = null;
 
     public static void main(String[] args) {
         if (!SystemTray.isSupported()) {
@@ -32,54 +37,69 @@ public class Main {
             return;
         }
 
+        if (config == null) {
+            config = DbConfig.loadConfig();
+        }
+
         SystemTray systemTray = SystemTray.getSystemTray();
-        Image image = Toolkit.getDefaultToolkit().getImage(new File("icon-sync.png").getAbsolutePath());
+        Image image = Toolkit.getDefaultToolkit().getImage(DbConfig.FILE_IMAGE_PNG.getAbsolutePath());
+        Image imageDisconnect = Toolkit.getDefaultToolkit().getImage(DbConfig.FILE_IMAGE_DISCONNECT_PNG.getAbsolutePath());
 
         PopupMenu trayPopupMenu = new PopupMenu();
         MenuItem action = new MenuItem("Log Apps");
-        action.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LogAppDialog dialog = new LogAppDialog(null, true);
-                dialog.setVisible(true);
-            }
+        action.addActionListener((ActionEvent e) -> {
+            LogAppDialog dialog = new LogAppDialog(null, true);
+            dialog.setVisible(true);
         });
+
         trayPopupMenu.add(action);
         trayPopupMenu.addSeparator();
+
         MenuItem downloadUpdate = new MenuItem("Check Update");
-        downloadUpdate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LOGGER.info("Download and update");
-                if (!new File("update_" + simp.format(new Date()) + ".version").exists()) {
-                    DownloadUtil.downloadAppUpdate();
-                } else {
-                    JOptionPane.showMessageDialog(null,
-                            "You are already using the latest version",
-                            "No newer version found.",
-                            JOptionPane.INFORMATION_MESSAGE);
-                }
+        downloadUpdate.addActionListener((ActionEvent e) -> {
+            LOGGER.info("Download and update");
+            if (checkVersion()) {
+                DownloadUtil.downloadAppUpdate();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "You are already using the latest version",
+                        "No newer version found.",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
         trayPopupMenu.add(downloadUpdate);
         trayPopupMenu.addSeparator();
+
         MenuItem close = new MenuItem("Exit");
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LOGGER.info("Close application monitor");
-                System.exit(0);
-            }
+        close.addActionListener((ActionEvent e) -> {
+            LOGGER.info("Close application monitor");
+            System.exit(0);
         });
         trayPopupMenu.add(close);
 
-        TrayIcon trayIcon = new TrayIcon(image, "Web daily sync", trayPopupMenu);
+        TrayIcon trayIcon = new TrayIcon(imageDisconnect, "Web daily sync (Disconnected)", trayPopupMenu);
+        try {
+            Socket socketSync = IO.socket(config.getApiServiceHost());
+            socketSync.on(Socket.EVENT_CONNECT, (Object... os) -> {
+                // check if connected
+                trayIcon.setToolTip("Web daily sync (Connected)");
+                trayIcon.setImage(image);
+            });
+
+            socketSync.on(Socket.EVENT_DISCONNECT, (Object... os) -> {
+                // check if disconnected
+                trayIcon.setToolTip("Web daily sync (Disconnected)");
+                trayIcon.setImage(imageDisconnect);
+            });
+
+            socketSync.open();
+        } catch (URISyntaxException e) {
+            LOGGER.error(e.getMessage());
+        }
+
         trayIcon.setImageAutoSize(true);
-        trayIcon.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Click Alert");
-            }
+        trayIcon.addActionListener((ActionEvent e) -> {
+            System.out.println("Click Alert");
         });
 
         try {
@@ -89,21 +109,16 @@ public class Main {
         }
 
         // first time download
-        if (!new File("update_" + simp.format(new Date()) + ".version").exists()) {
+        if (checkVersion()) {
             DownloadUtil.downloadAppUpdate();
         }
 
-//        while (!Thread.currentThread().isInterrupted()) {
-//            try {
-//                // show notification
-//                trayIcon.displayMessage("Attention!", "From Server", TrayIcon.MessageType.INFO);
-//                Thread.sleep(10000);
-//            } catch (InterruptedException ex) {
-//                LOGGER.error(ex.getMessage());
-//            }
-//        }
         // start application monitory running
         LOGGER.info("start application monitory");
         TaskController.run();
+    }
+
+    private static boolean checkVersion() {
+        return !new File("update_" + simp.format(new Date()) + ".version").exists();
     }
 }

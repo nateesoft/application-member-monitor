@@ -1,9 +1,16 @@
-package api;
+package api.model;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
  * @author nateesun
  */
+@Getter
+@Setter
+@ToString
 public class ReqMemberBody {
 
     private Float Member_TotalPurchase;
@@ -15,29 +22,4 @@ public class ReqMemberBody {
         this.Member_TotalScore = Member_TotalScore;
         this.Member_Code = Member_Code;
     }
-
-    public Float getMember_TotalPurchase() {
-        return Member_TotalPurchase;
-    }
-
-    public void setMember_TotalPurchase(Float Member_TotalPurchase) {
-        this.Member_TotalPurchase = Member_TotalPurchase;
-    }
-
-    public Float getMember_TotalScore() {
-        return Member_TotalScore;
-    }
-
-    public void setMember_TotalScore(Float Member_TotalScore) {
-        this.Member_TotalScore = Member_TotalScore;
-    }
-
-    public String getMember_Code() {
-        return Member_Code;
-    }
-
-    public void setMember_Code(String Member_Code) {
-        this.Member_Code = Member_Code;
-    }
-
 }

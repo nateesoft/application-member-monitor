@@ -2,3 +2,4 @@
 /MonitorApplication/dist/
 /MonitorApplication/build/
 /MonitorApplication/lib/
+/MonitorApplication/server/node_modules/*

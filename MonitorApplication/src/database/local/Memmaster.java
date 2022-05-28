@@ -1,10 +1,10 @@
 package database.local;
 
-import api.MemberModel;
+import api.model.MemberModel;
 import database.DbConfig;
+import database.DbConfigProps;
 import database.MySQLMemberConnect;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +30,7 @@ interface MemmasterInterface {
 public class Memmaster implements MemmasterInterface {
 
     private static final Logger LOGGER = Logger.getLogger(Memmaster.class);
-    private static final DbConfig config = DbConfig.loadConfig();
+    private static final DbConfigProps config = DbConfig.loadConfig();
 
     public MemmasterModel mapping(ResultSet rs, MemmasterModel model) {
         LOGGER.debug("mapping");
@@ -145,8 +145,8 @@ public class Memmaster implements MemmasterInterface {
                     + "m.Member_Email, m.Member_Brithday, m.Member_ExpiredDate,"
                     + "m.Member_TotalPurchase, m.Member_Mobile, m.Member_TotalScore,"
                     + "m.Member_TitleNameThai, m.Member_SurnameThai "
-                    + "from " + config.getDbNamePos() + ".billno b "
-                    + "left join " + config.getDbNameMember() + ".memmaster m on "
+                    + "from " + config.getPosDbName() + ".billno b "
+                    + "left join " + config.getMemberDbName() + ".memmaster m on "
                     + "b.B_MemCode = m.Member_Code ";
             MySQLMemberConnect mysql = new MySQLMemberConnect();
             try (Connection conn = mysql.openConnection();

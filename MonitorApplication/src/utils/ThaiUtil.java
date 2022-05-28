@@ -1,11 +1,12 @@
 package utils;
 
 import database.DbConfig;
+import database.DbConfigProps;
 import org.apache.log4j.Logger;
 
 public class ThaiUtil {
 
-    private static final DbConfig config;
+    private static final DbConfigProps config;
     private static final Logger LOGGER = Logger.getLogger(ThaiUtil.class);
 
     static {
@@ -24,7 +25,7 @@ public class ThaiUtil {
         if (str == null) {
             return "";
         }
-        if (!config.isThaiUtf()) {
+        if (!config.getThaiUtf().equals("Y")) {
             return str;
         }
         
@@ -47,7 +48,7 @@ public class ThaiUtil {
         if (ascii == null) {
             return "";
         }
-        if (!config.isThaiUtf()) {
+        if (!config.getThaiUtf().equals("Y")) {
             return ascii;
         }
         StringBuilder convert = new StringBuilder(ascii);

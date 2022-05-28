@@ -1,8 +1,8 @@
 package database.local;
 
-import api.MemberModel;
-import api.ReqMemberBody;
-import api.ReqRedeemBody;
+import api.model.MemberModel;
+import api.model.ReqMemberBody;
+import api.model.ReqRedeemBody;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;

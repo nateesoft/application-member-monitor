@@ -33,7 +33,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         btnShowLogFile = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        cbTargetLogFiles = new javax.swing.JComboBox<String>();
+        cbTargetLogFiles = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -51,6 +51,7 @@ public class LogAppDialog extends javax.swing.JDialog {
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setTitle("Log Applicataion Sync CRM v1.0.14");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -247,11 +248,8 @@ public class LogAppDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        try {
-            Desktop.getDesktop().open(new File("local.txt"));
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage());
-        }
+        ConfigDialog configDialog = new ConfigDialog(null, true);
+        configDialog.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void btnShowLogFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowLogFileActionPerformed
@@ -265,45 +263,6 @@ public class LogAppDialog extends javax.swing.JDialog {
     private void btnCheckStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckStatusActionPerformed
         checkStatusLoad();
     }//GEN-LAST:event_btnCheckStatusActionPerformed
-
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LogAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LogAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LogAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LogAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                LogAppDialog dialog = new LogAppDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckStatus;
