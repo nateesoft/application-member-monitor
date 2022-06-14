@@ -22,26 +22,28 @@ public class DateUtil {
         simp.setTimeZone(utc);
     }
 
-    public static java.sql.Date getDate(String time) {
+    public static java.sql.Date getDate(String date) {
         try {
-            Date tDate = simp.parse(time);
+            Date tDate = simp.parse(date);
             Date ouDate = simpOut.parse(simpOut.format(tDate));
-            java.sql.Date date = new java.sql.Date(ouDate.getTime());
-            return date;
+            java.sql.Date sqlDate = new java.sql.Date(ouDate.getTime());
+            return sqlDate;
         } catch (ParseException e) {
             System.err.println(e.getMessage());
         }
+        
         return null;
     }
-    
+
     public static java.sql.Date getDateAdd(java.sql.Date plusTime) {
         Calendar c = Calendar.getInstance();
         c.setTime(plusTime);
         c.add(Calendar.MINUTE, 30);
         java.sql.Date date = new java.sql.Date(c.getTimeInMillis());
+        
         return date;
     }
-    
+
     public static String getDateString(String time) {
         try {
             Date date = simp.parse(time);
@@ -49,13 +51,15 @@ public class DateUtil {
         } catch (ParseException e) {
             System.err.println(e.getMessage());
         }
+
         return null;
     }
-    
+
     public static String getDateString(java.sql.Date time) {
-        if(time==null){
+        if (time == null) {
             return null;
         }
+        
         Date date = new Date(time.getTime());
         return simpOut.format(date);
     }

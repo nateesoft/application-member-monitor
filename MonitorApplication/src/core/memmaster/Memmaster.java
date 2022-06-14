@@ -1,15 +1,17 @@
-package database.local;
+package core.memmaster;
 
-import api.model.MemberModel;
-import database.DbConfig;
-import database.DbConfigProps;
-import database.MySQLMemberConnect;
+import api.connect.model.MemberModel;
+import core.memmaster.model.MemmasterBean;
+import database.connect.MySQLConnect;
+import file.config.ConfigProps;
+import file.config.FileConfigValue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import utils.DateUtil;
 import utils.ThaiUtil;
@@ -18,21 +20,14 @@ import utils.ThaiUtil;
  *
  * @author nateesun
  */
-interface MemmasterInterface {
-
-    public MemmasterModel findByMemberCode(String memberCode);
-
-    public List<MemmasterModel> findAll();
-
-    public List<MemberModel> findMemberAll();
-}
-
-public class Memmaster implements MemmasterInterface {
+public class Memmaster {
 
     private static final Logger LOGGER = Logger.getLogger(Memmaster.class);
-    private static final DbConfigProps config = DbConfig.loadConfig();
+    private static final ConfigProps config = FileConfigValue.loadConfig();
 
-    public MemmasterModel mapping(ResultSet rs, MemmasterModel model) {
+    private final String sqlUpdateMemmaster = "update memmaster set Member_TotalPurchase=?, Member_TotalScore=? where Member_Code=?;";
+
+    public MemmasterBean mapping(ResultSet rs, MemmasterBean model) {
         LOGGER.debug("mapping");
         try {
             model.setMember_Code(rs.getString("Member_Code"));
@@ -46,6 +41,7 @@ public class Memmaster implements MemmasterInterface {
             model.setMember_TitleNameThai(rs.getString("Member_TitleNameThai"));
             model.setMember_SurnameThai(rs.getString("Member_SurnameThai"));
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
         }
         return model;
@@ -65,74 +61,81 @@ public class Memmaster implements MemmasterInterface {
             model.setPrefix(rs.getString("Member_TitleNameThai"));
             model.setLast_name(rs.getString("Member_SurnameThai"));
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
         }
         return model;
     }
 
-    @Override
-    public MemmasterModel findByMemberCode(String memberCode) {
+    public MemmasterBean findByMemberCode(String memberCode) {
         LOGGER.debug("findByMemberCode");
+
+        MySQLConnect mysql = new MySQLConnect();
         try {
-            String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,\n"
-                    + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,\n"
+            String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,"
+                    + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,"
                     + "Member_CompanyTel "
-                    + "from memmaster where Member_Code='" + memberCode + "'";
-            MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery(sql)) {
+                    + "from memmaster where Member_Code='" + memberCode + "' limit 1";
+            try ( Connection conn = mysql.open("member");  PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try ( ResultSet rs = stmt.executeQuery(sql)) {
                     if (rs.next()) {
-                        return mapping(rs, new MemmasterModel());
+                        return mapping(rs, new MemmasterBean());
                     }
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
         return null;
     }
 
-    @Override
-    public List<MemmasterModel> findAll() {
+    public List<MemmasterBean> findAll() {
         LOGGER.debug("findAll");
-        List<MemmasterModel> listMembers = new ArrayList<>();
+        List<MemmasterBean> listMembers = new ArrayList<>();
+        MySQLConnect mysql = new MySQLConnect();
         try {
             String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,\n"
                     + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,\n"
                     + "Member_CompanyTel from memmaster order by Member_Code";
-            MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery(sql)) {
+            try ( Connection conn = mysql.open("member");  PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try ( ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
-                        listMembers.add(mapping(rs, new MemmasterModel()));
+                        listMembers.add(mapping(rs, new MemmasterBean()));
                     }
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
         return listMembers;
     }
 
-    @Override
     public List<MemberModel> findMemberAll() {
         LOGGER.debug("findMemberAll");
         List<MemberModel> listMembers = new ArrayList<>();
+        MySQLConnect mysql = new MySQLConnect();
         try {
             String sql = "select Member_Code,Member_NameThai,Member_HomeTel,Member_Email,Member_Brithday,Member_ExpiredDate,"
                     + "Member_TotalPurchase,Member_Mobile,Member_TotalScore,Member_TitleNameThai,Member_SurnameThai,"
                     + "Member_CompanyTel from memmaster order by Member_Code";
-            MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection();
-                    PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery(sql)) {
+            try ( Connection conn = mysql.open("member");  PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try ( ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
                         listMembers.add(mapping(rs, new MemberModel()));
                     }
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
         return listMembers;
     }
@@ -140,37 +143,78 @@ public class Memmaster implements MemmasterInterface {
     public List<MemberModel> findMemberFromBillno() {
         LOGGER.debug("findMemberFromBillno");
         List<MemberModel> listMembers = new ArrayList<>();
+        MySQLConnect mysql = new MySQLConnect();
         try {
             String sql = "select m.Member_Code, m.Member_NameThai, m.Member_HomeTel,"
                     + "m.Member_Email, m.Member_Brithday, m.Member_ExpiredDate,"
                     + "m.Member_TotalPurchase, m.Member_Mobile, m.Member_TotalScore,"
                     + "m.Member_TitleNameThai, m.Member_SurnameThai "
-                    + "from " + config.getPosDbName() + ".billno b "
-                    + "left join " + config.getMemberDbName() + ".memmaster m on "
+                    + "from " + config.getPosDb() + ".billno b "
+                    + "left join " + config.getPosMemberDb() + ".memmaster m on "
                     + "b.B_MemCode = m.Member_Code ";
-            MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection();
-                    PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery(sql)) {
+            try ( Connection conn = mysql.open("member");  PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try ( ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
                         listMembers.add(mapping(rs, new MemberModel()));
                     }
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
         return listMembers;
     }
 
-    public void update(MemberModel[] listMember) {
-        LOGGER.debug("update");
+    public boolean updatePoint(MemberModel model) {
+        LOGGER.debug("Memmaster:update");
+        MySQLConnect mysql = new MySQLConnect();
+        boolean isUpdateData = false;
         try {
-            MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection()) {
+            try ( Connection conn = mysql.open("member")) {
                 conn.setAutoCommit(false);
-                String sql = "update memmaster set Member_TotalPurchase=?, Member_TotalScore=? where Member_Code=?;";
-                try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
+                try ( PreparedStatement prepStmt = conn.prepareStatement(sqlUpdateMemmaster)) {
+                    prepStmt.setFloat(1, model.getTotal_purchase());
+                    prepStmt.setFloat(2, model.getTotal_score());
+                    prepStmt.setString(3, model.getCode());
+
+                    prepStmt.addBatch();
+                    int[] numUpdates = prepStmt.executeBatch();
+                    for (int i = 0; i < numUpdates.length; i++) {
+                        if (numUpdates[i] == -2) {
+                            LOGGER.debug("Execution " + i + ": unknown number of rows updated");
+                        } else {
+                            isUpdateData = true;
+                            LOGGER.debug("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
+                        }
+                    }
+                }
+                conn.commit();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
+        }
+
+        return isUpdateData;
+    }
+
+    public void update(MemberModel[] listMember) {
+        LOGGER.debug("Memmaster:updateList => size(" + listMember.length + ")");
+        if (listMember.length == 0) {
+            LOGGER.debug("not found member to update local db");
+            return;
+        }
+        MySQLConnect mysql = new MySQLConnect();
+
+        try {
+            try ( Connection conn = mysql.open("member")) {
+                conn.setAutoCommit(false);
+                try ( PreparedStatement prepStmt = conn.prepareStatement(sqlUpdateMemmaster)) {
                     for (MemberModel model : listMember) {
                         if (model.getSaveOrUpdate().equals("update")) {
                             prepStmt.setFloat(1, model.getTotal_purchase());
@@ -192,54 +236,94 @@ public class Memmaster implements MemmasterInterface {
                 conn.commit();
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
     }
 
-    public void save(MemberModel[] listMember) {
-        LOGGER.debug("save");
+    public boolean saveOrUpdateList(MemberModel[] listMember) {
+        boolean isUpdate = false;
+        LOGGER.debug("Memmaster:saveList");
         if (listMember.length == 0) {
             LOGGER.debug("not found member to update local db");
-            return;
+            return isUpdate;
         }
+        MySQLConnect mysql = new MySQLConnect();
         try {
-            MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection()) {
+            try ( Connection conn = mysql.open("member")) {
                 conn.setAutoCommit(false);
-                String sql = "insert into memmaster(Member_Code, Member_NameThai, Member_HomeTel, Member_Email, Member_Brithday,"
+                String sqlInsertMemmaster = "insert into memmaster("
+                        + "Member_Code, Member_NameThai, Member_HomeTel, Member_Email, Member_Brithday,"
                         + "Member_ExpiredDate, Member_TotalPurchase, Member_Mobile, Member_TotalScore, Member_TitleNameThai,"
                         + "Member_SurnameThai, Member_CompanyTel, System_Created, System_Updated, Member_AppliedDate, "
-                        + "Member_LastDateService, Member_PointExpiredDate, Employee_CreateDate, Employee_ModifyDate) "
-                        + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),now(),now(),now());";
-                try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
+                        + "Member_LastDateService, Member_PointExpiredDate, Employee_CreateDate, Employee_ModifyDate, Member_Company, "
+                        + "Member_AddressNo, Member_Building, Member_AddressSoi, Member_AddressStreet, Member_AddressSubDistrict, "
+                        + "Member_AddressDistrict, Member_Province, Member_PostalCode, Member_Fax, Member_SpouseName, "
+                        + "Member_Food, Member_Remark1, Member_Remark2, Member_HobbySetCode, Member_CompanyAddressNo, "
+                        + "Member_CompanyBuilding, Member_CompanySoi, Member_CompanySubDistrict, Member_CompanyDistrict, Member_CompanyProvince, "
+                        + "Member_CompanyPostalCode, Member_CompanyFax,Member_CompanyStreet) "
+                        + "values ("
+                        + "?,?,?,?,?,"
+                        + "?,?,?,?,?,"
+                        + "?,?,now(),now(),now(),"
+                        + "now(),?,now(),now(),?,"
+                        + "?,?,?,?,?,"
+                        + "?,?,?,?,?,"
+                        + "?,?,?,?,?,"
+                        + "?,?,?,?,?,"
+                        + "?,?,?) on duplicate key update Member_TotalPurchase=?, Member_TotalScore=?;";
+                try ( PreparedStatement prepStmt = conn.prepareStatement(sqlInsertMemmaster)) {
                     for (MemberModel model : listMember) {
-                        LOGGER.debug("prefix<=" + model.getPrefix());
-                        LOGGER.debug("first_name<=" + model.getFirst_name());
-                        LOGGER.debug("last_name<=" + model.getLast_name());
-                        if (model.getSaveOrUpdate().equals("save")) {
-                            prepStmt.setString(1, model.getCode());
-                            prepStmt.setString(2, ThaiUtil.Unicode2ASCII(model.getFirst_name()));
-                            prepStmt.setString(3, model.getMobile());
-                            prepStmt.setString(4, model.getEmail());
-                            prepStmt.setString(5, DateUtil.getDateString(model.getBirthday()));
-                            prepStmt.setString(6, DateUtil.getDateString(model.getExpired_date()));
-                            prepStmt.setFloat(7, model.getTotal_purchase());
-                            prepStmt.setString(8, model.getMobile());
-                            prepStmt.setFloat(9, model.getTotal_score());
-                            prepStmt.setString(10, ThaiUtil.Unicode2ASCII(model.getPrefix()));
-                            prepStmt.setString(11, ThaiUtil.Unicode2ASCII(model.getLast_name()));
-                            prepStmt.setString(12, model.getMobile());
-                            prepStmt.setString(13, DateUtil.getDateString(model.getSystem_created()));
-                            prepStmt.setString(14, DateUtil.getDateString(model.getSystem_updated()));
+                        prepStmt.setString(1, model.getCode());//Member_Code
+                        prepStmt.setString(2, ThaiUtil.encodeThaiAscii(model.getFirst_name()));//Member_NameThai
+                        prepStmt.setString(3, model.getMobile());//Member_HomeTel
+                        prepStmt.setString(4, model.getEmail());//Member_Email
+                        prepStmt.setDate(5, DateUtil.getDate(model.getBirthday()));//Member_Brithday
+                        prepStmt.setDate(6, DateUtil.getDate(model.getExpired_date()));//Member_ExpiredDate
+                        prepStmt.setFloat(7, model.getTotal_purchase());//Member_TotalPurchase
+                        prepStmt.setString(8, model.getMobile());//Member_Mobile
+                        prepStmt.setFloat(9, model.getTotal_score());//Member_TotalScore
+                        prepStmt.setString(10, ThaiUtil.encodeThaiAscii(model.getPrefix()));//Member_TitleNameThai
+                        prepStmt.setString(11, ThaiUtil.encodeThaiAscii(model.getLast_name()));//Member_SurnameThai
+                        prepStmt.setString(12, model.getMobile());//Member_CompanyTel
+                        prepStmt.setDate(13, DateUtil.getDate(model.getPoint_expired_date()));//Member_PointExpiredDate
+                        prepStmt.setString(14, model.getCompany_code());//Member_Company
+                        prepStmt.setString(15, "");//Member_AddressNo
+                        prepStmt.setString(16, "");//Member_Building
+                        prepStmt.setString(17, "");//Member_AddressSoi
+                        prepStmt.setString(18, "");//Member_AddressStreet
+                        prepStmt.setString(19, "");//Member_AddressSubDistrict
+                        prepStmt.setString(20, "");//Member_AddressDistrict
+                        prepStmt.setString(21, "");//Member_Province
+                        prepStmt.setString(22, "");//Member_PostalCode
+                        prepStmt.setString(23, "");//Member_Fax
+                        prepStmt.setString(24, "");//Member_SpouseName
+                        prepStmt.setString(25, "");//Member_Food
+                        prepStmt.setString(26, "");//Member_Remark1
+                        prepStmt.setString(27, "");//Member_Remark2
+                        prepStmt.setString(28, "");//Member_HobbySetCode
+                        prepStmt.setString(29, "");//Member_CompanyAddressNo
+                        prepStmt.setString(30, "");//Member_CompanyBuilding
+                        prepStmt.setString(31, "");//Member_CompanySoi
+                        prepStmt.setString(32, "");//Member_CompanySubDistrict
+                        prepStmt.setString(33, "");//Member_CompanyDistrict
+                        prepStmt.setString(34, "");//Member_CompanyProvince
+                        prepStmt.setString(35, "");//Member_CompanyPostalCode
+                        prepStmt.setString(36, "");//Member_CompanyFax
+                        prepStmt.setString(37, "");//Member_CompanyStreet
+                        prepStmt.setFloat(38, model.getTotal_purchase());//Member_TotalPurchase
+                        prepStmt.setFloat(39, model.getTotal_score());//Member_TotalScore
 
-                            prepStmt.addBatch();
-                        }
+                        prepStmt.addBatch();
                     }
                     int[] numUpdates = prepStmt.executeBatch();
                     for (int i = 0; i < numUpdates.length; i++) {
                         if (numUpdates[i] == -2) {
                             LOGGER.debug("Execution " + i + ": unknown number of rows updated");
                         } else {
+                            isUpdate = true;
                             LOGGER.debug("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
                         }
                     }
@@ -247,7 +331,13 @@ public class Memmaster implements MemmasterInterface {
                 conn.commit();
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
+        
+        return isUpdate;
     }
+
 }

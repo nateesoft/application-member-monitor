@@ -7,9 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,7 +15,6 @@ import java.util.zip.ZipInputStream;
  * @author nateesun
  */
 public class UnzipUtility {
-
     private static final int BUFFER_SIZE = 4096;
 
     public static void unzip(String zipFilePath, String destDirectory) throws IOException {

@@ -1,34 +1,15 @@
 package utils;
 
-import database.DbConfig;
-import database.DbConfigProps;
-import org.apache.log4j.Logger;
-
 public class ThaiUtil {
 
-    private static final DbConfigProps config;
-    private static final Logger LOGGER = Logger.getLogger(ThaiUtil.class);
-
-    static {
-        config = DbConfig.loadConfig();
-    }
-
     public static void main(String[] args) {
-        String text = "ทดสอบ ภาษาไทย";
-        String result = ThaiUtil.Unicode2ASCII(text);
-        System.out.println(result);
-        System.out.println(ThaiUtil.ASCII2Unicode(result));
+        System.out.println(encodeThaiAscii("ทดสอบภาษาไทย"));
     }
 
-    public static String Unicode2ASCII(String str) {
-        LOGGER.debug("Unicode2ASCII <= " + str);
+    public static String encodeThaiAscii(String str) {
         if (str == null) {
             return "";
         }
-        if (!config.getThaiUtf().equals("Y")) {
-            return str;
-        }
-        
         StringBuilder convert = new StringBuilder(str);
         int code;
         for (int i = 0; i < str.length(); i++) {
@@ -39,17 +20,12 @@ public class ThaiUtil {
                 convert.setCharAt(i, (char) code);
             }
         }
-        LOGGER.debug("Unicode2ASCII => " + convert.toString());
         return convert.toString();
     }
 
-    public static String ASCII2Unicode(String ascii) {
-        LOGGER.debug("ASCII2Unicode <= " + ascii);
+    public static String readThaiAscii(String ascii) {
         if (ascii == null) {
             return "";
-        }
-        if (!config.getThaiUtf().equals("Y")) {
-            return ascii;
         }
         StringBuilder convert = new StringBuilder(ascii);
         int code;
@@ -61,7 +37,7 @@ public class ThaiUtil {
                 convert.setCharAt(i, (char) code);
             }
         }
-        LOGGER.debug("ASCII2Unicode => " + convert.toString());
+        
         return convert.toString();
     }
 }

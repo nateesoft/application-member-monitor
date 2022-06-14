@@ -30,7 +30,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+          <Component id="jPanel1" min="-2" pref="360" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -50,42 +50,41 @@
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jPanel2" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jPanel2" max="32767" attributes="0"/>
+                              </Group>
                               <Group type="102" attributes="0">
                                   <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jPanel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <EmptySpace min="0" pref="220" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanel4" max="32767" attributes="0"/>
-                      <Component id="jPanel5" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="btnOpenFile" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnSave" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jPanel4" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="264" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jPanel5" alignment="1" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="btnOpenFile" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnSave" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -106,20 +105,15 @@
                       <Component id="jPanel4" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jPanel3" max="32767" attributes="0"/>
-                      <Component id="jPanel5" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnSave" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnOpenFile" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -148,19 +142,28 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lbPosHost" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbPosUser" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbPosPassword" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbPosPort" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbPosDbName" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txtPosHost" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtPosUser" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtPosPort" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtPosDbName" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtPosPassword" alignment="0" min="-2" pref="142" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lbPosHost" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbPosUser" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbPosPassword" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbPosPort" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbPosDbName" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="txtPosHost" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtPosUser" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtPosPort" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtPosDbName" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtPosPassword" alignment="0" min="-2" pref="142" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lbMemberDbName" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="txtMemberDbName" min="-2" pref="142" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -193,6 +196,11 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lbPosDbName" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtPosDbName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lbMemberDbName" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtMemberDbName" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -232,7 +240,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lbPosDbName">
               <Properties>
-                <Property name="text" type="java.lang.String" value="pos.dbName"/>
+                <Property name="text" type="java.lang.String" value="pos.db"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtPosHost">
@@ -250,131 +258,14 @@
                 <Property name="text" type="java.lang.String" value="pos.password"/>
               </Properties>
             </Component>
-          </SubComponents>
-        </Container>
-        <Component class="javax.swing.JLabel" name="jLabel3">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="12" style="1"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Server Member Db"/>
-          </Properties>
-        </Component>
-        <Container class="javax.swing.JPanel" name="jPanel3">
-          <Properties>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder/>
-              </Border>
-            </Property>
-          </Properties>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lbMemberHost" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbMemberUser" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbMemberPassword" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbMemberPort" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbMemberDbName" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txtMemberHost" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtMemberUser" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtMemberPort" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtMemberDbName" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtMemberPassword" alignment="0" min="-2" pref="142" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lbMemberHost" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtMemberHost" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lbMemberUser" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtMemberUser" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lbMemberPassword" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtMemberPassword" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lbMemberPort" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtMemberPort" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lbMemberDbName" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtMemberDbName" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="javax.swing.JLabel" name="lbMemberHost">
+            <Component class="javax.swing.JLabel" name="lbMemberDbName">
               <Properties>
-                <Property name="text" type="java.lang.String" value="member.host"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lbMemberPort">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="member.port"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JPasswordField" name="txtMemberPassword">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="myPassword"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtMemberPort">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="3306"/>
+                <Property name="text" type="java.lang.String" value="pos.memberDb"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtMemberDbName">
               <Properties>
                 <Property name="text" type="java.lang.String" value="mycrmbranch"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtMemberUser">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="root"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lbMemberDbName">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="member.dbName"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtMemberHost">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="localhost"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lbMemberUser">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="member.user"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lbMemberPassword">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="member.password"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -403,20 +294,14 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lbApiServiceVersion" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbApiServiceMember" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbApiServiceRedeem" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="lbApiServiceDB" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="lbApiServiceAuth" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbApiServiceVersion1" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txtApiServiceVersion" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtApiServiceMember" alignment="0" pref="265" max="32767" attributes="0"/>
+                          <Component id="txtApiServiceHost" alignment="0" pref="265" max="32767" attributes="0"/>
                           <Component id="txtApiServiceDb" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtApiServiceRedeem" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtApiServiceAuth" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtApiServiceVersion1" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace pref="12" max="32767" attributes="0"/>
                   </Group>
@@ -428,22 +313,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lbApiServiceVersion" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtApiServiceVersion" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lbApiServiceVersion1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtApiServiceVersion1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lbApiServiceMember" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtApiServiceMember" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lbApiServiceRedeem" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtApiServiceRedeem" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtApiServiceHost" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -471,11 +341,6 @@
                 <Property name="text" type="java.lang.String" value="api.serviceDB"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JPasswordField" name="txtApiServiceRedeem">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="http://localhost:5000/api/redeem/client"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JTextField" name="txtApiServiceDb">
               <Properties>
                 <Property name="text" type="java.lang.String" value="d2ViZGFpbHlfMDAx"/>
@@ -483,12 +348,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtApiServiceAuth">
               <Properties>
-                <Property name="text" type="java.lang.String" value="YWRtaW46c29mdHBvczIwMTM="/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtApiServiceMember">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="http://localhost:5000/api/member/client"/>
+                <Property name="editable" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lbApiServiceAuth">
@@ -496,29 +356,9 @@
                 <Property name="text" type="java.lang.String" value="api.serviceAuth"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtApiServiceVersion">
+            <Component class="javax.swing.JTextField" name="txtApiServiceHost">
               <Properties>
                 <Property name="text" type="java.lang.String" value="http://localhost:5000"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lbApiServiceMember">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="api.serviceMember"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lbApiServiceRedeem">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="api.serviceRedeem"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lbApiServiceVersion1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="api.serviceVersion"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtApiServiceVersion1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="http://localhost:5000/api/version"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -528,7 +368,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Server Member Db"/>
+            <Property name="text" type="java.lang.String" value="Service Member Db"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel5">

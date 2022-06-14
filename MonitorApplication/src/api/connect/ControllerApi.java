@@ -1,13 +1,15 @@
-package api;
+package api.connect;
 
-import api.model.MemberModel;
-import api.model.ReqMemberBody;
-import api.model.ReqRedeemBody;
+import api.connect.model.MemberMapping;
+import api.connect.model.MemberModel;
+import api.connect.model.RedeemMapping;
+import api.connect.model.ReqMemberBody;
+import api.connect.model.ReqRedeemBody;
 import com.google.gson.Gson;
-import database.DbConfig;
-import database.DbConfigProps;
-import database.local.ControllerDB;
-import database.local.RedeemModel;
+import core.controller.ControllerDB;
+import core.redeem.model.RedeemModel;
+import file.config.ConfigProps;
+import file.config.FileConfigValue;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,13 +30,9 @@ public class ControllerApi {
     private static final Logger LOGGER = Logger.getLogger(ControllerApi.class);
 
     private static final String USER_AGENT = "Mozilla/5.0";
-    private final DbConfigProps config;
+    private final ConfigProps config = FileConfigValue.loadConfig();
     private final Gson gson = new Gson();
     private final ControllerDB controllerDB = new ControllerDB();
-
-    public ControllerApi() {
-        config = DbConfig.loadConfig();
-    }
 
     public String callGetService(String url) throws IOException {
         LOGGER.debug("ControllerApi:callGetService :" + url);
@@ -70,7 +68,7 @@ public class ControllerApi {
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("database", config.getApiServiceDB());
-        con.setRequestProperty("Authorization", "Basic " + config.getApiServiceAuth());
+        con.setRequestProperty("Authorization", "Basic YWRtaW46c29mdHBvczIwMTM=");
 
         if (reqBody != null) {
             con.setDoInput(true);
@@ -112,6 +110,18 @@ public class ControllerApi {
         }
         return true;
     }
+    
+    public MemberModel getMemberMapping(String getMember) {
+        LOGGER.debug("ControllerApi:getMemberMapping");
+        JSONObject json = new JSONObject(getMember);
+        return gson.fromJson(json.toString(), MemberModel.class);
+    }
+    
+    public MemberMapping getMemberOneMapping(String getMember) {
+        LOGGER.debug("ControllerApi:getMemberOneMapping");
+        JSONObject json = new JSONObject(getMember);
+        return gson.fromJson(json.toString(), MemberMapping.class);
+    }
 
     public MemberModel[] getMemberMapping() throws IOException {
         LOGGER.debug("ControllerApi:getMemberMapping");
@@ -119,6 +129,12 @@ public class ControllerApi {
         LOGGER.debug(getMember);
         JSONObject json = new JSONObject(getMember);
         return gson.fromJson(json.get("data").toString(), MemberModel[].class);
+    }
+    
+    public RedeemMapping getRedeemMapping(String getRedeem) {
+        LOGGER.debug("ControllerApi:getRedeemMapping");
+        JSONObject json = new JSONObject(getRedeem);
+        return gson.fromJson(json.toString(), RedeemMapping.class);
     }
 
     public RedeemModel[] getRedeemMapping() throws IOException {

@@ -1,4 +1,4 @@
-package api.model;
+package api.connect.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +8,7 @@ import lombok.ToString;
  *
  * @author nateesun
  */
+
 @Getter
 @Setter
 @ToString

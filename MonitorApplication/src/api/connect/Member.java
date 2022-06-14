@@ -1,6 +1,6 @@
-package api;
+package api.connect;
 
-import api.model.MemberModel;
+import api.connect.model.MemberModel;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,8 +10,8 @@ import utils.DateUtil;
  *
  * @author nateesun
  */
-public class Member {
 
+public class Member {
     private static final Logger LOGGER = Logger.getLogger(Member.class);
 
     public MemberModel mappingJsonToModel(JSONObject rs, MemberModel bean) {
@@ -42,6 +42,7 @@ public class Member {
         } catch (JSONException e) {
             LOGGER.error(e.getMessage());
         }
+        
         return bean;
     }
 
@@ -73,6 +74,7 @@ public class Member {
         } catch (JSONException e) {
             LOGGER.error(e.getMessage());
         }
+        
         return bean;
     }
 

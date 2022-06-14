@@ -1,4 +1,4 @@
-package api.model;
+package api.connect.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +8,7 @@ import lombok.ToString;
  *
  * @author nateesun
  */
+
 @Getter
 @Setter
 @ToString
@@ -36,4 +37,9 @@ public class MemberModel {
     private String data_sync;
     private String line_user_id;
     private String saveOrUpdate;
+    private String member_code_ref;
+    
+    // add more
+    private String database;
+    private String action_status;
 }

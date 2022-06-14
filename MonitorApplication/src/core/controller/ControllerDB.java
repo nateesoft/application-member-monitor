@@ -1,8 +1,11 @@
-package database.local;
+package core.controller;
 
-import api.model.MemberModel;
-import api.model.ReqMemberBody;
-import api.model.ReqRedeemBody;
+import api.connect.model.MemberModel;
+import api.connect.model.ReqMemberBody;
+import api.connect.model.ReqRedeemBody;
+import core.memmaster.Memmaster;
+import core.redeem.Redeem;
+import core.redeem.model.RedeemModel;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -18,38 +21,38 @@ public class ControllerDB {
     private final Redeem redeem = new Redeem();
 
     public MemberModel[] getMemberFromBillno() {
-        LOGGER.debug("getMemberFromBillno");
+        LOGGER.debug("ControllerDB:getMemberFromBillno");
         List<MemberModel> listMemberModel = memmaster.findMemberFromBillno();
-        MemberModel[] listMembers = listMemberModel.toArray(new MemberModel[listMemberModel.size()]);
-        return listMembers;
+        
+        return listMemberModel.toArray(new MemberModel[0]);
     }
     
     public MemberModel[] getMember() {
-        LOGGER.debug("getMember");
+        LOGGER.debug("ControllerDB:getMember");
         List<MemberModel> listMemberModel = memmaster.findMemberAll();
-        MemberModel[] listMembers = listMemberModel.toArray(new MemberModel[listMemberModel.size()]);
-        return listMembers;
+        
+        return listMemberModel.toArray(new MemberModel[0]);
     }
 
     public ReqMemberBody[] getMemberReqBody(MemberModel[] insertMember) {
-        LOGGER.debug("getMemberReqBody");
+        LOGGER.debug("ControllerDB:getMemberReqBody");
         List<ReqMemberBody> listReq = new ArrayList<>();
         for (MemberModel model : insertMember) {
             listReq.add(new ReqMemberBody(model.getTotal_purchase(), model.getTotal_score(), model.getCode()));
         }
-        ReqMemberBody[] listMembers = listReq.toArray(new ReqMemberBody[listReq.size()]);
-        return listMembers;
+        
+        return listReq.toArray(new ReqMemberBody[0]);
     }
 
     public RedeemModel[] getRedeem() {
-        LOGGER.debug("getRedeem");
+        LOGGER.debug("ControllerDB:getRedeem");
         List<RedeemModel> listRedeemModel = redeem.findAll();
-        RedeemModel[] listRedeems = listRedeemModel.toArray(new RedeemModel[listRedeemModel.size()]);
-        return listRedeems;
+        
+        return listRedeemModel.toArray(new RedeemModel[0]);
     }
 
     public ReqRedeemBody[] getRedeemReqBody(RedeemModel[] insertRedeem) {
-        LOGGER.debug("getRedeemReqBody");
+        LOGGER.debug("ControllerDB:getRedeemReqBody");
         List<ReqRedeemBody> listReq = new ArrayList<>();
         for (RedeemModel model : insertRedeem) {
             listReq.add(new ReqRedeemBody(
@@ -61,19 +64,17 @@ public class ControllerDB {
                 model.getRedeem_code()
             ));
         }
-        ReqRedeemBody[] listRedeems = listReq.toArray(new ReqRedeemBody[listReq.size()]);
-        return listRedeems;
+        
+        return listReq.toArray(new ReqRedeemBody[0]);
     }
 
-    public void saveUpdateMember(MemberModel[] listMember) {
-        LOGGER.debug("saveUpdateMember");
-        memmaster.save(listMember);
-//        memmaster.update(listMember);
+    public void saveMemberList(MemberModel[] listMember) {
+        LOGGER.debug("ControllerDB:saveMemberList");
+        memmaster.saveOrUpdateList(listMember);
     }
 
-    public void saveUpdateRedeem(RedeemModel[] listRedeem) {
-        LOGGER.debug("saveUpdateRedeem");
-        redeem.save(listRedeem);
-//        redeem.update(listRedeem);
+    public void saveRedeemList(RedeemModel[] listRedeem) {
+        LOGGER.debug("ControllerDB:saveRedeemList");
+        redeem.saveOrUpdateList(listRedeem);
     }
 }

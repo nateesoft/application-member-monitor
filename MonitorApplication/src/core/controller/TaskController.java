@@ -1,14 +1,12 @@
-package apps;
+package core.controller;
 
-import api.ControllerApi;
-import api.model.MemberModel;
-import database.DbConfig;
-import database.DbConfigProps;
-import database.local.ControllerDB;
-import database.local.RedeemModel;
+import api.connect.ControllerApi;
+import api.connect.model.MemberModel;
+import core.redeem.model.RedeemModel;
 import java.io.IOException;
 import org.apache.log4j.Logger;
-import utils.ArrayDiff;
+import utils.ArrayDiffMember;
+import utils.ArrayDiffRedeem;
 
 /**
  *
@@ -18,28 +16,31 @@ public class TaskController {
 
     private static final Logger LOGGER = Logger.getLogger(TaskController.class);
 
-    private static final ControllerApi API = new ControllerApi();
-    private static final ControllerDB DB_LOCAL = new ControllerDB();
-    private static int count = 0;
-    
-    private static MemberModel []memberServerList = null;
-    private static RedeemModel []redeemServerList = null;
+    private static final ControllerApi callAPI = new ControllerApi();
+    private static final ControllerDB callLocalDb = new ControllerDB();
 
-    public static void run() {
+    private static MemberModel[] memberServerList = null;
+    private static RedeemModel[] redeemServerList = null;
+    
+    private static final ArrayDiffMember arrayDiffMember = new ArrayDiffMember();
+    private static final ArrayDiffRedeem arrayDiffRedeem = new ArrayDiffRedeem();
+
+    public static void run(int timeSync) {
         LOGGER.info("Task running");
-        DbConfigProps config = DbConfig.loadConfig();
+        if (timeSync < 1) {
+            timeSync = 1;
+        }
+        
+        int count = 0;
         while (!Thread.currentThread().isInterrupted()) {
-            if (count % 2 == 0) {
-                syncDown();
-            } else {
-                pushUp();
-            }
+            count++;
             try {
-                count++;
-                Thread.sleep(config.getTimeSync() * 1000);
+                pushUp();
+                Thread.sleep(timeSync * 1000);
             } catch (InterruptedException ex) {
                 LOGGER.error(ex.getMessage());
             }
+
             if (count == 100) {
                 count = 0;
             }
@@ -51,25 +52,32 @@ public class TaskController {
         LOGGER.debug("syncDown");
         try {
             // member
-            memberServerList = API.getMemberMapping();
-            if (memberServerList.length > 0) {
-                MemberModel memberLocalList[] = DB_LOCAL.getMember();
-                MemberModel[] insertMember = ArrayDiff.diffInsertUpdate(memberServerList, memberLocalList);
-                if (insertMember.length > 0) {
-                    DB_LOCAL.saveUpdateMember(insertMember);
-                }
-            }
-
+            memberServerList = callAPI.getMemberMapping();
+            callLocalDb.saveMemberList(memberServerList);
+            
             // redeem
-            redeemServerList = API.getRedeemMapping();
-            if (redeemServerList.length > 0) {
-                RedeemModel redeemLocalList[] = DB_LOCAL.getRedeem();
-                RedeemModel[] insertRedeem = ArrayDiff.diffInsertUpdate(redeemServerList, redeemLocalList);
-                if (insertRedeem.length > 0) {
-                    DB_LOCAL.saveUpdateRedeem(insertRedeem);
-                }
-            }
-
+            redeemServerList = callAPI.getRedeemMapping();
+            callLocalDb.saveRedeemList(redeemServerList);
+        } catch (IOException ex) {
+            LOGGER.error(ex.getMessage());
+        }
+    }
+    
+    // refresh list from server onlys
+    public static void refreshMemberListFromServer() {
+        LOGGER.debug("refreshMemberListFromServer");
+        try {
+            memberServerList = callAPI.getMemberMapping();
+        } catch (IOException ex) {
+            LOGGER.error(ex.getMessage());
+        }
+    }
+    
+    // refresh list from server onlys
+    public static void refreshRedeemListFromServer() {
+        LOGGER.debug("refreshRedeemListFromServer");
+        try {
+            redeemServerList = callAPI.getRedeemMapping();
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage());
         }
@@ -80,20 +88,20 @@ public class TaskController {
         LOGGER.debug("pushUp");
         try {
             // member
-            MemberModel[] memberLocalList = DB_LOCAL.getMemberFromBillno();
+            MemberModel[] memberLocalList = callLocalDb.getMemberFromBillno();
             if (memberLocalList.length > 0) {
-                MemberModel[] updateMember = ArrayDiff.getLocalDiff(memberServerList, memberLocalList);
+                MemberModel[] updateMember = arrayDiffMember.getLocalDiff(memberServerList, memberLocalList);
                 if (updateMember.length > 0) {
-                    API.pushMemberService(updateMember);
+                    callAPI.pushMemberService(updateMember);
                 }
             }
 
             // redeem
-            RedeemModel[] redeemLocalList = DB_LOCAL.getRedeem();
+            RedeemModel[] redeemLocalList = callLocalDb.getRedeem();
             if (redeemLocalList.length > 0) {
-                RedeemModel[] updateRedeem = ArrayDiff.getLocalDiff(redeemServerList, redeemLocalList);
+                RedeemModel[] updateRedeem = arrayDiffRedeem.getLocalDiff(redeemServerList, redeemLocalList);
                 if (updateRedeem.length > 0) {
-                    API.pushRedeemService(updateRedeem);
+                    callAPI.pushRedeemService(updateRedeem);
                 }
             }
 
@@ -101,4 +109,5 @@ public class TaskController {
             LOGGER.error(e.getMessage());
         }
     }
+
 }

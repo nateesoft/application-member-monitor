@@ -1,7 +1,13 @@
-package apps;
+package apps.main.ui;
 
-import database.DbConfig;
-import database.DbConfigProps;
+import api.connect.ControllerApi;
+import api.connect.model.MemberMapping;
+import api.connect.model.RedeemMapping;
+import core.controller.TaskController;
+import core.memmaster.Memmaster;
+import core.redeem.Redeem;
+import file.config.ConfigProps;
+import file.config.FileConfigValue;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import java.awt.AWTException;
@@ -12,12 +18,9 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import utils.DownloadUtil;
 
@@ -29,7 +32,11 @@ public class Main {
 
     private static final Logger LOGGER = Logger.getLogger(Main.class);
     private static final SimpleDateFormat simp = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-    private static DbConfigProps config = null;
+    private static final ConfigProps config = FileConfigValue.loadConfig();
+    private static final ControllerApi callApi = new ControllerApi();
+
+    private static final Memmaster memmaster = new Memmaster();
+    private static final Redeem redeem = new Redeem();
 
     public static void main(String[] args) {
         if (!SystemTray.isSupported()) {
@@ -37,13 +44,9 @@ public class Main {
             return;
         }
 
-        if (config == null) {
-            config = DbConfig.loadConfig();
-        }
-
         SystemTray systemTray = SystemTray.getSystemTray();
-        Image image = Toolkit.getDefaultToolkit().getImage(DbConfig.FILE_IMAGE_PNG.getAbsolutePath());
-        Image imageDisconnect = Toolkit.getDefaultToolkit().getImage(DbConfig.FILE_IMAGE_DISCONNECT_PNG.getAbsolutePath());
+        Image image = Toolkit.getDefaultToolkit().getImage(FileConfigValue.FILE_IMAGE_PNG.getAbsolutePath());
+        Image imageDisconnect = Toolkit.getDefaultToolkit().getImage(FileConfigValue.FILE_IMAGE_DISCONNECT_PNG.getAbsolutePath());
 
         PopupMenu trayPopupMenu = new PopupMenu();
         MenuItem action = new MenuItem("Log Apps");
@@ -55,17 +58,10 @@ public class Main {
         trayPopupMenu.add(action);
         trayPopupMenu.addSeparator();
 
-        MenuItem downloadUpdate = new MenuItem("Check Update");
+        MenuItem downloadUpdate = new MenuItem("Download last version");
         downloadUpdate.addActionListener((ActionEvent e) -> {
             LOGGER.info("Download and update");
-            if (checkVersion()) {
-                DownloadUtil.downloadAppUpdate();
-            } else {
-                JOptionPane.showMessageDialog(null,
-                        "You are already using the latest version",
-                        "No newer version found.",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
+            DownloadUtil.downloadAppUpdate();
         });
         trayPopupMenu.add(downloadUpdate);
         trayPopupMenu.addSeparator();
@@ -81,15 +77,43 @@ public class Main {
         try {
             Socket socketSync = IO.socket(config.getApiServiceHost());
             socketSync.on(Socket.EVENT_CONNECT, (Object... os) -> {
-                // check if connected
                 trayIcon.setToolTip("Web daily sync (Connected)");
                 trayIcon.setImage(image);
+                trayIcon.displayMessage("Server Status", "Connected", TrayIcon.MessageType.INFO);
             });
 
             socketSync.on(Socket.EVENT_DISCONNECT, (Object... os) -> {
-                // check if disconnected
                 trayIcon.setToolTip("Web daily sync (Disconnected)");
                 trayIcon.setImage(imageDisconnect);
+                trayIcon.displayMessage("Server Status", "Disconnected", TrayIcon.MessageType.ERROR);
+            });
+
+            socketSync.on("sync_member", (Object... response) -> {
+                TaskController.refreshMemberListFromServer();
+                MemberMapping data = callApi.getMemberOneMapping(response[0].toString());
+                boolean validSave = false;
+                if (data.getAction_status().equals("create")) {
+                    validSave = memmaster.saveOrUpdateList(data.getData());
+                } else if (data.getAction_status().equals("update")) {
+                    validSave = memmaster.updatePoint(data.getData()[0]);
+                }
+                if (validSave) {
+                    trayIcon.displayMessage("Sync Data", "Found sync", TrayIcon.MessageType.INFO);
+                }
+            });
+
+            socketSync.on("sync_redeem", (Object... response) -> {
+                TaskController.refreshRedeemListFromServer();
+                RedeemMapping data = callApi.getRedeemMapping(response[0].toString());
+                boolean validSave = false;
+                if (data.getAction_status().equals("create")) {
+                    validSave = redeem.saveOrUpdateList(data.getData());
+                } else if (data.getAction_status().equals("update")) {
+                    validSave = redeem.update(data.getData()[0]);
+                }
+                if (validSave) {
+                    trayIcon.displayMessage("Sync Data", "Found sync", TrayIcon.MessageType.INFO);
+                }
             });
 
             socketSync.open();
@@ -108,17 +132,13 @@ public class Main {
             LOGGER.error(awtException.getMessage());
         }
 
-        // first time download
-        if (checkVersion()) {
-            DownloadUtil.downloadAppUpdate();
-        }
-
         // start application monitory running
         LOGGER.info("start application monitory");
-        TaskController.run();
-    }
 
-    private static boolean checkVersion() {
-        return !new File("update_" + simp.format(new Date()) + ".version").exists();
+        // initial sync first time open application
+        TaskController.syncDown();
+
+        // scheduler time sync up
+        TaskController.run(10);
     }
 }

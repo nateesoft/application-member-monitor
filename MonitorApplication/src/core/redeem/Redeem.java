@@ -1,13 +1,14 @@
-package database.local;
+package core.redeem;
 
-import database.MySQLMemberConnect;
-import database.MySQLPOSConnect;
+import core.redeem.model.RedeemModel;
+import database.connect.MySQLConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import utils.DateUtil;
 import utils.ThaiUtil;
@@ -16,16 +17,21 @@ import utils.ThaiUtil;
  *
  * @author nateesun
  */
-interface RedeemInterface {
-
-    public RedeemModel findById(String id);
-
-    public List<RedeemModel> findAll();
-}
-
-public class Redeem implements RedeemInterface {
+public class Redeem {
 
     private static final Logger LOGGER = Logger.getLogger(Redeem.class);
+    private final String sqlInsertRedeem = "insert into redeem"
+            + "(uuid_index,redeem_code,product_code,point_to_redeem,use_in_branch,"
+            + "emp_code_redeem,member_code_use,qty_in_use,system_create,redeem_date,"
+            + "in_time,status_use,active,redeem_name,bill_no,"
+            + "discount_amt,discount_percent,redeem_or_free,data_sync) "
+            + "values ("
+            + "?,?,?,?,?,"
+            + "?,?,?,?,?,"
+            + "?,?,?,?,?,"
+            + "?,?,?,?) "
+            + "on duplicate key update bill_no=?, status_use=?, active=?, use_in_branch=?;";
+    private final String sqlUpdateRedeem = "update redeem set bill_no=?, status_use=?, active=?, use_in_branch=? where uuid_index=?";
 
     public RedeemModel mapping(ResultSet rs, RedeemModel model) {
         LOGGER.debug("mapping");
@@ -50,47 +56,55 @@ public class Redeem implements RedeemInterface {
             model.setRedeem_or_free(rs.getString("redeem_or_free"));
             model.setData_sync(rs.getString("data_sync"));
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
         }
+
         return model;
     }
 
-    @Override
     public RedeemModel findById(String id) {
         LOGGER.debug("findById");
+        MySQLConnect mysql = new MySQLConnect();
         try {
-            String sql = "select * from redeem where uuid_index='" + id + "'";
-            MySQLPOSConnect mysql = new MySQLPOSConnect();
-            try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery(sql)) {
+            String sql = "select * from redeem where uuid_index='" + id + "' limit 1";
+            try ( Connection conn = mysql.open("pos");  PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try ( ResultSet rs = stmt.executeQuery(sql)) {
                     if (rs.next()) {
                         return mapping(rs, new RedeemModel());
                     }
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
+
         return null;
     }
 
-    @Override
     public List<RedeemModel> findAll() {
         LOGGER.debug("findAll");
         List<RedeemModel> listRedeems = new ArrayList<>();
+        MySQLConnect mysql = new MySQLConnect();
         try {
             String sql = "select * from redeem order by redeem_code";
-            MySQLPOSConnect mysql = new MySQLPOSConnect();
-            try (Connection conn = mysql.openConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery(sql)) {
+            try ( Connection conn = mysql.open("pos");  PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try ( ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
                         listRedeems.add(mapping(rs, new RedeemModel()));
                     }
                 }
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
+
         return listRedeems;
     }
 
@@ -99,12 +113,11 @@ public class Redeem implements RedeemInterface {
         if (listRedeem.length == 0) {
             return;
         }
+        MySQLConnect mysql = new MySQLConnect();
         try {
-            MySQLMemberConnect mysql = new MySQLMemberConnect();
-            try (Connection conn = mysql.openConnection()) {
+            try ( Connection conn = mysql.open("pos")) {
                 conn.setAutoCommit(false);
-                String sql = "update redeem set bill_no=?, status_use=?, active=?, use_in_branch=? where uuid_index=?";
-                try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
+                try ( PreparedStatement prepStmt = conn.prepareStatement(sqlUpdateRedeem)) {
                     for (RedeemModel model : listRedeem) {
                         if (model.getSaveOrUpdate().equals("update")) {
                             prepStmt.setString(1, model.getBill_no());
@@ -128,58 +141,35 @@ public class Redeem implements RedeemInterface {
                 conn.commit();
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
     }
 
-    public void save(RedeemModel[] listRedeem) {
-        LOGGER.debug("save");
-        if (listRedeem.length == 0) {
-            LOGGER.debug("not found redeem to update local db");
-            return;
-        }
+    public boolean update(RedeemModel model) {
+        LOGGER.debug("update");
+        boolean isUpdate = false;
+        MySQLConnect mysql = new MySQLConnect();
         try {
-            MySQLPOSConnect mysql = new MySQLPOSConnect();
-            try (Connection conn = mysql.openConnection()) {
+            try ( Connection conn = mysql.open("pos")) {
                 conn.setAutoCommit(false);
-                String sql = "insert into redeem"
-                        + "(uuid_index,redeem_code,product_code,point_to_redeem,use_in_branch,"
-                        + "emp_code_redeem,member_code_use,qty_in_use,system_create,redeem_date,"
-                        + "in_time,status_use,active,redeem_name,bill_no,"
-                        + "discount_amt,discount_percent,redeem_or_free,data_sync) "
-                        + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-                try (PreparedStatement prepStmt = conn.prepareStatement(sql)) {
-                    for (RedeemModel model : listRedeem) {
-                        LOGGER.debug("redeem_name<=" + model.getRedeem_name());
-                        if (model.getSaveOrUpdate().equals("save")) {
-                            prepStmt.setString(1, model.getUuid_index());
-                            prepStmt.setString(2, model.getRedeem_code());
-                            prepStmt.setString(3, model.getProduct_code());
-                            prepStmt.setFloat(4, model.getPoint_to_redeem());
-                            prepStmt.setString(5, model.getUse_in_branch());
-                            prepStmt.setString(6, model.getEmp_code_redeem());
-                            prepStmt.setString(7, model.getMember_code_use());
-                            prepStmt.setInt(8, model.getQty_in_use());
-                            prepStmt.setString(9, DateUtil.getDateString(model.getSystem_create()));
-                            prepStmt.setString(10, null);
-                            prepStmt.setString(11, DateUtil.getDateString(model.getIn_time()));
-                            prepStmt.setString(12, model.getStatus_use());
-                            prepStmt.setString(13, model.getActive());
-                            prepStmt.setString(14, ThaiUtil.Unicode2ASCII(model.getRedeem_name()));
-                            prepStmt.setString(15, model.getBill_no());
-                            prepStmt.setFloat(16, model.getDiscount_amt());
-                            prepStmt.setFloat(17, model.getDiscount_percent());
-                            prepStmt.setString(18, model.getRedeem_or_free());
-                            prepStmt.setString(19, model.getData_sync());
+                try ( PreparedStatement prepStmt = conn.prepareStatement(sqlUpdateRedeem)) {
+                    prepStmt.setString(1, model.getBill_no());
+                    prepStmt.setString(2, model.getStatus_use());
+                    prepStmt.setString(3, model.getActive());
+                    prepStmt.setString(4, model.getUse_in_branch());
+                    prepStmt.setString(5, model.getUuid_index());
 
-                            prepStmt.addBatch();
-                        }
-                    }
+                    prepStmt.addBatch();
+
                     int[] numUpdates = prepStmt.executeBatch();
                     for (int i = 0; i < numUpdates.length; i++) {
                         if (numUpdates[i] == -2) {
                             LOGGER.debug("Execution " + i + ": unknown number of rows updated");
                         } else {
+                            isUpdate = true;
                             LOGGER.debug("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
                         }
                     }
@@ -187,7 +177,75 @@ public class Redeem implements RedeemInterface {
                 conn.commit();
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
+
+        return isUpdate;
+    }
+
+    public boolean saveOrUpdateList(RedeemModel[] listRedeem) {
+        boolean isUpdate = false;
+        LOGGER.debug("save");
+        if (listRedeem.length == 0) {
+            LOGGER.debug("not found redeem to update local db");
+            return isUpdate;
+        }
+        MySQLConnect mysql = new MySQLConnect();
+        try {
+            try ( Connection conn = mysql.open("pos")) {
+                conn.setAutoCommit(false);
+                try ( PreparedStatement prepStmt = conn.prepareStatement(sqlInsertRedeem)) {
+                    for (RedeemModel model : listRedeem) {
+                        LOGGER.debug("redeem_name =>" + model.getRedeem_name());
+                        prepStmt.setString(1, model.getUuid_index());
+                        prepStmt.setString(2, model.getRedeem_code());
+                        prepStmt.setString(3, model.getProduct_code());
+                        prepStmt.setFloat(4, model.getPoint_to_redeem());
+                        prepStmt.setString(5, model.getUse_in_branch());
+                        prepStmt.setString(6, model.getEmp_code_redeem());
+                        prepStmt.setString(7, model.getMember_code_use());
+                        prepStmt.setInt(8, model.getQty_in_use());
+                        prepStmt.setDate(9, DateUtil.getDate(model.getSystem_create()));
+                        prepStmt.setString(10, null);
+                        prepStmt.setDate(11, DateUtil.getDate(model.getIn_time()));
+                        prepStmt.setString(12, model.getStatus_use());
+                        prepStmt.setString(13, model.getActive());
+                        prepStmt.setString(14, ThaiUtil.encodeThaiAscii(model.getRedeem_name()));
+                        prepStmt.setString(15, model.getBill_no());
+                        prepStmt.setFloat(16, model.getDiscount_amt());
+                        prepStmt.setFloat(17, model.getDiscount_percent());
+                        prepStmt.setString(18, model.getRedeem_or_free());
+                        prepStmt.setString(19, model.getData_sync());
+                        
+                        prepStmt.setString(20, model.getBill_no());
+                        prepStmt.setString(21, model.getStatus_use());
+                        prepStmt.setString(22, model.getActive());
+                        prepStmt.setString(23, model.getUse_in_branch());
+                        
+                        prepStmt.addBatch();
+                    }
+                    int[] numUpdates = prepStmt.executeBatch();
+                    for (int i = 0; i < numUpdates.length; i++) {
+                        if (numUpdates[i] == -2) {
+                            LOGGER.debug("Execution " + i + ": unknown number of rows updated");
+                        } else {
+                            isUpdate = true;
+                            LOGGER.debug("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
+                        }
+                    }
+                }
+                conn.commit();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
+        }
+
+        return isUpdate;
     }
 }

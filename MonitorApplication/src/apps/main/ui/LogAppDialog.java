@@ -1,8 +1,7 @@
-package apps;
+package apps.main.ui;
 
-import api.ControllerApi;
-import database.MySQLMemberConnect;
-import database.MySQLPOSConnect;
+import api.connect.ControllerApi;
+import database.connect.MySQLConnect;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.io.File;
@@ -22,7 +21,7 @@ public class LogAppDialog extends javax.swing.JDialog {
     public LogAppDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         checkStatusLoad();
     }
 
@@ -304,31 +303,39 @@ public class LogAppDialog extends javax.swing.JDialog {
     }
 
     private void checkConnectionMySQL() {
+        MySQLConnect mysql = new MySQLConnect();
         try {
             // pos db connect
-            MySQLPOSConnect pos = new MySQLPOSConnect();
-            Connection con1 = pos.openConnection();
-            if(con1!=null){
+            Connection conn = mysql.open("pos");
+            if (conn != null) {
                 lbPosDbConnect.setText("Connected.");
                 lbPosDbConnect.setForeground(Color.BLUE);
-                con1.close();
-            }
-            // member db connect
-            MySQLMemberConnect member = new MySQLMemberConnect();
-            Connection con2 = member.openConnection();
-            if(con2!=null){
-                lbMemberDbConnect.setText("Connected.");
-                lbMemberDbConnect.setForeground(Color.BLUE);
-                con2.close();
+                conn.close();
             }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
+        }
+
+        try {
+            // member db connect
+            Connection conn = mysql.open("member");
+            if (conn != null) {
+                lbMemberDbConnect.setText("Connected.");
+                lbMemberDbConnect.setForeground(Color.BLUE);
+                conn.close();
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        } finally {
+            mysql.close();
         }
     }
 
     private void checkConnectionService() {
         ControllerApi api = new ControllerApi();
-        if(api.getVersion()){
+        if (api.getVersion()) {
             lbServiceMemberConnect.setText("Connected.");
             lbServiceRedeemConnect.setText("Connected.");
             lbServiceMemberConnect.setForeground(Color.BLUE);

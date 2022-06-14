@@ -1,6 +1,6 @@
-package api;
+package api.connect;
 
-import database.local.RedeemModel;
+import core.redeem.model.RedeemModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.apache.log4j.Logger;
@@ -39,6 +39,7 @@ public class Redeem {
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
+        
         return bean;
     }
 

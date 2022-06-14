@@ -3,3 +3,4 @@
 /MonitorApplication/build/
 /MonitorApplication/lib/
 /MonitorApplication/server/node_modules/*
+/MonitorApplication/crm-web-sync/*

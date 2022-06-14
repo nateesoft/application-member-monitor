@@ -36,7 +36,7 @@ public class GetImageBin {
     public void writeByteImage(File fileOutput, byte[] dataImage) {
         LOGGER.debug("writeByteImage");
         try {
-            try (FileOutputStream fw = new FileOutputStream(fileOutput)) {
+            try ( FileOutputStream fw = new FileOutputStream(fileOutput)) {
                 fw.write(dataImage);
                 fw.flush();
             }

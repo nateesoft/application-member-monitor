@@ -1,13 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
-package apps;
+package apps.main.ui;
 
-import database.DbConfig;
-import database.DbConfigProps;
+import file.config.ConfigProps;
+import file.config.FileConfigValue;
 import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 
@@ -18,9 +13,12 @@ import org.apache.log4j.Logger;
 public class ConfigDialog extends javax.swing.JDialog {
 
     private static final Logger LOGGER = Logger.getLogger(ConfigDialog.class);
+    private final ConfigProps config = FileConfigValue.loadConfig();
 
     /**
      * Creates new form ConfigDialog
+     * @param parent
+     * @param modal
      */
     public ConfigDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -51,32 +49,16 @@ public class ConfigDialog extends javax.swing.JDialog {
         txtPosHost = new javax.swing.JTextField();
         lbPosUser = new javax.swing.JLabel();
         lbPosPassword = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        lbMemberHost = new javax.swing.JLabel();
-        lbMemberPort = new javax.swing.JLabel();
-        txtMemberPassword = new javax.swing.JPasswordField();
-        txtMemberPort = new javax.swing.JTextField();
-        txtMemberDbName = new javax.swing.JTextField();
-        txtMemberUser = new javax.swing.JTextField();
         lbMemberDbName = new javax.swing.JLabel();
-        txtMemberHost = new javax.swing.JTextField();
-        lbMemberUser = new javax.swing.JLabel();
-        lbMemberPassword = new javax.swing.JLabel();
+        txtMemberDbName = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         lbApiServiceVersion = new javax.swing.JLabel();
         lbApiServiceDB = new javax.swing.JLabel();
-        txtApiServiceRedeem = new javax.swing.JPasswordField();
         txtApiServiceDb = new javax.swing.JTextField();
         txtApiServiceAuth = new javax.swing.JTextField();
-        txtApiServiceMember = new javax.swing.JTextField();
         lbApiServiceAuth = new javax.swing.JLabel();
-        txtApiServiceVersion = new javax.swing.JTextField();
-        lbApiServiceMember = new javax.swing.JLabel();
-        lbApiServiceRedeem = new javax.swing.JLabel();
-        lbApiServiceVersion1 = new javax.swing.JLabel();
-        txtApiServiceVersion1 = new javax.swing.JTextField();
+        txtApiServiceHost = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         lbTimeSync = new javax.swing.JLabel();
@@ -109,13 +91,17 @@ public class ConfigDialog extends javax.swing.JDialog {
 
         txtPosUser.setText("root");
 
-        lbPosDbName.setText("pos.dbName");
+        lbPosDbName.setText("pos.db");
 
         txtPosHost.setText("localhost");
 
         lbPosUser.setText("pos.user");
 
         lbPosPassword.setText("pos.password");
+
+        lbMemberDbName.setText("pos.memberDb");
+
+        txtMemberDbName.setText("mycrmbranch");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -124,18 +110,24 @@ public class ConfigDialog extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbPosHost)
-                    .addComponent(lbPosUser)
-                    .addComponent(lbPosPassword)
-                    .addComponent(lbPosPort)
-                    .addComponent(lbPosDbName))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtPosHost)
-                    .addComponent(txtPosUser)
-                    .addComponent(txtPosPort)
-                    .addComponent(txtPosDbName)
-                    .addComponent(txtPosPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbPosHost)
+                            .addComponent(lbPosUser)
+                            .addComponent(lbPosPassword)
+                            .addComponent(lbPosPort)
+                            .addComponent(lbPosDbName))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPosHost)
+                            .addComponent(txtPosUser)
+                            .addComponent(txtPosPort)
+                            .addComponent(txtPosDbName)
+                            .addComponent(txtPosPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lbMemberDbName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtMemberDbName, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -161,79 +153,11 @@ public class ConfigDialog extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbPosDbName)
                     .addComponent(txtPosDbName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("Server Member Db");
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        lbMemberHost.setText("member.host");
-
-        lbMemberPort.setText("member.port");
-
-        txtMemberPassword.setText("myPassword");
-
-        txtMemberPort.setText("3306");
-
-        txtMemberDbName.setText("mycrmbranch");
-
-        txtMemberUser.setText("root");
-
-        lbMemberDbName.setText("member.dbName");
-
-        txtMemberHost.setText("localhost");
-
-        lbMemberUser.setText("member.user");
-
-        lbMemberPassword.setText("member.password");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbMemberHost)
-                    .addComponent(lbMemberUser)
-                    .addComponent(lbMemberPassword)
-                    .addComponent(lbMemberPort)
-                    .addComponent(lbMemberDbName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtMemberHost)
-                    .addComponent(txtMemberUser)
-                    .addComponent(txtMemberPort)
-                    .addComponent(txtMemberDbName)
-                    .addComponent(txtMemberPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbMemberHost)
-                    .addComponent(txtMemberHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbMemberUser)
-                    .addComponent(txtMemberUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbMemberPassword)
-                    .addComponent(txtMemberPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbMemberPort)
-                    .addComponent(txtMemberPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbMemberDbName)
                     .addComponent(txtMemberDbName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -245,25 +169,13 @@ public class ConfigDialog extends javax.swing.JDialog {
 
         lbApiServiceDB.setText("api.serviceDB");
 
-        txtApiServiceRedeem.setText("http://localhost:5000/api/redeem/client");
-
         txtApiServiceDb.setText("d2ViZGFpbHlfMDAx");
 
-        txtApiServiceAuth.setText("YWRtaW46c29mdHBvczIwMTM=");
-
-        txtApiServiceMember.setText("http://localhost:5000/api/member/client");
+        txtApiServiceAuth.setEditable(false);
 
         lbApiServiceAuth.setText("api.serviceAuth");
 
-        txtApiServiceVersion.setText("http://localhost:5000");
-
-        lbApiServiceMember.setText("api.serviceMember");
-
-        lbApiServiceRedeem.setText("api.serviceRedeem");
-
-        lbApiServiceVersion1.setText("api.serviceVersion");
-
-        txtApiServiceVersion1.setText("http://localhost:5000/api/version");
+        txtApiServiceHost.setText("http://localhost:5000");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -273,19 +185,13 @@ public class ConfigDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbApiServiceVersion)
-                    .addComponent(lbApiServiceMember)
-                    .addComponent(lbApiServiceRedeem)
                     .addComponent(lbApiServiceDB)
-                    .addComponent(lbApiServiceAuth)
-                    .addComponent(lbApiServiceVersion1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(lbApiServiceAuth))
+                .addGap(28, 28, 28)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtApiServiceVersion)
-                    .addComponent(txtApiServiceMember, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                    .addComponent(txtApiServiceHost, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                     .addComponent(txtApiServiceDb)
-                    .addComponent(txtApiServiceRedeem)
-                    .addComponent(txtApiServiceAuth)
-                    .addComponent(txtApiServiceVersion1))
+                    .addComponent(txtApiServiceAuth))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -294,19 +200,7 @@ public class ConfigDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbApiServiceVersion)
-                    .addComponent(txtApiServiceVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbApiServiceVersion1)
-                    .addComponent(txtApiServiceVersion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbApiServiceMember)
-                    .addComponent(txtApiServiceMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbApiServiceRedeem)
-                    .addComponent(txtApiServiceRedeem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtApiServiceHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbApiServiceDB)
@@ -319,7 +213,7 @@ public class ConfigDialog extends javax.swing.JDialog {
         );
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setText("Server Member Db");
+        jLabel5.setText("Service Member Db");
 
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -381,33 +275,32 @@ public class ConfigDialog extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jLabel2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnOpenFile)
+                                .addComponent(jLabel2)
+                                .addGap(0, 220, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(0, 264, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnOpenFile)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSave)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -422,17 +315,14 @@ public class ConfigDialog extends javax.swing.JDialog {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel3))
+                .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
-                    .addComponent(btnOpenFile)))
+                    .addComponent(btnOpenFile))
+                .addGap(87, 87, 87))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -443,7 +333,7 @@ public class ConfigDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -451,15 +341,24 @@ public class ConfigDialog extends javax.swing.JDialog {
 
     private void btnOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenFileActionPerformed
         try {
-            Desktop.getDesktop().open(new File("local.txt"));
+            Desktop.getDesktop().open(FileConfigValue.FILE_CONFIG);
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage());
         }
     }//GEN-LAST:event_btnOpenFileActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        DbConfigProps props = new DbConfigProps();
-        DbConfig.saveConfigFileData(props);
+        ConfigProps props = new ConfigProps();
+        props.setPosHost(txtPosHost.getText());
+        props.setPosUser(txtPosUser.getText());
+        props.setPosPassword(txtPosPassword.getText());
+        props.setPosPort(txtPosPort.getText());
+        props.setPosDb(txtPosDbName.getText());
+        props.setPosMemberDb(txtMemberDbName.getText());
+        props.setApiServiceHost(txtApiServiceHost.getText());
+        props.setApiServiceDB(txtApiServiceDb.getText());
+        
+        FileConfigValue.saveConfigFileData(props);
     }//GEN-LAST:event_btnSaveActionPerformed
 
 
@@ -468,26 +367,17 @@ public class ConfigDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox<String> cbTimeSync;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel lbApiServiceAuth;
     private javax.swing.JLabel lbApiServiceDB;
-    private javax.swing.JLabel lbApiServiceMember;
-    private javax.swing.JLabel lbApiServiceRedeem;
     private javax.swing.JLabel lbApiServiceVersion;
-    private javax.swing.JLabel lbApiServiceVersion1;
     private javax.swing.JLabel lbAppDownload;
     private javax.swing.JLabel lbMemberDbName;
-    private javax.swing.JLabel lbMemberHost;
-    private javax.swing.JLabel lbMemberPassword;
-    private javax.swing.JLabel lbMemberPort;
-    private javax.swing.JLabel lbMemberUser;
     private javax.swing.JLabel lbPosDbName;
     private javax.swing.JLabel lbPosHost;
     private javax.swing.JLabel lbPosPassword;
@@ -496,16 +386,9 @@ public class ConfigDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lbTimeSync;
     private javax.swing.JTextField txtApiServiceAuth;
     private javax.swing.JTextField txtApiServiceDb;
-    private javax.swing.JTextField txtApiServiceMember;
-    private javax.swing.JPasswordField txtApiServiceRedeem;
-    private javax.swing.JTextField txtApiServiceVersion;
-    private javax.swing.JTextField txtApiServiceVersion1;
+    private javax.swing.JTextField txtApiServiceHost;
     private javax.swing.JTextField txtAppDownload;
     private javax.swing.JTextField txtMemberDbName;
-    private javax.swing.JTextField txtMemberHost;
-    private javax.swing.JPasswordField txtMemberPassword;
-    private javax.swing.JTextField txtMemberPort;
-    private javax.swing.JTextField txtMemberUser;
     private javax.swing.JTextField txtPosDbName;
     private javax.swing.JTextField txtPosHost;
     private javax.swing.JPasswordField txtPosPassword;
@@ -514,7 +397,6 @@ public class ConfigDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void initLoadConfig() {
-        DbConfigProps config = DbConfig.loadConfig();
         txtPosHost.setText(config.getPosHost());
     }
 }
