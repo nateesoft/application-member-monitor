@@ -40,8 +40,8 @@ public class FileConfigValue {
             config.setPosMemberDb(prop.getProperty("pos.memberDb"));
 
             config.setApiServiceHost(prop.getProperty("api.serviceHost"));
-            config.setApiServiceMember(prop.getProperty("api.serviceHost") + "/api/member/client");
-            config.setApiServiceRedeem(prop.getProperty("api.serviceHost") + "/api/redeem/client");
+            config.setApiServiceMember(prop.getProperty("api.serviceHost") + "/api/member/client2");
+            config.setApiServiceRedeem(prop.getProperty("api.serviceHost") + "/api/redeem/client2");
             config.setApiServiceDB(prop.getProperty("api.serviceDB"));
             config.setApiServiceAuth("YWRtaW46c29mdHBvczIwMTM="); // fix auth to secure
             config.setApiServiceVersion(prop.getProperty("api.serviceHost") + "/version");
