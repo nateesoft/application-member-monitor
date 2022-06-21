@@ -18,8 +18,10 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import org.apache.log4j.Logger;
 import utils.DownloadUtil;
@@ -131,6 +133,11 @@ public class Main {
         } catch (AWTException awtException) {
             LOGGER.error(awtException.getMessage());
         }
+        
+        // first time download
+        if (checkVersion()) {
+            DownloadUtil.downloadAppUpdate();
+        }
 
         // start application monitory running
         LOGGER.info("start application monitory");
@@ -140,5 +147,9 @@ public class Main {
 
         // scheduler time sync up
         TaskController.run(10);
+    }
+    
+    private static boolean checkVersion() {
+        return !new File("update_" + simp.format(new Date()) + ".version").exists();
     }
 }
