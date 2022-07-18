@@ -46,7 +46,7 @@ public class FileConfigValue {
             config.setApiServiceAuth("YWRtaW46c29mdHBvczIwMTM="); // fix auth to secure
             config.setApiServiceVersion(prop.getProperty("api.serviceHost") + "/version");
 
-            config.setAppDownload(prop.getProperty("api.serviceHost")+"/images/applications");
+            config.setAppDownload(prop.getProperty("api.serviceHost") + "/images/applications");
             config.setThaiUtf(prop.getProperty("thaiUtf"));
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage());
