@@ -208,9 +208,9 @@ public class Redeem {
                         prepStmt.setString(6, model.getEmp_code_redeem());
                         prepStmt.setString(7, model.getMember_code_use());
                         prepStmt.setInt(8, model.getQty_in_use());
-                        prepStmt.setDate(9, DateUtil.getDate(model.getSystem_create()));
+                        prepStmt.setTimestamp(9, DateUtil.getDateTimestamp(model.getSystem_create()));
                         prepStmt.setString(10, null);
-                        prepStmt.setDate(11, DateUtil.getDate(model.getIn_time()));
+                        prepStmt.setTimestamp(11, DateUtil.getDateTimestamp(model.getIn_time()));
                         prepStmt.setString(12, model.getStatus_use());
                         prepStmt.setString(13, model.getActive());
                         prepStmt.setString(14, ThaiUtil.encodeThaiAscii(model.getRedeem_name()));

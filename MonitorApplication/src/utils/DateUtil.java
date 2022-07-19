@@ -1,5 +1,6 @@
 package utils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,7 +32,19 @@ public class DateUtil {
         } catch (ParseException e) {
             System.err.println(e.getMessage());
         }
-        
+
+        return null;
+    }
+
+    public static java.sql.Timestamp getDateTimestamp(String date) {
+        try {
+            Date tDate = simp.parse(date);
+            Timestamp ts = new Timestamp(tDate.getTime());
+            return ts;
+        } catch (ParseException e) {
+            System.err.println(e.getMessage());
+        }
+
         return null;
     }
 
@@ -40,7 +53,7 @@ public class DateUtil {
         c.setTime(plusTime);
         c.add(Calendar.MINUTE, 30);
         java.sql.Date date = new java.sql.Date(c.getTimeInMillis());
-        
+
         return date;
     }
 
@@ -59,7 +72,7 @@ public class DateUtil {
         if (time == null) {
             return null;
         }
-        
+
         Date date = new Date(time.getTime());
         return simpOut.format(date);
     }
