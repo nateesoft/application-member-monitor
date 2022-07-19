@@ -1,7 +1,7 @@
 /*.log
 /local.ini
 /applications/*
-/update_20210112.zip
+*.zip
 /test.txt
 /nbproject/*
 package-lock.json

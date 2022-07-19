@@ -45,11 +45,12 @@ public class LogAppDialog extends javax.swing.JDialog {
         btnCheckStatus = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
 
-        setTitle("Log Applicataion Sync CRM v1.1");
+        setTitle("Log Applicataion Sync CRM v1.2");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
@@ -190,6 +191,14 @@ public class LogAppDialog extends javax.swing.JDialog {
 
         jMenu1.setText("File");
 
+        jMenuItem3.setText("Show Tables");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
         jMenuItem1.setText("Hide");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -263,6 +272,11 @@ public class LogAppDialog extends javax.swing.JDialog {
         checkStatusLoad();
     }//GEN-LAST:event_btnCheckStatusActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        TableDataDialog tableDialog = new TableDataDialog(null, true);
+        tableDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckStatus;
     private javax.swing.JButton btnShowLogFile;
@@ -277,6 +291,7 @@ public class LogAppDialog extends javax.swing.JDialog {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lbMemberDbConnect;
